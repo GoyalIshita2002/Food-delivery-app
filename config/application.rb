@@ -38,5 +38,6 @@ module FastHomeAPI
     config.session_store :cookie_store, key: '_fast_home_session'
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
+    config.default_request_format = :json
   end
 end

@@ -8,6 +8,14 @@ Rails.application.routes.draw do
     get 'restaurants/index'
     get 'restaurants/create'
     get 'restaurants/update'
+
+    namespace :restaurant_owner do
+      put 'restaurants/:id/update', to: "restaurants#update", format: :json
+      post 'restaurant/:restaurant_id/dishes', to: "dishes#create", format: :json
+      put 'restaurant/:restaurant_id/dishes/:id', to: "dishes#update", format: :json
+      get 'restaurant/:restaurant_id/dishes/:id', to: "dishes#show", format: :json
+      get 'restaurant/:restaurant_id/dishes', to: "dishes#index", format: :json
+    end
   end
   devise_for :admin_users, controllers: {
     sessions: 'admin_users/sessions',

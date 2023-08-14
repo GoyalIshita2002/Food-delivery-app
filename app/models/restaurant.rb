@@ -21,9 +21,7 @@ class Restaurant < ApplicationRecord
 
   has_many :documents, as: :documenter
 
-  has_one :restaurant_menu
-
-  has_many :dishes, through: :restaurant_menu
+  has_many :dishes
 
   validates_presence_of :name
 

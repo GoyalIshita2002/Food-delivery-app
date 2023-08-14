@@ -11,7 +11,8 @@ class AdminUsers::SessionsController < Devise::SessionsController
       render json: {
         status: 200,
         message: "signin successful",
-        data: current_admin_user
+        data: current_admin_user,
+        restaurant: admin_user.restaurants.last
       },status: :ok
     else
       render json: {

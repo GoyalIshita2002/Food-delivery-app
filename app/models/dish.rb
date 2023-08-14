@@ -1,3 +1,5 @@
 class Dish < ApplicationRecord
-  belongs_to :restaurant_menu
+  belongs_to :restaurant
+
+  has_one_attached :image
 end

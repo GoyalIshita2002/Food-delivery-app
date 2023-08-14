@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_07_101459) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_14_051703) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -86,13 +86,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_07_101459) do
 
   create_table "dishes", force: :cascade do |t|
     t.string "name"
-    t.integer "type"
+    t.string "dish_type"
     t.decimal "price"
     t.text "description"
-    t.bigint "restaurant_menu_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["restaurant_menu_id"], name: "index_dishes_on_restaurant_menu_id"
+    t.bigint "restaurant_id", null: false
+    t.boolean "is_popular", default: false
+    t.index ["restaurant_id"], name: "index_dishes_on_restaurant_id"
   end
 
   create_table "documents", force: :cascade do |t|
@@ -186,12 +187,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_07_101459) do
     t.string "phone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "open_for_orders", default: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "avg_pricings", "restaurants"
-  add_foreign_key "dishes", "restaurant_menus"
+  add_foreign_key "dishes", "restaurants"
   add_foreign_key "open_hours", "restaurants"
   add_foreign_key "restaurant_addresses", "restaurants"
   add_foreign_key "restaurant_categories", "categories"
