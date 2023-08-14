@@ -5,7 +5,7 @@ class V1::RestaurantOwner::DishesController < ApplicationController
 
   def create
     created_dish = restaurant.dishes.create(dish_params)
-    if dish.persisted?
+    if created_dish.persisted?
       render json: { status: { code: "200", message: "Dish Added successfully"}, data: created_dish }, status: :ok 
     else
       render json: { status: { code: "422", message: "Failed to add dish", errors: dish&.errors&.full_messages }},status: :bad_request and return
