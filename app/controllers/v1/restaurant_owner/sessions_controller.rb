@@ -29,7 +29,6 @@ module V1
       end
 
       def respond_to_on_destroy
-        debugger
         jwt_payload = JWT.decode(request.headers['Authorization'].split(" ")[1], Rails.application.credentials.fetch(:secret_key_base))&.first
         current_admin_user = RestaurantAdmin.find_by(jti: jwt_payload['jti'])
         if current_admin_user.present?
