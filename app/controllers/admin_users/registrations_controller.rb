@@ -2,6 +2,7 @@
 
 class AdminUsers::RegistrationsController < Devise::RegistrationsController
   respond_to :json
+  skip_before_action :authenticate_admin_user!, only: :create
   before_action :configure_sign_up_params, only: [:create]
 
   def create

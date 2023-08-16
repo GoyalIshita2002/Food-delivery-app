@@ -28,7 +28,11 @@ class AdminUser < ApplicationRecord
   end
 
   def jwt_payload
-    # { 'foo' => 'bar' }
     super
+  end
+
+  def generate_jwt
+    payload = { "jti"=> self.jti, "sub"=> self.id, "scp"=>"admin_user", "aud"=>nil, "iat"=>Time.now.to_i, "exp"=> (Time.now + 60.minutes).to_i }
+    JWT.encode(payload,  Rails.application.credentials.fetch(:secret_key_base))
   end
 end

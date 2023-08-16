@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       put 'restaurant/:restaurant_id/dishes/:id', to: "dishes#update", format: :json
       get 'restaurant/:restaurant_id/dishes/:id', to: "dishes#show", format: :json
       get 'restaurant/:restaurant_id/dishes', to: "dishes#index", format: :json
+      put '/password', to: "passwords#update", format: :json
     end
   end
   devise_for :admin_users, controllers: {
@@ -22,6 +23,10 @@ Rails.application.routes.draw do
     registrations: 'admin_users/registrations',
     passwords: 'admin_users/passwords'
   }
+
+  devise_for :super_admin, path: 'v1/super_admin', controllers: { sessions: 'v1/super_admin/sessions' }
+  devise_for :restaurant_admin, path: 'v1/restaurant_owner', controllers: { sessions: 'v1/restaurant_owner/sessions' }
+
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

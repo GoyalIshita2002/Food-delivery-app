@@ -1,0 +1,2 @@
+class RestaurantAdmin < AdminUser
+end

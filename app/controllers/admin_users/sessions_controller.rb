@@ -2,6 +2,7 @@
 
 class AdminUsers::SessionsController < Devise::SessionsController
   respond_to :json
+  skip_before_action :authenticate_admin_user!, only: :create
 
   # POST /resource/sign_in
   def create

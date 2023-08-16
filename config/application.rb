@@ -39,5 +39,6 @@ module FastHomeAPI
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
     config.default_request_format = :json
+    config.autoload_paths << Rails.root.join('lib')
   end
 end
