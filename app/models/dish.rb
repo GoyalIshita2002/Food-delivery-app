@@ -4,5 +4,10 @@ class Dish < ApplicationRecord
   has_one_attached :image
 
   enum dish_type: [ "MainCourses", "Appetizer", "Pizza&Pasta" ]
-  ActiveStorage::Current.host = Rails.application.credentials.fetch(:base_url)
+  
+
+  def image_url
+    ActiveStorage::Current.host = Rails.application.credentials.fetch(:base_url)
+    self.image.url
+  end
 end

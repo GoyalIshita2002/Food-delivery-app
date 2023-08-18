@@ -1,5 +1,4 @@
 class V1::RestaurantOwner::DishesController < ApplicationController
-
   before_action :check_restaurant
   before_action :check_dish, only: [:show, :update, :upload_image]
 
@@ -13,7 +12,7 @@ class V1::RestaurantOwner::DishesController < ApplicationController
   end
 
   def show
-    render json: { status: { code: "200"}, data: dish.as_json.merge(image_url: dish.reload.image.url) }, status: :ok and return
+    render json: { status: { code: "200"}, data: dish.as_json.merge(image_url: dish.reload.image_url) }, status: :ok and return
   end
 
   def update
@@ -34,7 +33,7 @@ class V1::RestaurantOwner::DishesController < ApplicationController
 
   def upload_image
     if dish.update!(image: params[:image])
-      render json: { status: {code: "200", message:"Image updated successfully"}, image_url: dish.reload.image.url },status: :ok
+      render json: { status: {code: "200", message:"Image updated successfully"}, image_url: dish.reload.image_url },status: :ok
     else
       render json: { status: { code:"422", message: "Image upload failed", errors: dish&.errors&.full_messages} }, status: :bad_request
     end
@@ -54,7 +53,7 @@ class V1::RestaurantOwner::DishesController < ApplicationController
 
   def check_restaurant
     unless restaurant.present?
-      render json: { status: "404", message: "invalid Restaurant"}, status: :bad_request and return
+      render json: { status: "404", message: "invalid Restaurant/Dish"}, status: :bad_request and return
     end
   end
 
