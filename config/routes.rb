@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  namespace :v1 do
+  namespace :v1, defaults: { format: :json } do
     namespace :admin_users do
       post 'documents/create'
       get 'restaurants/details'
@@ -10,12 +10,14 @@ Rails.application.routes.draw do
     get 'restaurants/update'
 
     namespace :restaurant_owner do
-      put 'restaurants/:id/update', to: "restaurants#update", format: :json
-      post 'restaurant/:restaurant_id/dishes', to: "dishes#create", format: :json
-      put 'restaurant/:restaurant_id/dishes/:id', to: "dishes#update", format: :json
-      get 'restaurant/:restaurant_id/dishes/:id', to: "dishes#show", format: :json
-      get 'restaurant/:restaurant_id/dishes', to: "dishes#index", format: :json
-      put '/password', to: "passwords#update", format: :json
+      put 'restaurants/:id/update', to: "restaurants#update"
+      post 'restaurant/:restaurant_id/dishes', to: "dishes#create"
+      put 'restaurant/:restaurant_id/dishes/:id', to: "dishes#update"
+      get 'restaurant/:restaurant_id/dishes/:id', to: "dishes#show"
+      get 'restaurant/:restaurant_id/dishes', to: "dishes#index"
+      put 'dish/:id/upload_image', to: "dishes#upload_image"
+      put '/password', to: "passwords#update"
+      get '/dish_types', to: "dishes#types"
     end
   end
   devise_for :admin_users, controllers: {

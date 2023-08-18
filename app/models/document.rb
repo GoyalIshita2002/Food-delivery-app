@@ -3,6 +3,6 @@ class Document < ApplicationRecord
   has_one_attached :front
   has_one_attached :back
 
-  ActiveStorage::Current.host = "http://localhost:3000"
+  ActiveStorage::Current.host = Rails.application.credentials.fetch(:base_url)
 end
  

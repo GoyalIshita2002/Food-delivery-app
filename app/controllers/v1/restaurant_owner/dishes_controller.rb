@@ -1,7 +1,7 @@
 class V1::RestaurantOwner::DishesController < ApplicationController
 
   before_action :check_restaurant
-  before_action :check_dish, only: [:show, :update]
+  before_action :check_dish, only: [:show, :update, :upload_image]
 
   def create
     created_dish = restaurant.dishes.create(dish_params)
@@ -13,7 +13,7 @@ class V1::RestaurantOwner::DishesController < ApplicationController
   end
 
   def show
-    render json: { status: { code: "200"}, data: dish}, status: :ok and return
+    render json: { status: { code: "200"}, data: dish.as_json.merge(image_url: dish.reload.image.url) }, status: :ok and return
   end
 
   def update
@@ -28,8 +28,28 @@ class V1::RestaurantOwner::DishesController < ApplicationController
     render json: { status: { code: "200"}, data: restaurant.dishes }, status: :ok 
   end
 
+  def types 
+    render json: { status: { code: "200"}, data: Dish.dish_types }, status: :ok
+  end
+
+  def upload_image
+    if dish.update!(image: params[:image])
+      render json: { status: {code: "200", message:"Image updated successfully"}, image_url: dish.reload.image.url },status: :ok
+    else
+      render json: { status: { code:"422", message: "Image upload failed", errors: dish&.errors&.full_messages} }, status: :bad_request
+    end
+  end
+
+  protected
+
+  def validate_image
+    unless params[:image].present?
+      render json: { status: { code: "422", message: "Request missing image params" }}, status: :bad_request
+    end
+  end
+
   def dish_params
-    params.require(:dish).permit(:name, :dish_type, :price, :description, :image, :is_popular)
+    params.require(:dish).permit(:name, :dish_type, :price, :description, :is_popular)
   end
 
   def check_restaurant
