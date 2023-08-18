@@ -1,10 +1,9 @@
 class Dish < ApplicationRecord
   belongs_to :restaurant
-
+ 
   has_one_attached :image
-
-  enum dish_type: [ "MainCourses", "Appetizer", "Pizza&Pasta" ]
-  
+  has_one :dish_category
+  has_one :dish_type, through: :dish_category  
 
   def image_url
     ActiveStorage::Current.host = Rails.application.credentials.fetch(:base_url)
