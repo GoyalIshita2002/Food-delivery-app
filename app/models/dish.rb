@@ -6,7 +6,8 @@ class Dish < ApplicationRecord
   has_one :dish_type, through: :dish_category  
 
   def image_url
-    ActiveStorage::Current.host = Rails.application.credentials.fetch(:base_url)
-    self.image.url
+    ActiveStorage::Current.set(host: Rails.application.credentials.fetch(:base_url)) do
+      self.image.url
+    end
   end
 end
