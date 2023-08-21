@@ -18,6 +18,9 @@ Rails.application.routes.draw do
       put 'dish/:id/upload_image', to: "dishes#upload_image"
       put '/password', to: "passwords#update"
       get '/dish_types', to: "dishes#types"
+      delete 'dish/:id', to: "dishes#destroy"
+      get 'grouped_dishes', to: "dishes#dishes_by_type"
+      get 'popular_dishes', to: "dishes#popular"
     end
   end
   devise_for :admin_users, controllers: {

@@ -1,13 +1,13 @@
 class V1::RestaurantOwner::DishesController < ApplicationController
   before_action :check_restaurant
-  before_action :check_dish, only: [:show, :update, :upload_image]
+  before_action :check_dish, only: [:show, :update, :upload_image, :destroy]
 
   def create
     created_dish = RestaurantOwner::CreateDish.call(restaurant, dish_params)
     if created_dish.persisted?
       render json: { status: { code: "200", message: "Dish Added successfully"}, data: created_dish.as_json.merge(dish_type: created_dish.dish_type) }, status: :ok 
     else
-      render json: { status: { code: "422", message: "Failed to add dish", errors: created_dish&.errors&.full_messages }},status: :bad_request and return
+      render json: { status: { code: "400", message: "Failed to add dish", errors: created_dish&.errors&.full_messages }},status: :bad_request and return
     end
   end
 
@@ -20,7 +20,7 @@ class V1::RestaurantOwner::DishesController < ApplicationController
     if updated_dish.persisted?
       render json: { status: { code: "200", message: "Dish updated successfully"}, data: updated_dish.as_json.merge(dish_type: updated_dish.dish_type) }, status: :ok
     else
-      render json: { status: { code: "422", message: "Failed to update dish", errors: updated_dish&.errors&.full_messages }},status: :bad_request and return
+      render json: { status: { code: "400", message: "Failed to update dish", errors: updated_dish&.errors&.full_messages }},status: :bad_request and return
     end
   end
 
@@ -36,15 +36,36 @@ class V1::RestaurantOwner::DishesController < ApplicationController
     if dish.update!(image: params[:image])
       render json: { status: {code: "200", message:"Image updated successfully"}, image_url: dish.reload.image_url },status: :ok
     else
-      render json: { status: { code:"422", message: "Image upload failed", errors: dish&.errors&.full_messages} }, status: :bad_request
+      render json: { status: { code:"400", message: "Image upload failed", errors: dish&.errors&.full_messages} }, status: :bad_request
     end
+  end
+
+  def destroy
+    destroyed_dish = dish.destroy
+    unless destroyed_dish.persisted?
+      render json: { status: { code: "200", message: "Dish deleted successfully"}}, status: :ok
+    else
+      render json: { status: { code: "400", message: "Failed to destroy dish"}}, status: :bad_request
+    end
+  end
+
+  def dishes_by_type
+    data = Hash.new
+    DishType.includes(:dishes).each do |type|
+        data[type.title] = type.dishes
+    end
+    render json: { status: { code: "200"}, data: data }, status: :ok                  
+  end
+
+  def popular
+    render json: { status: { code: "200"}, data: restaurant.dishes.where(is_popular: true) }, status: :ok 
   end
 
   protected
 
   def validate_image
     unless params[:image].present?
-      render json: { status: { code: "422", message: "Request missing image params" }}, status: :bad_request
+      render json: { status: { code: "400", message: "Request missing image params" }}, status: :bad_request
     end
   end
 
@@ -54,12 +75,12 @@ class V1::RestaurantOwner::DishesController < ApplicationController
 
   def check_restaurant
     unless restaurant.present?
-      render json: { status: "404", message: "invalid Restaurant/Dish"}, status: :bad_request and return
+      render json: { status: "404", message: "invalid Restaurant/Dish"}, status: :not_found and return
     end
   end
 
   def restaurant
-    @restaurant ||= Restaurant.find_by(id: params[:restaurant_id])
+    @restaurant ||= Restaurant.find_by(id: restaurant_id)
   end
 
   def dish
@@ -68,7 +89,11 @@ class V1::RestaurantOwner::DishesController < ApplicationController
 
   def check_dish
     unless dish.present?
-      render json: { status: "404", message: "invalid Restaurant"}, status: :bad_request and return
+      render json: { status: "404", message: "Missing Restaurant/Dish ID"}, status: :not_found and return
     end
+  end
+
+  def restaurant_id
+    params[:restaurant_id] || request.headers["restaurant-id"]
   end
 end
