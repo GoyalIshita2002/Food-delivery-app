@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_21_111950) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_22_065206) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -84,6 +84,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_21_111950) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "dish_add_ons", force: :cascade do |t|
+    t.string "name"
+    t.integer "min_quantity"
+    t.integer "max_quantity"
+    t.bigint "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_dish_add_ons_on_restaurant_id"
+  end
+
   create_table "dish_categories", force: :cascade do |t|
     t.bigint "dish_id", null: false
     t.bigint "dish_type_id", null: false
@@ -91,6 +101,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_21_111950) do
     t.datetime "updated_at", null: false
     t.index ["dish_id"], name: "index_dish_categories_on_dish_id"
     t.index ["dish_type_id"], name: "index_dish_categories_on_dish_type_id"
+  end
+
+  create_table "dish_items", force: :cascade do |t|
+    t.bigint "dish_id", null: false
+    t.bigint "item_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dish_id"], name: "index_dish_items_on_dish_id"
+    t.index ["item_id"], name: "index_dish_items_on_item_id"
   end
 
   create_table "dish_types", force: :cascade do |t|
@@ -118,6 +137,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_21_111950) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["documenter_type", "documenter_id"], name: "index_documents_on_documenter"
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.string "name"
+    t.float "price"
+    t.bigint "dish_add_on_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dish_add_on_id"], name: "index_items_on_dish_add_on_id"
   end
 
   create_table "open_days", force: :cascade do |t|
@@ -208,9 +236,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_21_111950) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "avg_pricings", "restaurants"
+  add_foreign_key "dish_add_ons", "restaurants"
   add_foreign_key "dish_categories", "dish_types"
   add_foreign_key "dish_categories", "dishes"
+  add_foreign_key "dish_items", "dishes"
+  add_foreign_key "dish_items", "items"
   add_foreign_key "dishes", "restaurants"
+  add_foreign_key "items", "dish_add_ons"
   add_foreign_key "open_hours", "restaurants"
   add_foreign_key "restaurant_addresses", "restaurants"
   add_foreign_key "restaurant_categories", "categories"

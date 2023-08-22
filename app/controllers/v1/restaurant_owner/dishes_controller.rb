@@ -50,7 +50,18 @@ class V1::RestaurantOwner::DishesController < ApplicationController
     render template: "v1/restaurant_owner/dishes/index"
   end
 
+  def dishes_availability 
+    restaurant.dishes.where(id: availability_params[:available]).update_all(is_available: true)  if availability_params[:available].present?
+    restaurant.dishes.where(id: availability_params[:unavailable]).update_all(is_available: false) if availability_params[:unavailable].present?
+    @dishes = restaurant.dishes
+    render template: "v1/restaurant_owner/dishes/index"
+  end
+
   protected
+
+  def availability_params
+    params.require(:dishes).permit(:available => [], :unavailable => [])
+  end
 
   def validate_image
     unless params[:image].present?
