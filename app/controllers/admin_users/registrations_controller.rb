@@ -8,7 +8,7 @@ class AdminUsers::RegistrationsController < Devise::RegistrationsController
   def create
     ActiveRecord::Base.transaction do
       super
-      CreateRestaurant.call(restaurant_params, resource) if resource.persisted?
+      CreateRestaurant.call(restaurant_params, resource) if resource.persisted? && restaurant_params.present?
     end
   end
 
