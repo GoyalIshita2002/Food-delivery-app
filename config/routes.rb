@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
   namespace :v1, defaults: { format: :json } do
+    devise_for :super_admin, controllers: {
+      sessions: 'v1/super_admin/sessions'
+    }
+
     namespace :admin_users do
       post 'documents/create'
       get 'restaurants/details'
@@ -27,14 +31,26 @@ Rails.application.routes.draw do
       # delete 'add_ons', to: "add_ons#destroy"
       get 'add_ons/:id', to: "add_ons#show"
     end
+
+    namespace :super_admin do
+      post 'restaurants', to: "restaurants#create"
+      put 'restaurants/:id', to: "restaurants#update"
+      get 'restaurants/:id', to: "restaurants#show"
+      post 'restaurant/:restaurant_id/documents', to: "documents#create"
+      get 'restaurant/:restaurant_id/documents', to: "documents#index"
+    end
   end
+  
   devise_for :admin_users, controllers: {
     sessions: 'admin_users/sessions',
     registrations: 'admin_users/registrations',
     passwords: 'admin_users/passwords'
   }
 
-  devise_for :super_admin, path: 'v1/super_admin', controllers: { sessions: 'v1/super_admin/sessions' }
+  
+
+
+  # devise_for :super_admin, controllers: { sessions: '/v1/super_admin/create_restaurant' }
   devise_for :restaurant_admin, path: 'v1/restaurant_owner', controllers: { sessions: 'v1/restaurant_owner/sessions' }
 
 

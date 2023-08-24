@@ -4,7 +4,7 @@ module V1
   module RestaurantOwner
     class SessionsController < Devise::SessionsController
       respond_to :json 
-      skip_before_action :authenticate_admin_user!, only: :create
+      skip_before_action :authenticate_user!, only: :create
 
       def create
         admin = RestaurantAdmin.find_by(email: sign_in_params[:email])

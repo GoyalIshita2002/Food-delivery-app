@@ -1,5 +1,5 @@
 class V1::AdminUserController < ApplicationController
-  skip_before_action :authenticate_admin_user!, only: :check_account_availability
+  skip_before_action :authenticate_user!, only: :check_account_availability
 
   def check_account_availability
     unless params[:email].present?
