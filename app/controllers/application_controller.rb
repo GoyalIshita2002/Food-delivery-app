@@ -7,7 +7,8 @@ class ApplicationController < ActionController::API
     unless request.headers['Authorization'].present?
       render json: { status: {code:"401", message: "unauthorized request" }}, status: :unauthorized and return
     end
-    jwt_payload = JWT.decode(request.headers['Authorization'].split(" ")[1], Rails.application.credentials.fetch(:secret_key_base))&.first
+
+    jwt_payload = JWT.decode(request.headers['Authorization'].split(" ")[1], Rails.application.credentials.fetch(:secret_key_base), false)&.first
 
     if request.url.include?('v1/super_admin')
       @current_super_admin = SuperAdmin.find_by(id: jwt_payload['sub'])
