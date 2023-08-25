@@ -7,7 +7,6 @@ class V1::RestaurantOwner::ProfileController < ApplicationController
       current_admin_user.update(profile_params)
       RestaurantOwner::UpdateRestaurant.call(restaurant, restaurant_params) if restaurant_params.present?
       RestaurantOwner::UpdateRestaurantAddress.call(restaurant, restaurant_address_params) if restaurant_address_params.present?
-      current_admin_user.reload
     end
   end
  
@@ -16,7 +15,6 @@ class V1::RestaurantOwner::ProfileController < ApplicationController
       render json: { status: {code:"404", message:"Missing avatar"}}, status: :bad_request
     end
     if current_admin_user.update(avatar: params[:avatar])
-      current_admin_user.reload
       render template: "v1/restaurant_owner/profile/update"
     else
       render json: { code: { status: "400", errors: current_admin_user.errors&.full_messages }}, status: :bad_request and return
@@ -46,7 +44,7 @@ class V1::RestaurantOwner::ProfileController < ApplicationController
   end
 
   def restaurant
-    @restaurant ||= Restaurant.find_by(restaurant_id)
+    @restaurant ||= current_admin_user.restaurants.last
   end
 
   def check_restaurant

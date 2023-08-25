@@ -3,7 +3,7 @@ json.status do
  json.message "Restaurant created successfully"
 end
 
-restaurant = current_admin_user.restaurants.last
+restaurant = current_admin_user.reload.restaurants.reload.last
 
 json.restaurant do 
   json.id restaurant.id
@@ -42,4 +42,5 @@ json.restaurant_admin do
   json.id admin_user.id
   json.email admin_user.email
   json.owner_name admin_user.user_name
+  json.avatar_url admin_user.avatar_url
 end

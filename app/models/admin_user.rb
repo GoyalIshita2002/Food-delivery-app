@@ -27,6 +27,12 @@ class AdminUser < ApplicationRecord
     end
   end
 
+  def avatar_url
+    ActiveStorage::Current.set(host: Rails.application.credentials.fetch(:base_url)) do
+      self.avatar.url
+    end
+  end
+
   def jwt_payload
     super
   end
