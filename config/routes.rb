@@ -26,10 +26,13 @@ Rails.application.routes.draw do
       get 'grouped_dishes', to: "dishes#dishes_by_type"
       get 'popular_dishes', to: "dishes#popular"
       put 'dishes_availability', to: "dishes#dishes_availability"
+      put 'update_popular_dishes', to: "dishes#popular_dishes"
       post 'add_ons', to: "add_ons#create"
       put 'add_ons/:id', to: "add_ons#update"
       # delete 'add_ons', to: "add_ons#destroy"
       get 'add_ons/:id', to: "add_ons#show"
+      put 'profile/update', to: "profile#update"
+      post 'profile/upload_image', to: "profile#upload_image"
     end
 
     namespace :super_admin do

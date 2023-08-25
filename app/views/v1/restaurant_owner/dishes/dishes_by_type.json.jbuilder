@@ -3,8 +3,9 @@ json.status do
 end
 
 json.data do
-  @dish_types.each do |dish_type|
-    json.set! dish_type.title  do |json| 
+  json.array! @dish_types do |dish_type|
+    json.title dish_type.title
+    json.dishes do |json| 
         json.partial! 'dishes', locals: { dishes: dish_type.dishes, restaurant: @restaurant }
     end 
   end

@@ -53,7 +53,14 @@ class V1::RestaurantOwner::DishesController < ApplicationController
   def dishes_availability 
     restaurant.dishes.where(id: availability_params[:available]).update_all(is_available: true)  if availability_params[:available].present?
     restaurant.dishes.where(id: availability_params[:unavailable]).update_all(is_available: false) if availability_params[:unavailable].present?
-    @dishes = restaurant.dishes
+    @dishes = restaurant.dishes.order(:id)
+    render template: "v1/restaurant_owner/dishes/index"
+  end
+
+  def popular_dishes
+    restaurant.dishes.where(id: popular_dishes_params[:popular]).update_all(is_popular: true)   if popular_dishes_params[:popular].present?
+    restaurant.dishes.where(id: popular_dishes_params[:unpopular]).update_all(is_popular: false)  if popular_dishes_params[:unpopular].present?
+    @dishes = restaurant.dishes.order(:id)
     render template: "v1/restaurant_owner/dishes/index"
   end
 
@@ -61,6 +68,10 @@ class V1::RestaurantOwner::DishesController < ApplicationController
 
   def availability_params
     params.require(:dishes).permit(:available => [], :unavailable => [])
+  end
+
+  def popular_dishes_params
+    params.require(:dishes).permit(:popular => [], :unpopular => [])
   end
 
   def validate_image
