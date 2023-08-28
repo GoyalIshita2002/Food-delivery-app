@@ -16,6 +16,7 @@ class V1::RestaurantOwner::ProfileController < ApplicationController
       render json: { status: {code:"404", message:"Missing avatar"}}, status: :bad_request
     end
     if current_admin_user.update(avatar: params[:avatar])
+      @admin = current_admin_user.reload
       render template: "v1/restaurant_owner/profile/update"
     else
       render json: { code: { status: "400", errors: current_admin_user.errors&.full_messages }}, status: :bad_request and return
