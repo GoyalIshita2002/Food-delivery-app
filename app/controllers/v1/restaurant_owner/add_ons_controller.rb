@@ -1,7 +1,7 @@
 class V1::RestaurantOwner::AddOnsController < ApplicationController
 
   before_action :check_restaurant 
-  before_action :check_add_on, only: [:show, :update]
+  before_action :check_add_on, only: [:show, :update, :destroy]
 
   def create
     @add_on = RestaurantOwner::CreateAddOn.call(restaurant, add_on_params)
@@ -11,12 +11,22 @@ class V1::RestaurantOwner::AddOnsController < ApplicationController
   end
 
   def update
-    add_on.update(add_on_params)
+    @add_on = RestaurantOwner::UpdateAddOn.call(@add_on, add_on_params)
     @add_on.reload
     render template: "v1/restaurant_owner/add_ons/show"
   end
 
+  def index
+    @add_ons = restaurant.add_ons
+  end
+
   def destroy
+    if add_on.destroy!
+      @add_ons = restaurant.add_ons
+      render template: "v1/restaurant_owner/add_ons/index"
+    else
+      render json: { status: { code: "400", message: "Failed to destroy add-on"}, errors: add_on.errors.map(&:full_messages)  }, status: :bad_request
+    end
   end
 
   protected
@@ -26,7 +36,7 @@ class V1::RestaurantOwner::AddOnsController < ApplicationController
   end
 
   def add_on_params
-    params.require(:add_ons).permit(:name, :min_quantity, :max_quantity,:items=>[ :name, :price ])
+    params.require(:add_ons).permit(:name ,:items=>[ :id, :name, :price, :min_quantity, :max_quantity ])
   end
 
   def item_params

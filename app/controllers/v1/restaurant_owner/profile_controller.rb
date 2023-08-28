@@ -3,10 +3,11 @@ class V1::RestaurantOwner::ProfileController < ApplicationController
   before_action :check_restaurant, only: :update
 
   def update
-    ActiveRecord::Base.transaction do 
+    @admin = ActiveRecord::Base.transaction do 
       current_admin_user.update(profile_params)
       RestaurantOwner::UpdateRestaurant.call(restaurant, restaurant_params) if restaurant_params.present?
       RestaurantOwner::UpdateRestaurantAddress.call(restaurant, restaurant_address_params) if restaurant_address_params.present?
+      current_admin_user.reload
     end
   end
  

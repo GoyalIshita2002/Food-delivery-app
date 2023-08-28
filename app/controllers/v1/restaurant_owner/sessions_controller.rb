@@ -7,15 +7,9 @@ module V1
       skip_before_action :authenticate_user!, only: :create
 
       def create
-        admin = RestaurantAdmin.find_by(email: sign_in_params[:email])
-        if admin&.valid_for_authentication? { admin.valid_password?(sign_in_params[:password]) }
-          render json: {
-            status: 200,
-            message: "signin successful",
-            data: admin,
-            restaurant: admin.restaurants.last,
-            auth_token: admin.generate_jwt,
-          },status: :ok
+        @admin = RestaurantAdmin.find_by(email: sign_in_params[:email])
+        if @admin&.valid_for_authentication? { @admin.valid_password?(sign_in_params[:password]) }
+          render template: "v1/restaurant_owner/profile/update"
         else
           render json: {
             status: 401,

@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     get 'restaurants/update'
 
     namespace :restaurant_owner do
-      put 'restaurants/:id/update', to: "restaurants#update"
+      put 'restaurants/update', to: "restaurants#update"
       post 'dishes', to: "dishes#create"
       put 'dishes/:id', to: "dishes#update"
       get 'dishes/:id', to: "dishes#show"
@@ -28,8 +28,9 @@ Rails.application.routes.draw do
       put 'dishes_availability', to: "dishes#dishes_availability"
       put 'update_popular_dishes', to: "dishes#popular_dishes"
       post 'add_ons', to: "add_ons#create"
+      get 'add_ons', to: "add_ons#index"
       put 'add_ons/:id', to: "add_ons#update"
-      # delete 'add_ons', to: "add_ons#destroy"
+      delete 'add_ons/:id', to: "add_ons#destroy"
       get 'add_ons/:id', to: "add_ons#show"
       put 'profile/update', to: "profile#update"
       post 'profile/upload_image', to: "profile#upload_image"

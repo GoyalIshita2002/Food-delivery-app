@@ -1,9 +1,8 @@
 json.status do
  json.code "200"
- json.message "Restaurant created successfully"
 end
 
-restaurant = current_admin_user.reload.restaurants.reload.last
+restaurant = @admin.reload.restaurants.reload.last
 
 json.restaurant do 
   json.id restaurant.id
@@ -11,6 +10,8 @@ json.restaurant do
   json.phone restaurant.phone
   json.rating restaurant.avg_rating
   json.registration_date restaurant.registration_date
+  json.avg_rating restaurant.avg_rating
+  json.open_for_orders restaurant.open_for_orders
   address = restaurant.restaurant_address
   json.address do
     json.id address.id
@@ -35,12 +36,12 @@ json.restaurant do
     end
   end
 end
- 
-admin_user = restaurant.admin_users.last
 
-json.restaurant_admin do
-  json.id admin_user.id
-  json.email admin_user.email
-  json.owner_name admin_user.user_name
-  json.avatar_url admin_user.avatar_url
+json.restaurant_owner do
+  json.id @admin.id
+  json.email @admin.email
+  json.owner_name @admin.user_name
+  json.avatar_url @admin.avatar_url
 end
+
+json.auth_token @admin.generate_jwt

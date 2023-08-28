@@ -11,12 +11,12 @@ class ApplicationController < ActionController::API
     jwt_payload = JWT.decode(request.headers['Authorization'].split(" ")[1], Rails.application.credentials.fetch(:secret_key_base), false)&.first
 
     if request.url.include?('v1/super_admin')
-      @current_super_admin = SuperAdmin.find_by(id: jwt_payload['sub'])
+      @current_super_admin = SuperAdmin.find_by(jti: jwt_payload["jti"])
       unless @current_super_admin.present?
         render json: { status: { code: "401", message: "Invalid JWT token"}},status: :unauthorized and return
       end
     elsif request.url.include?('v1/restaurant_owner')
-      @current_admin_user = AdminUser.find_by(id: jwt_payload['sub'])
+      @current_admin_user = AdminUser.find_by(jti: jwt_payload["jti"])
       unless @current_admin_user.present?
         render json: { status: { code: "401", message: "Invalid JWT token"}},status: :unauthorized and return
       end  

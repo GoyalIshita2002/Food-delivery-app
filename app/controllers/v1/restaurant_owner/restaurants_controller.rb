@@ -15,7 +15,11 @@ class V1::RestaurantOwner::RestaurantsController < ApplicationController
     params.require(:restaurant).permit(:open_for_orders)
   end
 
+  def restaurant_id
+    request.headers["restaurant-id"]
+  end
+
   def restaurant
-    @restaurant ||= Restaurant.find_by(id: params[:id])
+    @restaurant ||= Restaurant.find_by(id: restaurant_id)
   end
 end
