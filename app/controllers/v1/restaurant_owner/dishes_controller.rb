@@ -81,7 +81,7 @@ class V1::RestaurantOwner::DishesController < ApplicationController
   end
 
   def dish_params
-    params.require(:dish).permit(:name, :dish_type, :price, :description, :is_popular)
+    params.require(:dish).permit(:name, :dish_type, :price, :description, :is_popular, :add_ons=>[:id, :name, :sub_item_ids=>[]])
   end
 
   def check_restaurant

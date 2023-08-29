@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_28_053726) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_29_090058) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -107,6 +107,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_053726) do
     t.bigint "item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "dish_add_on_id"
+    t.index ["dish_add_on_id"], name: "index_dish_items_on_dish_add_on_id"
     t.index ["dish_id"], name: "index_dish_items_on_dish_id"
     t.index ["item_id"], name: "index_dish_items_on_item_id"
   end
@@ -269,6 +271,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_053726) do
   add_foreign_key "dish_add_ons", "restaurants"
   add_foreign_key "dish_categories", "dish_types"
   add_foreign_key "dish_categories", "dishes"
+  add_foreign_key "dish_items", "dish_add_ons"
   add_foreign_key "dish_items", "dishes"
   add_foreign_key "dish_items", "items"
   add_foreign_key "dishes", "restaurants"
