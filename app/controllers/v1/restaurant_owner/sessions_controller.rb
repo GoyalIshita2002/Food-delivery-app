@@ -19,7 +19,7 @@ module V1
       end
 
       def sign_in_params
-        params.require(:restaurant_owner).permit(:email,:password)
+        params.permit(:email,:password)
       end
 
       def respond_to_on_destroy
