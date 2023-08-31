@@ -1,2 +1,0 @@
-class RestaurantAdmin < AdminUser
-end

@@ -8,6 +8,7 @@ json.restaurant do
   json.id restaurant.id
   json.name restaurant.name
   json.phone restaurant.phone
+  json.std_code restaurant.std_code
   json.rating restaurant.avg_rating
   json.registration_date restaurant.registration_date
   json.avg_rating restaurant.avg_rating

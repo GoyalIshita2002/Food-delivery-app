@@ -19,7 +19,7 @@ class V1::RestaurantOwner::PasswordsController < ApplicationController
   end
 
   def restaurant_admin
-    @restaurant_admin ||= RestaurantAdmin.find_by(email: password_params[:email])
+    @restaurant_admin ||= AdminUser.find_by(email: password_params[:email])
   end
 
   def validate_restaurant_admin

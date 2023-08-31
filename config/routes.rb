@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       get 'add_ons/:id', to: "add_ons#show"
       put 'profile/update', to: "profile#update"
       post 'profile/upload_image', to: "profile#upload_image"
+      get 'countries', to: "countries#index"
     end
 
     namespace :super_admin do
@@ -45,17 +46,17 @@ Rails.application.routes.draw do
     end
   end
   
-  devise_for :admin_users, controllers: {
-    sessions: 'admin_users/sessions',
-    registrations: 'admin_users/registrations',
-    passwords: 'admin_users/passwords'
-  }
+  # devise_for :admin_users, controllers: {
+  #   sessions: 'admin_users/sessions',
+  #   registrations: 'admin_users/registrations',
+  #   passwords: 'admin_users/passwords'
+  # }
 
   
 
 
   # devise_for :super_admin, controllers: { sessions: '/v1/super_admin/create_restaurant' }
-  devise_for :restaurant_admin, path: 'v1/restaurant_owner', controllers: { sessions: 'v1/restaurant_owner/sessions' }
+  devise_for :admin_user, path: 'v1/restaurant_owner', controllers: { sessions: 'v1/restaurant_owner/sessions' }
 
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

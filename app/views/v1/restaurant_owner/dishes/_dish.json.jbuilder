@@ -21,5 +21,7 @@ end
 json.restaurant do
   json.id restaurant.id
   json.name restaurant.name
+  json.phone restaurant.phone
+  json.std_code restaurant.std_code
 end
  

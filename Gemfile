@@ -57,3 +57,5 @@ gem 'devise-jwt'
 gem "pundit", "~> 2.3"
 
 gem "ruby-vips", "~> 2.1"
+
+gem "countries", "~> 5.6"
