@@ -44,6 +44,14 @@ Rails.application.routes.draw do
       post 'restaurant/:restaurant_id/documents', to: "documents#create"
       get 'restaurant/:restaurant_id/documents', to: "documents#index"
     end
+
+    namespace :customer do
+      get 'check_email_availability', to: "miscellaneous#check_email_availability" 
+      post 'verify_customer', to: "profile#verify_otp"
+      put 'profile', to: "profile#update"
+      post 'addresses', to: "customer_addresses#create"
+      post 'delete_avatar', to: "profile#delete_avatar"
+    end
   end
   
   # devise_for :admin_users, controllers: {
@@ -55,9 +63,11 @@ Rails.application.routes.draw do
   
 
 
-  # devise_for :super_admin, controllers: { sessions: '/v1/super_admin/create_restaurant' }
   devise_for :admin_user, path: 'v1/restaurant_owner', controllers: { sessions: 'v1/restaurant_owner/sessions' }
-
+  devise_for :customers, path: 'v1/customer', controllers: { 
+    sessions: 'v1/customer/sessions',
+    registrations: 'v1/customer/registrations'
+  }
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

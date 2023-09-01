@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_31_065108) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_01_075328) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -82,6 +82,46 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_31_065108) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "customer_addresses", force: :cascade do |t|
+    t.string "street", null: false
+    t.string "address", null: false
+    t.string "zip_code", null: false
+    t.string "state", null: false
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "customer_id", null: false
+    t.index ["customer_id"], name: "index_customer_addresses_on_customer_id"
+  end
+
+  create_table "customer_otps", force: :cascade do |t|
+    t.string "otp", limit: 4
+    t.bigint "customer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_customer_otps_on_customer_id"
+  end
+
+  create_table "customers", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "username"
+    t.string "phone"
+    t.string "std_code"
+    t.date "dob"
+    t.date "doa"
+    t.string "jti", null: false
+    t.boolean "is_verified", default: false
+    t.index ["email"], name: "index_customers_on_email", unique: true
+    t.index ["jti"], name: "index_customers_on_jti", unique: true
+    t.index ["reset_password_token"], name: "index_customers_on_reset_password_token", unique: true
   end
 
   create_table "dish_add_ons", force: :cascade do |t|
@@ -269,6 +309,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_31_065108) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "avg_pricings", "restaurants"
+  add_foreign_key "customer_addresses", "customers"
+  add_foreign_key "customer_otps", "customers"
   add_foreign_key "dish_add_ons", "restaurants"
   add_foreign_key "dish_categories", "dish_types"
   add_foreign_key "dish_categories", "dishes"
