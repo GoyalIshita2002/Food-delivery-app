@@ -7,18 +7,13 @@ class V1::Customer::SessionsController < Devise::SessionsController
   def create
     customer = Customer.find_by(email: sign_in_params[:email])
     
-    if customer&.valid_for_authentication? { customer.valid_password?(sign_in_params[:password]) }
-      # render json: {
-      #   status: 200,
-      #   message: "signin successful",
-      #   data: current_customer,
-      # },status: :ok
-    else
+    unless customer&.valid_for_authentication? { customer.valid_password?(sign_in_params[:password]) }
       render json: {
         status: 401,
         message: "Invalid Credentials"
       },status: :unauthorized
     end
+    @current_customer = customer
   end
 
   protected
@@ -27,14 +22,6 @@ class V1::Customer::SessionsController < Devise::SessionsController
   def sign_in_params
     params.permit(:email,:password)
   end
-
-  # def respond_with(resource, options={})
-  #   render json: {
-  #     status: 200,
-  #     message: "signin successful",
-  #     data: current_admin_user
-  #   },status: :ok
-  # end
 
   def respond_to_on_destroy
     jwt_payload = JWT.decode(request.headers['Authorization'].split(" ")[1], Rails.application.credentials.fetch(:secret_key_base))&.first

@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       put 'profile', to: "profile#update"
       post 'addresses', to: "customer_addresses#create"
       post 'delete_avatar', to: "profile#delete_avatar"
+      patch 'update_password', to: "profile#update_password"  
     end
   end
   
