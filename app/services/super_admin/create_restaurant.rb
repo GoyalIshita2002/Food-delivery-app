@@ -17,6 +17,8 @@ class SuperAdmin::CreateRestaurant < ApplicationService
                   open_hour.split_hours.create(split_hour)
                 end
               end
+              restaurant.create_customer_margin(margin_percent: customer_margin) if customer_margin.present?
+              restaurant.create_restaurant_margin(margin_percent: restaurant_margin) if restaurant_margin.present?
               admin
             end
   end
@@ -26,7 +28,7 @@ class SuperAdmin::CreateRestaurant < ApplicationService
   end
 
   def restaurant_params 
-    params.require(:restaurant).permit(:name, :registration_date, :phone)
+    params.require(:restaurant).permit(:name, :registration_date, :phone, :lock_menu)
   end
 
   def restaurant_address_params
@@ -34,8 +36,18 @@ class SuperAdmin::CreateRestaurant < ApplicationService
   end
 
   def open_hour_params
-    # params.require(:restaurant).require(:open_hours).permit([:day, :start_time, :end_time, :split_hours_attributes => []])
     params.require(:restaurant).require(:open_hours)
   end
 
+  def margins
+    params.require(:restaurant).require(:margins).permit(:customer_percent, :restaurant_percent)
+  end
+
+  def customer_margin
+    margins[:customer_percent]
+  end
+
+  def restaurant_margin
+    margins[:restaurant_percent]
+  end
 end

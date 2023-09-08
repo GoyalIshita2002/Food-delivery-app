@@ -25,6 +25,10 @@ class Restaurant < ApplicationRecord
 
   has_many :add_ons, class_name: 'DishAddOn', foreign_key: 'restaurant_id'
 
+  has_one :restaurant_margin
+
+  has_one :customer_margin
+
   validates_presence_of :name
 
   def address

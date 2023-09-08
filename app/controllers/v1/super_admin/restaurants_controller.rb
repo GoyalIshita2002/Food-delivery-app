@@ -8,9 +8,13 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
   end
 
   def update
-  end
+  end 
 
   def show
+    @restaurant = Restaurant.find_by(id: params[:id])
+    unless @restaurant.present?
+      render json: { status: { code: "404", message: "Invalid Restaurant ID"}},status: :not_found and return
+    end
   end
 
   protected
@@ -19,3 +23,4 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
     params.require(:restaurant_admin).permit(:email,:user_name, :password, :phone, :restaurant => {})
   end
 end
+ 

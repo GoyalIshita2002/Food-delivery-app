@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_01_075328) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_08_112057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -94,6 +94,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_075328) do
     t.datetime "updated_at", null: false
     t.bigint "customer_id", null: false
     t.index ["customer_id"], name: "index_customer_addresses_on_customer_id"
+  end
+
+  create_table "customer_margins", force: :cascade do |t|
+    t.bigint "restaurant_id", null: false
+    t.integer "margin_percent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_customer_margins_on_restaurant_id"
   end
 
   create_table "customer_otps", force: :cascade do |t|
@@ -243,6 +251,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_075328) do
     t.index ["restaurant_id"], name: "index_restaurant_cuisines_on_restaurant_id"
   end
 
+  create_table "restaurant_margins", force: :cascade do |t|
+    t.bigint "restaurant_id", null: false
+    t.integer "margin_percent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_restaurant_margins_on_restaurant_id"
+  end
+
   create_table "restaurant_menus", force: :cascade do |t|
     t.bigint "restaurant_id", null: false
     t.decimal "min_price"
@@ -279,6 +295,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_075328) do
     t.boolean "open_for_orders", default: false
     t.string "registration_date"
     t.string "std_code"
+    t.boolean "lock_menu", default: false
   end
 
   create_table "split_hours", force: :cascade do |t|
@@ -310,6 +327,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_075328) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "avg_pricings", "restaurants"
   add_foreign_key "customer_addresses", "customers"
+  add_foreign_key "customer_margins", "restaurants"
   add_foreign_key "customer_otps", "customers"
   add_foreign_key "dish_add_ons", "restaurants"
   add_foreign_key "dish_categories", "dish_types"
@@ -325,6 +343,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_075328) do
   add_foreign_key "restaurant_categories", "restaurants"
   add_foreign_key "restaurant_cuisines", "cuisines"
   add_foreign_key "restaurant_cuisines", "restaurants"
+  add_foreign_key "restaurant_margins", "restaurants"
   add_foreign_key "restaurant_menus", "restaurants"
   add_foreign_key "restaurant_open_days", "open_days"
   add_foreign_key "restaurant_open_days", "restaurants"
