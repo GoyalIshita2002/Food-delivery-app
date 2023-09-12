@@ -5,4 +5,4 @@ end
 
 json.partial! 'v1/customer/profile'
 
-json.verification_otp current_customer.verification_otp
+json.auth_token current_customer.generate_jwt

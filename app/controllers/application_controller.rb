@@ -27,5 +27,7 @@ class ApplicationController < ActionController::API
       end  
     else
     end
+  rescue => e
+    render json: { status: { code: "401", message: "Invalid JWT token"}},status: :unauthorized and return
   end
 end

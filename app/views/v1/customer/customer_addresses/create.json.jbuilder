@@ -7,5 +7,4 @@ json.addresses current_customer.addresses do |address|
   json.partial! 'address', locals: { address: address}
 end
 
-json.partial! 'v1/customer/profile'
 

@@ -52,6 +52,7 @@ Rails.application.routes.draw do
       post 'addresses', to: "customer_addresses#create"
       post 'delete_avatar', to: "profile#delete_avatar"
       patch 'update_password', to: "profile#update_password"  
+      patch 'update_phone', to: "profile#update_phone"
     end
   end
   

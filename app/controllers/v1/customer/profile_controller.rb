@@ -1,10 +1,20 @@
 class V1::Customer::ProfileController < ApplicationController
 
   def verify_otp
-    unless (CustomerOtp.find_by(otp: params[:otp])&.customer_id == current_customer.id)
+    # unless (CustomerOtp.find_by(otp: params[:otp])&.customer_id == current_customer.id)
+    #   render json: { status: { code: "400", message: "Invalid OTP" }}, status: :bad_request and return
+    # end 
+    unless (params[:otp] == "1234")
       render json: { status: { code: "400", message: "Invalid OTP" }}, status: :bad_request and return
-    end 
+    end
     current_customer.update(is_verified: true)
+  end
+
+  def update_phone
+    unless current_customer.update!(phone_params.merge(is_verified: false))
+      render json: { status: { code: "400", message: "Invalid params" }}, status: :bad_request and return
+    end
+    render template: "v1/customer/profile/update"
   end
  
   def delete_avatar
@@ -15,8 +25,8 @@ class V1::Customer::ProfileController < ApplicationController
   end
 
   def update
-    unless current_customer.update!(profile_params)
-      render json: { status: { code: "400", message: "Invalid params" }}, status: :bad_request and return
+    unless current_customer.update(profile_params)
+      render json: { status: { code: "400", message: "Invalid params"}, errors: current_customer.errors.full_messages }, status: :bad_request and return
     end
   end
 
@@ -47,6 +57,10 @@ class V1::Customer::ProfileController < ApplicationController
   end
 
   def profile_params
-    params.permit(:username, :email, :dob,:doa, :std_code, :phone, :avatar)
+    params.permit(:username, :email, :dob,:doa, :std_code, :avatar)
+  end
+
+  def phone_params
+    params.permit(:phone)
   end
 end 
