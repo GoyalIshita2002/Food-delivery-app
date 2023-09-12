@@ -5,10 +5,10 @@ class V1::Customer::ProfileController < ApplicationController
     #   render json: { status: { code: "400", message: "Invalid OTP" }}, status: :bad_request and return
     # end 
     unless (params[:otp] == "1234")
-      render json: { status: { code: "400", message: "Invalid OTP" }}, status: :bad_request and return
+      render json: { status: { success: false, code: "400", message: "Invalid OTP" }}, status: :bad_request and return
     end
     current_customer.update(is_verified: true)
-  end
+  end 
 
   def update_phone
     unless current_customer.update!(phone_params.merge(is_verified: false))
