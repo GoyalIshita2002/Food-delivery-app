@@ -53,6 +53,7 @@ Rails.application.routes.draw do
       post 'delete_avatar', to: "profile#delete_avatar"
       patch 'update_password', to: "profile#update_password"  
       patch 'update_phone', to: "profile#update_phone"
+      resources :restaurants, only: [ :index, :show ]
     end
   end
   

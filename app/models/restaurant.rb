@@ -36,6 +36,12 @@ class Restaurant < ApplicationRecord
     "#{location.street}, #{location.address}, #{location.zip_code}, #{location.state}"
   end
 
+  def main_image_url
+    ActiveStorage::Current.set(host: Rails.application.credentials.fetch(:base_url)) do
+      self.main_image.url
+    end
+  end
+
   def coordinates
     location = self.restaurant_address
     [location.latitude, location.longitude ]

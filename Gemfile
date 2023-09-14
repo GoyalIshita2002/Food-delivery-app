@@ -59,3 +59,7 @@ gem "pundit", "~> 2.3"
 gem "ruby-vips", "~> 2.1"
 
 gem "countries", "~> 5.6"
+
+gem "geocoder", "~> 1.8"
+
+gem "pagy", "~> 6.0"

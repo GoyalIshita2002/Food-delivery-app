@@ -1,0 +1,9 @@
+json.id address.id
+json.street address.street
+json.address1 address.address1
+json.address2 address.address2
+json.zip_code address.zip_code
+json.city address.city
+json.state address.state
+json.latitude address.latitude
+json.longitude address.longitude
