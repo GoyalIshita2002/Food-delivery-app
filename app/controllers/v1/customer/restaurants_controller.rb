@@ -2,7 +2,7 @@ class V1::Customer::RestaurantsController < ApplicationController
   include Pagy::Backend
 
   def index
-    @pagy, @restaurants = pagy(Restaurant.all, items: params[:per_page]&.to_i)
+    @pagy, @restaurants = pagy(Restaurant.opened, items: params[:per_page]&.to_i)
   end
 
   def show

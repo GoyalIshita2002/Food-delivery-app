@@ -54,6 +54,7 @@ Rails.application.routes.draw do
       patch 'update_password', to: "profile#update_password"  
       patch 'update_phone', to: "profile#update_phone"
       resources :restaurants, only: [ :index, :show ]
+      resources :dishes, only: [ :index, :show ]
     end
   end
   
