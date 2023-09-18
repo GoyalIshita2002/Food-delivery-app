@@ -6,7 +6,7 @@ class V1::AdminUsers::RestaurantsController < ApplicationController
       render json: { status: "401", message: "Authorization failure" }, status: :unauthorized and return 
     end
 
-    @restaurant = current_admin_user.restaurants.first
+    @restaurant = current_admin_user.restaurant
   end
 
 

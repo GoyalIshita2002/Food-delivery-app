@@ -46,7 +46,7 @@ end
   end
 
   def restaurant
-    @restaurant ||= current_admin_user.restaurants.last
+    @restaurant ||= current_admin_user.restaurant
   end
 
   def check_restaurant

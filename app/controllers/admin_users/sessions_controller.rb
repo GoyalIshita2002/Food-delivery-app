@@ -13,7 +13,7 @@ class AdminUsers::SessionsController < Devise::SessionsController
         status: 200,
         message: "signin successful",
         data: current_admin_user,
-        restaurant: admin_user.restaurants.last
+        restaurant: admin_user.restaurant
       },status: :ok
     else
       render json: {

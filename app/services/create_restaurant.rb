@@ -7,7 +7,7 @@ class CreateRestaurant < ApplicationService
   attr_reader :params, :owner
 
   def call
-    restaurant = owner.restaurants.create(name: params[:name])
+    restaurant = owner.create_restaurant(name: params[:name])
     map_categories(restaurant)  if params[:type].present?
     set_open_hours(restaurant)  if params[:open_time].present? || params[:close_time].present?
     set_restaurant_address(restaurant)  if params[:restaurant_address].present? && params[:restaurant_address][:address].present?

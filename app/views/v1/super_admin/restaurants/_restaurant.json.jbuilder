@@ -5,6 +5,7 @@ json.restaurant do
   json.phone restaurant.phone
   json.registration_date restaurant.registration_date
   json.lock_menu restaurant.lock_menu 
+  json.main_image_url restaurant.main_image_url
   address = restaurant.restaurant_address
   json.address do
     json.id address.id
@@ -23,6 +24,7 @@ json.restaurant do
       json.end_time open_hour.end_time
       json.split_hours do 
         json.array! open_hour.split_hours do |split_hour|
+          json.id split_hour.id
           json.start_at split_hour.start_at
           json.end_at split_hour.end_at
         end
@@ -33,10 +35,11 @@ json.restaurant do
   json.margin_from_customer restaurant&.customer_margin&.margin_percent || 0
 end
  
-admin_user = restaurant.admin_users.last
+admin_user = restaurant.admin_user
 
 json.restaurant_admin do
   json.id admin_user.id
   json.email admin_user.email
   json.owner_name admin_user.user_name
+  json.avatar_url admin_user.avatar_url 
 end

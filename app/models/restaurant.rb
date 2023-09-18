@@ -1,6 +1,6 @@
 class Restaurant < ApplicationRecord
-  has_many :restaurant_users, dependent: :destroy
-  has_many :admin_users, through: :restaurant_users
+  has_one :restaurant_user, dependent: :destroy
+  has_one :admin_user, through: :restaurant_user
 
   has_one_attached :main_image
 

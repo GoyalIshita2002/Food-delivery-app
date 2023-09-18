@@ -38,11 +38,10 @@ Rails.application.routes.draw do
     end
 
     namespace :super_admin do
-      post 'restaurants', to: "restaurants#create"
-      put 'restaurants/:id', to: "restaurants#update"
-      get 'restaurants/:id', to: "restaurants#show"
+      resources :restaurants
       post 'restaurant/:restaurant_id/documents', to: "documents#create"
       get 'restaurant/:restaurant_id/documents', to: "documents#index"
+      delete 'documents/:id', to: "documents#destroy"
     end
 
     namespace :customer do

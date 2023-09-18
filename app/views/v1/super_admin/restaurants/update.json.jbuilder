@@ -1,4 +1,3 @@
-
 json.partial! 'restaurant', locals: { restaurant: @restaurant}
 
 json.documents do

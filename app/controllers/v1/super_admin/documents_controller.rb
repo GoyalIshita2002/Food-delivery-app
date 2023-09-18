@@ -14,6 +14,18 @@ class V1::SuperAdmin::DocumentsController < ApplicationController
     @documents = restaurant.documents
   end
 
+  def destroy
+    document = Document.find_by(id: params[:id])
+    unless document.present?
+      render json: {status: {code: "400", message: "Invalid Document ID"}}, sttaus: :bad_request and return
+    end
+    if document.destroy!
+      render json: { status: {code: "200", message: "Document destroyed successfully"}}, status: :ok and return
+    else
+      render json: {status: {code: "400", message: "Invalid Document"}}, status: :bad_request and return
+    end
+  end
+
   private 
 
   def document_params

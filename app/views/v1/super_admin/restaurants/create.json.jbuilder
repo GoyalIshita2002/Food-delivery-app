@@ -3,7 +3,7 @@ json.status do
  json.message "Restaurant created successfully"
 end
 
-restaurant = @admin.restaurants.last
+restaurant = @admin.restaurant
 
 
 json.partial! 'restaurant', locals: { restaurant: restaurant}

@@ -9,8 +9,8 @@ class AdminUser < ApplicationRecord
   enum :role, [ :super_admin, :franchise_owner, :staff ]
   has_one_attached :avatar
 
-  has_many :restaurant_users
-  has_many :restaurants, through: :restaurant_users
+  has_one :restaurant_user
+  has_one :restaurant, through: :restaurant_user
 
   validate :acceptable_image
 
