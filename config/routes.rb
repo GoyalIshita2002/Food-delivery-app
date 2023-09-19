@@ -54,6 +54,8 @@ Rails.application.routes.draw do
       patch 'update_phone', to: "profile#update_phone"
       resources :restaurants, only: [ :index, :show ]
       resources :dishes, only: [ :index, :show ]
+      resources :cart_items
+      get 'show_cart', to: "carts#show"
     end
   end
   

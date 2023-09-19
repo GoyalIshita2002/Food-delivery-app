@@ -15,7 +15,6 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
   def update
     ActiveRecord::Base.transaction do 
       SuperAdmin::UpdateUserProfile.call(restaurant_admin_update_params, restaurant_owner) if restaurant_admin_update_params.present?
-      debugger
       SuperAdmin::UpdateRestaurant.call(restaurant_update_params, restaurant) if restaurant_update_params.present?
     end
   rescue => e

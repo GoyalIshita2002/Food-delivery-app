@@ -9,6 +9,11 @@ class Customer < ApplicationRecord
   has_one_attached :avatar
   has_one :customer_otp
   has_many :addresses, class_name: 'CustomerAddress', foreign_key: 'customer_id'
+  has_many :carts
+
+  def cart
+    self.carts.find_by(status: :open) 
+  end
 
   def avatar_url
     ActiveStorage::Current.set(host: Rails.application.credentials.fetch(:base_url)) do

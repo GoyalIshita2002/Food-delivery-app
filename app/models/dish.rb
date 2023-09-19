@@ -15,4 +15,13 @@ class Dish < ApplicationRecord
       image.url
     end
   end
+
+  def customer_price
+    margin = restaurant.customer_margin
+    if margin.present? && margin.margin_percent.present?
+      self.price + (margin.margin_percent.to_i * price)/100
+    else
+      self.price
+    end
+  end
 end

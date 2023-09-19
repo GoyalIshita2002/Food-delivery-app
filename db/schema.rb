@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_14_070306) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_19_030752) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -70,6 +70,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_14_070306) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["restaurant_id"], name: "index_avg_pricings_on_restaurant_id"
+  end
+
+  create_table "cart_items", force: :cascade do |t|
+    t.bigint "cart_id", null: false
+    t.bigint "dish_id", null: false
+    t.integer "quantity", default: 1
+    t.decimal "ordered_price", default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "unit_price"
+    t.index ["cart_id"], name: "index_cart_items_on_cart_id"
+    t.index ["dish_id"], name: "index_cart_items_on_dish_id"
+  end
+
+  create_table "carts", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.decimal "total_amount", default: "0.0"
+    t.integer "item_count", default: 0
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_carts_on_customer_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -329,6 +351,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_14_070306) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "avg_pricings", "restaurants"
+  add_foreign_key "cart_items", "carts"
+  add_foreign_key "cart_items", "dishes"
+  add_foreign_key "carts", "customers"
   add_foreign_key "customer_addresses", "customers"
   add_foreign_key "customer_margins", "restaurants"
   add_foreign_key "customer_otps", "customers"
