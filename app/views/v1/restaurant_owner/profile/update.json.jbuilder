@@ -2,7 +2,7 @@ json.status do
  json.code "200"
 end
 
-restaurant = @admin.reload.restaurant.reload.last
+restaurant = @admin.reload.restaurant
 
 json.restaurant do 
   json.id restaurant.id
