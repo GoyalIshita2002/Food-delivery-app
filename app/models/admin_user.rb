@@ -42,3 +42,4 @@ class AdminUser < ApplicationRecord
     JWT.encode(payload,  Rails.application.credentials.fetch(:secret_key_base))
   end
 end
+ 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_19_030752) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_20_010150) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -118,6 +118,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_19_030752) do
     t.decimal "latitude"
     t.decimal "longitude"
     t.string "city", default: ""
+    t.boolean "is_default", default: false
+    t.integer "address_type", default: 0
     t.index ["customer_id"], name: "index_customer_addresses_on_customer_id"
   end
 

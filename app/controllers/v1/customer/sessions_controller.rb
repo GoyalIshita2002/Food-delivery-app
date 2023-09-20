@@ -16,7 +16,7 @@ class V1::Customer::SessionsController < Devise::SessionsController
     @current_customer = customer
   end
 
-  protected
+  protected 
 
   # If you have extra params to permit, append them to the sanitizer.
   def sign_in_params

@@ -26,7 +26,7 @@ class Customer < ApplicationRecord
   end
 
   def generate_jwt
-    payload = { "jti"=> self.jti, "sub"=> self.id, "scp"=>"customer", "aud"=>nil, "iat"=>Time.now.to_i, "exp"=> 0 }
+    payload = { "jti"=> self.jti, "sub"=> self.id, "scp"=>"customer", "aud"=>nil, "iat"=>Time.now.to_i, "exp"=> (Time.now + 1.years).to_i }
     JWT.encode(payload,  Rails.application.credentials.fetch(:secret_key_base))
   end
 

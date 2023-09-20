@@ -9,9 +9,7 @@ Rails.application.routes.draw do
       get 'restaurants/details'
     end
     get 'admin_user/check_account_availability'
-    get 'restaurants/index'
-    get 'restaurants/create'
-    get 'restaurants/update'
+    get 'countries', to: "miscellaneous#list"
 
     namespace :restaurant_owner do
       put 'restaurants/update', to: "restaurants#update"
@@ -34,7 +32,6 @@ Rails.application.routes.draw do
       get 'add_ons/:id', to: "add_ons#show"
       put 'profile/update', to: "profile#update"
       post 'profile/upload_image', to: "profile#upload_image"
-      get 'countries', to: "countries#index"
     end
 
     namespace :super_admin do
@@ -49,6 +46,8 @@ Rails.application.routes.draw do
       post 'verify_customer', to: "profile#verify_otp"
       put 'profile', to: "profile#update"
       post 'addresses', to: "customer_addresses#create"
+      put 'addresses/:id', to: "customer_addresses#update"
+      get 'addresses', to: "customer_addresses#index"
       post 'delete_avatar', to: "profile#delete_avatar"
       patch 'update_password', to: "profile#update_password"  
       patch 'update_phone', to: "profile#update_phone"
@@ -58,25 +57,10 @@ Rails.application.routes.draw do
       get 'show_cart', to: "carts#show"
     end
   end
-  
-  # devise_for :admin_users, controllers: {
-  #   sessions: 'admin_users/sessions',
-  #   registrations: 'admin_users/registrations',
-  #   passwords: 'admin_users/passwords'
-  # }
-
-  
-
 
   devise_for :admin_user, path: 'v1/restaurant_owner', controllers: { sessions: 'v1/restaurant_owner/sessions' }
   devise_for :customers, path: 'v1/customer', controllers: { 
     sessions: 'v1/customer/sessions',
     registrations: 'v1/customer/registrations'
   }
-
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
-  
 end
