@@ -55,6 +55,7 @@ Rails.application.routes.draw do
       resources :dishes, only: [ :index, :show ]
       resources :cart_items
       get 'show_cart', to: "carts#show"
+      get 'grouped_dishes', to: "dishes#grouped_dishes"
     end
   end
 

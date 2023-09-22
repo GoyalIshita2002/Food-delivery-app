@@ -10,6 +10,8 @@ class Dish < ApplicationRecord
   has_many :dish_add_ons, through: :dish_items
   has_many :items, through: :dish_items
 
+  scope :popular, -> { where(is_popular: true) }
+  
   def image_url
     ActiveStorage::Current.set(host: Rails.application.credentials.fetch(:base_url)) do
       image.url
