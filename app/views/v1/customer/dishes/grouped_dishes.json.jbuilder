@@ -3,8 +3,9 @@ json.status do
 end
 
 json.data do
-  @data.each do |type, dishes|
-    json.set! type do 
+  json.array! @data do |type, dishes|
+    json.title type
+    json.dishes do 
       json.array! dishes do |dish|   
           json.id dish.id
           json.image_url dish.image_url
