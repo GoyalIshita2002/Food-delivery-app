@@ -56,6 +56,10 @@ Rails.application.routes.draw do
       resources :cart_items
       get 'show_cart', to: "carts#show"
       get 'grouped_dishes', to: "dishes#grouped_dishes"
+      post 'favourites/add_restaurant', to: "favourites#add_restaurant"
+      post 'favourites/add_dish', to: "favourites#add_dish"
+      delete 'favourites/remove_restaurant', to: "favourites#remove_restaurant"
+      delete 'favourites/remove_dish', to: "favourites#remove_dish"
     end
   end
 

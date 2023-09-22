@@ -10,6 +10,8 @@ class Customer < ApplicationRecord
   has_one :customer_otp
   has_many :addresses, class_name: 'CustomerAddress', foreign_key: 'customer_id'
   has_many :carts
+  has_many :fav_restaurants
+  has_many :fav_dishes
 
   def cart
     self.carts.find_by(status: :open) 

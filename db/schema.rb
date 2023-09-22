@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_20_010150) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_22_071655) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -215,6 +215,32 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_010150) do
     t.index ["documenter_type", "documenter_id"], name: "index_documents_on_documenter"
   end
 
+  create_table "fav_dishes", force: :cascade do |t|
+    t.bigint "dish_id", null: false
+    t.bigint "customer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_fav_dishes_on_customer_id"
+    t.index ["dish_id"], name: "index_fav_dishes_on_dish_id"
+  end
+
+  create_table "fav_restaurants", force: :cascade do |t|
+    t.bigint "restaurant_id", null: false
+    t.bigint "customer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_fav_restaurants_on_customer_id"
+    t.index ["restaurant_id"], name: "index_fav_restaurants_on_restaurant_id"
+  end
+
+  create_table "favourites", force: :cascade do |t|
+    t.string "favourable_type", null: false
+    t.bigint "favourable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["favourable_type", "favourable_id"], name: "index_favourites_on_favourable"
+  end
+
   create_table "items", force: :cascade do |t|
     t.string "name"
     t.float "price"
@@ -366,6 +392,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_010150) do
   add_foreign_key "dish_items", "dishes"
   add_foreign_key "dish_items", "items"
   add_foreign_key "dishes", "restaurants"
+  add_foreign_key "fav_dishes", "customers"
+  add_foreign_key "fav_dishes", "dishes"
+  add_foreign_key "fav_restaurants", "customers"
+  add_foreign_key "fav_restaurants", "restaurants"
   add_foreign_key "items", "dish_add_ons"
   add_foreign_key "open_hours", "restaurants"
   add_foreign_key "restaurant_addresses", "restaurants"
