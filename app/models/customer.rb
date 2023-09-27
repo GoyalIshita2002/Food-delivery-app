@@ -36,4 +36,12 @@ class Customer < ApplicationRecord
     create_customer_otp({otp: rand(1000..9999)}) unless self.customer_otp.present?
     customer_otp.otp
   end
+
+  def is_favourite_dish(dish_id)
+    self.fav_dishes.where(dish_id: dish_id).present?
+  end
+
+  def is_favourite_restaurant(restaurant_id)
+    self.fav_restaurants.where(restaurant_id: restaurant_id).present?
+  end
 end

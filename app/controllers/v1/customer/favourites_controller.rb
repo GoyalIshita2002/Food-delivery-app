@@ -1,4 +1,5 @@
 class V1::Customer::FavouritesController < ApplicationController
+  include Pagy::Backend
 
   before_action :check_restaurant , only: [:add_restaurant, :remove_restaurant]
   before_action :check_dish, only: [:add_dish, :remove_dish]
@@ -35,6 +36,16 @@ class V1::Customer::FavouritesController < ApplicationController
     else
       render json: { status: {code: "400", error: fav_dish.errors.full_message }}, status: :bad_request and return
     end
+  end
+
+  def list_restaurants 
+    restaurant_ids = current_customer.fav_restaurants.pluck(:restaurant_id)
+    @pagy, @restaurants = pagy(Restaurant.where(id: restaurant_ids), items: params[:per_page]&.to_i)
+  end
+
+  def list_dishes
+    dish_ids = current_customer.fav_dishes.pluck(:dish_id)
+    @pagy, @dishes = pagy(Dish.where(id: dish_ids), items: params[:per_page]&.to_i)
   end
 
   protected

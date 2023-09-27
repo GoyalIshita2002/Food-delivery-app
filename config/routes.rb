@@ -60,6 +60,8 @@ Rails.application.routes.draw do
       post 'favourites/add_dish', to: "favourites#add_dish"
       delete 'favourites/remove_restaurant', to: "favourites#remove_restaurant"
       delete 'favourites/remove_dish', to: "favourites#remove_dish"
+      get 'favourite_restaurants', to: "favourites#list_restaurants"
+      get 'favourite_dishes', to: "favourites#list_dishes"
     end
   end
 
