@@ -3,7 +3,7 @@ json.success true
 
 json.restaurant do
   json.partial! 'restaurant', locals: { restaurant: @restaurant }
-  json.dish_types @restaurant.dishes.map(&:dish_type).compact.pluck(:title).unshift('Popular')
+  json.dish_types @restaurant.dishes.map(&:dish_type).compact.pluck(:title).unshift('Popular').uniq
   json.address do
     json.partial! 'restaurant_address', locals: { address: @restaurant.restaurant_address }
   end

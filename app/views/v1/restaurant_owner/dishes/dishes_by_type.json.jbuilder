@@ -5,7 +5,7 @@ end
 json.data do
   json.array! @dish_types do |dish_type|
     json.title dish_type.title
-    json.dishes do |json| 
+    json.data do |json| 
         json.partial! 'dishes', locals: { dishes: dish_type.dishes, restaurant: @restaurant }
     end 
   end
