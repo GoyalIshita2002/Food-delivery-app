@@ -40,5 +40,8 @@ module FastHomeAPI
     config.middleware.use config.session_store, config.session_options
     config.default_request_format = :json
     config.autoload_paths << Rails.root.join('lib')
+    config.i18n.available_locales = [:en, :fr]
+    config.i18n.default_locale = :en
+    config.i18n.fallbacks = true
   end
 end

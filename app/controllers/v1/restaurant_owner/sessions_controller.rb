@@ -13,7 +13,7 @@ module V1
         else
           render json: {
             status: 401,
-            message: "Invalid Credentials"
+            message: I18n.t(session.signin.failure),
           },status: :unauthorized
         end
       end
@@ -26,9 +26,9 @@ module V1
         jwt_payload = JWT.decode(request.headers['Authorization'].split(" ")[1], Rails.application.credentials.fetch(:secret_key_base))&.first
         current_admin_user = AdminUser.find_by(jti: jwt_payload['jti'])
         if current_admin_user.present?
-          render json: { status: 200, message: "Signed out successfully"},status: :ok and return
+          render json: { status: 200, message: I18n.t(session.signout.success) },status: :ok and return
         else
-          render json: { status:401, message: "No Active session to signout"},status: :unauthorized
+          render json: { status:401, message: I18n.t(session.signout.failure) },status: :unauthorized
         end
       end
     end

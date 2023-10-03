@@ -7,7 +7,7 @@ class V1::SuperAdmin::SessionsController < Devise::SessionsController
     if admin&.valid_for_authentication? { admin.valid_password?(sign_in_params[:password]) }
       render json: {
         status: 200, 
-        message: "signin successful",
+        message: I18n.t('session.signin.success'),
         data: admin,
         auth_token: admin.generate_jwt,
       },status: :ok

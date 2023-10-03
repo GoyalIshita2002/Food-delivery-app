@@ -1,6 +1,6 @@
 json.status do 
  json.code "200"
- json.message "signin successful"
+ json.message  I18n.t('session.signin.success')
 end
 
 json.partial! 'v1/customer/profile'

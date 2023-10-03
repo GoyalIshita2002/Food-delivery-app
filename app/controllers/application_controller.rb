@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
   include Pundit::Authorization
   respond_to :json
+  before_action :set_locale
   before_action :authenticate_user!
 
   def authenticate_user!
@@ -30,4 +31,8 @@ class ApplicationController < ActionController::API
   rescue => e
     render json: { status: { code: "401", message: "Invalid JWT token"}},status: :unauthorized and return
   end
+
+  def set_locale
+    I18n.locale = :en
+  end 
 end

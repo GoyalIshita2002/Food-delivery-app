@@ -10,7 +10,7 @@ class V1::Customer::SessionsController < Devise::SessionsController
     unless customer&.valid_for_authentication? { customer.valid_password?(sign_in_params[:password]) }
       render json: {
         status: 401,
-        message: "Invalid Credentials"
+        message: I18n.t('session.signin.failure')
       },status: :unauthorized
     end
     @current_customer = customer
@@ -28,9 +28,9 @@ class V1::Customer::SessionsController < Devise::SessionsController
     
     current_admin_user = AdminUser.find_by(id: jwt_payload['sub'])
     if current_admin_user.present?
-      render json: { status: 200, message: "Signed out successfully"},status: :ok
+      render json: { status: 200, message: I18n.t('session.signout.success')},status: :ok
     else
-      render json: { status:401, message: "No Active session to signout"},status: :unauthorized
+      render json: { status:401, message: I18n.t('session.signout.failure')},status: :unauthorized
     end
   end
 end

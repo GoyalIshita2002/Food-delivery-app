@@ -11,7 +11,7 @@ class AdminUsers::SessionsController < Devise::SessionsController
     if admin_user&.valid_for_authentication? { admin_user.valid_password?(sign_in_params[:password]) }
       render json: {
         status: 200,
-        message: "signin successful",
+        message:  I18n.t('session.signin.success'),
         data: current_admin_user,
         restaurant: admin_user.restaurant
       },status: :ok
@@ -33,7 +33,7 @@ class AdminUsers::SessionsController < Devise::SessionsController
   def respond_with(resource, options={})
     render json: {
       status: 200,
-      message: "signin successful",
+      message:  I18n.t('session.signin.success'),
       data: current_admin_user
     },status: :ok
   end

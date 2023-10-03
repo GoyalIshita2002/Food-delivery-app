@@ -1,0 +1,8 @@
+fr:
+  session:
+    signout:
+      success: "Déconnexion réussie"
+      failure: "Aucune session active pour se déconnecter"
+    signin:
+      success:
+      failure: "Les informations d'identification invalides"
