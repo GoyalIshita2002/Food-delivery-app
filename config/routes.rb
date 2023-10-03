@@ -39,7 +39,7 @@ Rails.application.routes.draw do
       post 'restaurant/:restaurant_id/documents', to: "documents#create"
       get 'restaurant/:restaurant_id/documents', to: "documents#index"
       delete 'documents/:id', to: "documents#destroy"
-    end
+    end 
 
     namespace :customer do
       get 'check_email_availability', to: "miscellaneous#check_email_availability" 
@@ -62,6 +62,10 @@ Rails.application.routes.draw do
       delete 'favourites/remove_dish', to: "favourites#remove_dish"
       get 'favourite_restaurants', to: "favourites#list_restaurants"
       get 'favourite_dishes', to: "favourites#list_dishes"
+    end
+
+    namespace :driver do
+      post 'register', to: "registration#create"
     end
   end
 

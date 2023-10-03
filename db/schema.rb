@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_22_071655) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_03_113905) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -215,6 +215,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_071655) do
     t.index ["documenter_type", "documenter_id"], name: "index_documents_on_documenter"
   end
 
+  create_table "driver_otps", force: :cascade do |t|
+    t.string "otp"
+    t.bigint "driver_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["driver_id"], name: "index_driver_otps_on_driver_id"
+  end
+
+  create_table "drivers", force: :cascade do |t|
+    t.string "full_name"
+    t.date "dob"
+    t.string "email"
+    t.text "address"
+    t.string "phone"
+    t.string "std_code"
+    t.boolean "is_verified", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "jti"
+    t.index ["jti"], name: "index_drivers_on_jti", unique: true
+  end
+
   create_table "fav_dishes", force: :cascade do |t|
     t.bigint "dish_id", null: false
     t.bigint "customer_id", null: false
@@ -392,6 +414,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_071655) do
   add_foreign_key "dish_items", "dishes"
   add_foreign_key "dish_items", "items"
   add_foreign_key "dishes", "restaurants"
+  add_foreign_key "driver_otps", "drivers"
   add_foreign_key "fav_dishes", "customers"
   add_foreign_key "fav_dishes", "dishes"
   add_foreign_key "fav_restaurants", "customers"

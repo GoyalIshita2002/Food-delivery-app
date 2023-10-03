@@ -26,6 +26,11 @@ class ApplicationController < ActionController::API
       unless @current_customer.present?
         render json: { status: { code: "401", message: "Invalid JWT token"}},status: :unauthorized and return
       end  
+    elsif request.url.include?('v1/driver')
+      @current_driver= Driver.find_by(jti: jwt_payload["jti"])
+      unless @current_driver.present?
+        render json: { status: { code: "401", message: "Invalid JWT token"}},status: :unauthorized and return
+      end  
     else
     end
   rescue => e
