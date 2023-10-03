@@ -66,6 +66,8 @@ Rails.application.routes.draw do
 
     namespace :driver do
       post 'register', to: "registration#create"
+      post 'sign_in', to: "session#create"
+      put '/:id/update', to: "profile#update"
     end
   end
 

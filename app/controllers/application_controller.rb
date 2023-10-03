@@ -10,7 +10,6 @@ class ApplicationController < ActionController::API
     end
 
     jwt_payload = JWT.decode(request.headers['Authorization'].split(" ")[1], Rails.application.credentials.fetch(:secret_key_base), false)&.first
-
     if request.url.include?('v1/super_admin')
       @current_super_admin = SuperAdmin.find_by(jti: jwt_payload["jti"])
       unless @current_super_admin.present?
@@ -27,7 +26,7 @@ class ApplicationController < ActionController::API
         render json: { status: { code: "401", message: "Invalid JWT token"}},status: :unauthorized and return
       end  
     elsif request.url.include?('v1/driver')
-      @current_driver= Driver.find_by(jti: jwt_payload["jti"])
+      @current_driver = Driver.find_by(jti: jwt_payload["jti"])
       unless @current_driver.present?
         render json: { status: { code: "401", message: "Invalid JWT token"}},status: :unauthorized and return
       end  
@@ -35,6 +34,10 @@ class ApplicationController < ActionController::API
     end
   rescue => e
     render json: { status: { code: "401", message: "Invalid JWT token"}},status: :unauthorized and return
+  end
+
+  def current_driver
+    @current_driver
   end
 
   def set_locale

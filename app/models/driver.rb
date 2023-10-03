@@ -6,6 +6,8 @@ class Driver < ApplicationRecord
   before_create :generate_jti
   before_create :generate_otp
 
+  delegate :otp, to: :driver_otp
+
   def generate_jti
     unless jti.present? 
       jti = SecureRandom.uuid
