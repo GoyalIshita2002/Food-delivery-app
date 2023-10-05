@@ -3,7 +3,7 @@ class Restaurant < ApplicationRecord
   has_one :admin_user, through: :restaurant_user
 
   has_one_attached :main_image
-
+  has_many :restaurant_rating, dependent: :destroy
   has_many :restaurant_categories, dependent: :destroy
   has_many :categories, through: :restaurant_categories
 

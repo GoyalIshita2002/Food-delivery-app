@@ -6,3 +6,6 @@ en:
     signin:
       failure: "Invalid Credentials" 
       success: "Signin successful"
+  rating:
+    success: "Rating Added Successfully"
+    failure: "Failed To Add Rating"      

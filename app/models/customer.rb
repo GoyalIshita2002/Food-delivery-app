@@ -12,7 +12,7 @@ class Customer < ApplicationRecord
   has_many :carts
   has_many :fav_restaurants
   has_many :fav_dishes
-
+  has_many :restaurant_rating
   def cart
     self.carts.find_by(status: :open) 
   end
