@@ -62,7 +62,7 @@ Rails.application.routes.draw do
       delete 'favourites/remove_dish', to: "favourites#remove_dish"
       get 'favourite_restaurants', to: "favourites#list_restaurants"
       get 'favourite_dishes', to: "favourites#list_dishes"
-      post 'restaurant_rating/add_rating' , to: "restaurant_rating#add_rating"
+      post 'restaurant_ratings/add_rating' , to: "restaurant_ratings#add_rating"
       # delete 'restaurant_rating/remove_rating', to: "restaurant_rating#remove_rating"
       # patch 'restaurant_rating/update_rating', to: "restaurant_rating#update_rating"
     end
