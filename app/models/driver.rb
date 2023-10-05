@@ -4,8 +4,8 @@ class Driver < ApplicationRecord
   has_one :driver_otp
 
   before_create :generate_jti
-  before_create :generate_otp
-
+  before_commit :generate_otp
+  has_many :documents, as: :documenter
   delegate :otp, to: :driver_otp
 
   def generate_jti
