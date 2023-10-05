@@ -6,3 +6,6 @@ fr:
     signin:
       success:
       failure: "Les informations d'identification invalides"
+  rating:
+    success: "Note ajoutée avec succès"
+    failure: "Échec de l'ajout d'une note"    
