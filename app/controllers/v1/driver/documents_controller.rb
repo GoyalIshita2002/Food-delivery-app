@@ -34,7 +34,7 @@ class V1::Driver::DocumentsController < ApplicationController
   private
 
   def document_params
-    params.permit(:name,:front,:back,:driver_id)
+    params.permit(:name,:front,:back)
   end
 
   def driver_id

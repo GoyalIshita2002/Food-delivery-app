@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_04_101823) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_05_065702) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -212,7 +212,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_04_101823) do
     t.bigint "documenter_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "driver_id"
     t.index ["documenter_type", "documenter_id"], name: "index_documents_on_documenter"
   end
 
@@ -353,6 +352,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_04_101823) do
     t.index ["restaurant_id"], name: "index_restaurant_open_days_on_restaurant_id"
   end
 
+  create_table "restaurant_ratings", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.bigint "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "rating", default: 0
+    t.index ["customer_id"], name: "index_restaurant_ratings_on_customer_id"
+    t.index ["restaurant_id"], name: "index_restaurant_ratings_on_restaurant_id"
+  end
+
   create_table "restaurant_users", force: :cascade do |t|
     t.bigint "restaurant_id", null: false
     t.bigint "admin_user_id", null: false
@@ -431,6 +440,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_04_101823) do
   add_foreign_key "restaurant_menus", "restaurants"
   add_foreign_key "restaurant_open_days", "open_days"
   add_foreign_key "restaurant_open_days", "restaurants"
+  add_foreign_key "restaurant_ratings", "customers"
+  add_foreign_key "restaurant_ratings", "restaurants"
   add_foreign_key "restaurant_users", "admin_users"
   add_foreign_key "restaurant_users", "restaurants"
   add_foreign_key "split_hours", "open_hours"
