@@ -1,9 +1,12 @@
 class V1::Customer::RestaurantRatingsController < ApplicationController
- 
+  before_action :check_restaurant ,only: [:add_rating]
   def add_rating
     add_rating =  current_customer.restaurant_rating.create(rating_params)
-    if add_rating
-      render json: { status: { code: "200", message: I18n.t("rating.success") } }, status: :ok
+    avg = average_rating(params[:restaurant_id]).to_f
+    Restaurant.find_by(id: params[:restaurant_id]).update(avg_rating: avg)
+
+    if add_rating.persisted?
+      render json: { status: { code: "200", message: I18n.t('rating.success') } }, status: :ok
     else
       render json: { status: { code: "400", message: I18n.t('rating.failure'), errors: add_rating.errors.full_messages } }, status: :bad_request
     end
@@ -42,7 +45,20 @@ class V1::Customer::RestaurantRatingsController < ApplicationController
   def rating_params
     {
       restaurant_id: params[:restaurant_id], 
-      rating: params[:rating]
+      rating: params[:rating] || 0
     }
+  end
+
+  def average_rating(id)
+    Restaurant.find_by!(id: id).restaurant_rating.average(:rating).round(2)
+  end
+
+  def check_restaurant
+    restaurant_id = params[:restaurant_id]
+    rating= params[:rating]
+    restaurant = Restaurant.find_by(id: params[:restaurant_id])
+    unless restaurant.present? && !restaurant_id.blank? && !rating.blank?
+      render json: {status: {code: "400" ,message:"restauarnt is not present "}}
+    end
   end
 end
