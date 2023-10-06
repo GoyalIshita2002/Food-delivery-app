@@ -1,13 +1,16 @@
 class V1::Customer::ProfileController < ApplicationController
 
   def verify_otp
-    # unless (CustomerOtp.find_by(otp: params[:otp])&.customer_id == current_customer.id)
-    #   render json: { status: { code: "400", message: "Invalid OTP" }}, status: :bad_request and return
-    # end 
-    unless (params[:otp] == "1234")
-      render json: { status: { success: false, code: "400", message: "Invalid OTP" }}, status: :bad_request and return
-    end
-    current_customer.update(is_verified: true)
+   # unless (CustomerOtp.find_by(otp: params[:otp])&.customer_id == current_customer.id)
+     #   render json: { status: { code: "400", message: "Invalid OTP" }}, status: :bad_request and return
+     # end
+     customer_otp = CustomerOtp.find_by(otp: params[:otp])&.customer_id == current_customer.id
+     if customer_otp
+       current_customer.update(is_verified: true)
+       render json: {status: {success: true, message: "verified"}}
+      else
+     render json: { status: { success: false, code: "400", message: "Invalid OTP" }}, status: :bad_request and return
+       end    
   end 
 
   def update_phone
@@ -40,6 +43,12 @@ class V1::Customer::ProfileController < ApplicationController
     else
       render json:{ status:"200", message: "password updated successfully"}, status: :ok and return
     end
+  end
+
+  def resend_otp
+    current_customer.customer_otp.destroy if current_customer.customer_otp.present?
+    otp = current_customer.verification_otp
+    render json: { status: { success: true, code: "200", message: "OTP resent successfully", new_otp: otp}}
   end
 
   protected

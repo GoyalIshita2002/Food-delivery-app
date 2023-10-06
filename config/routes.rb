@@ -42,6 +42,7 @@ Rails.application.routes.draw do
     end 
 
     namespace :customer do
+      post 'resend_otp', to: "profile#resend_otp"
       get 'check_email_availability', to: "miscellaneous#check_email_availability" 
       post 'verify_customer', to: "profile#verify_otp"
       put 'profile', to: "profile#update"

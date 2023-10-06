@@ -32,7 +32,8 @@ class Customer < ApplicationRecord
     JWT.encode(payload,  Rails.application.credentials.fetch(:secret_key_base))
   end
 
-  def verification_otp
+  def verification_
+    reload
     create_customer_otp({otp: rand(1000..9999)}) unless self.customer_otp.present?
     customer_otp.otp
   end
