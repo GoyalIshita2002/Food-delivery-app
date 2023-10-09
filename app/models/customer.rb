@@ -32,6 +32,11 @@ class Customer < ApplicationRecord
     JWT.encode(payload,  Rails.application.credentials.fetch(:secret_key_base))
   end
 
+  def generate_reset_password_token
+    self.reset_password_token = SecureRandom.urlsafe_base64
+    self.save!
+  end
+
   def verification_
     reload
     create_customer_otp({otp: rand(1000..9999)}) unless self.customer_otp.present?

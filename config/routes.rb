@@ -45,6 +45,8 @@ Rails.application.routes.draw do
       post 'resend_otp', to: "profile#resend_otp"
       get 'check_email_availability', to: "miscellaneous#check_email_availability" 
       post 'verify_customer', to: "profile#verify_otp"
+      post 'forget_password',to:"profile#forget_password"
+      post 'reset_password',to:"profile#reset_password"
       put 'profile', to: "profile#update"
       post 'addresses', to: "customer_addresses#create"
       put 'addresses/:id', to: "customer_addresses#update"
