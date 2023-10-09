@@ -1,5 +1,5 @@
 class V1::Customer::ProfileController < ApplicationController
-
+  skip_before_action :authenticate_user! , only: [:forget_password,:reset_password]
   def verify_otp
    # unless (CustomerOtp.find_by(otp: params[:otp])&.customer_id == current_customer.id)
      #   render json: { status: { code: "400", message: "Invalid OTP" }}, status: :bad_request and return
@@ -49,6 +49,31 @@ class V1::Customer::ProfileController < ApplicationController
     current_customer.customer_otp.destroy if current_customer.customer_otp.present?
     otp = current_customer.verification_otp
     render json: { status: { success: true, code: "200", message: "OTP resent successfully", new_otp: otp}}
+  end
+
+  def forget_password
+    customer = Customer.find_by(email: params[:email])
+
+    if customer.present?
+       customer.generate_reset_password_token
+      render json: {status: {message:"the link for reset password is send in your email. please check it...", }, reset_token: customer.reset_password_token}
+    else
+      render json: {status: {message:" Email ID not found"}}, status: :not_found 
+    end
+  end 
+
+  def reset_password
+    customer = Customer.find_by(reset_password_token: params[:reset_password_token])
+    if customer.present?
+      if customer.update(password: params[:password])
+        render json: {status: "200", message: "Password Reset Successfully"}
+      else
+        render json: {error: customer.errors.full_messages}, status: :unprocessable_entity
+      end
+    else 
+      render json: {status: "404", message: "Token is not valid "}, status: :not_found 
+    end
+
   end
 
   protected
