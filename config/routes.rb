@@ -77,9 +77,9 @@ Rails.application.routes.draw do
       post ':driver_id/documents', to: "documents#create"
       get ':driver_id/documents', to: "documents#index"
       delete 'documents/:id', to: "documents#destroy"
+      delete 'sign_out', to:"session#destroy"
     end
   end
-
   devise_for :admin_user, path: 'v1/restaurant_owner', controllers: { sessions: 'v1/restaurant_owner/sessions' }
   devise_for :customers, path: 'v1/customer', controllers: { 
     sessions: 'v1/customer/sessions',

@@ -2,9 +2,8 @@ class Driver < ApplicationRecord
   validates :phone, presence: true, uniqueness: true
   has_one_attached :profile_image
   has_one :driver_otp
-
   before_create :generate_jti
-  before_commit :generate_otp
+  before_commit :generate_otp , on: :create
   has_many :documents, as: :documenter
   delegate :otp, to: :driver_otp
 
@@ -17,6 +16,12 @@ class Driver < ApplicationRecord
       self.jti = jti
     end
   end 
+
+  def update_jti
+    self.jti=nil 
+   jti_token= self.generate_jti
+    self.update(jti: jti_token)
+  end
 
   def generate_otp
     self.create_driver_otp(otp: rand(1000..9999))
