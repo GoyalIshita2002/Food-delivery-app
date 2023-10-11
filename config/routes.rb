@@ -43,6 +43,8 @@ Rails.application.routes.draw do
 
     namespace :customer do
       post 'resend_otp', to: "profile#resend_otp"
+      post 'create_order', to: "order#create"
+      patch 'update_order/:order_id', to: "order#update"
       get 'check_email_availability', to: "miscellaneous#check_email_availability" 
       post 'verify_customer', to: "profile#verify_otp"
       put 'profile', to: "profile#update"
