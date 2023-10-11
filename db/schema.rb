@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_06_081645) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_11_061346) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -375,6 +375,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_06_081645) do
     t.boolean "lock_menu", default: false
   end
 
+  create_table "service_details", force: :cascade do |t|
+    t.integer "vehicle"
+    t.text "locality"
+    t.bigint "driver_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["driver_id"], name: "index_service_details_on_driver_id"
+  end
+
   create_table "split_hours", force: :cascade do |t|
     t.time "start_at"
     t.time "end_at"
@@ -436,5 +445,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_06_081645) do
   add_foreign_key "restaurant_ratings", "restaurants"
   add_foreign_key "restaurant_users", "admin_users"
   add_foreign_key "restaurant_users", "restaurants"
+  add_foreign_key "service_details", "drivers"
   add_foreign_key "split_hours", "open_hours"
 end

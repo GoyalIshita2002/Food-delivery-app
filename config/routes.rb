@@ -74,6 +74,7 @@ Rails.application.routes.draw do
       post 'register', to: "registration#create"
       post 'sign_in', to: "session#create"
       put '/:id/update', to: "profile#update"
+      post 'service_details',to:"service_details#create"
       post ':driver_id/documents', to: "documents#create"
       get ':driver_id/documents', to: "documents#index"
       delete 'documents/:id', to: "documents#destroy"
