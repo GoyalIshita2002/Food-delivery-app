@@ -1,6 +1,6 @@
 class Driver < ApplicationRecord
   validates :phone, presence: true, uniqueness: true
-  has_one_attached :profile_image
+  has_one_attached :avatar
   has_one :driver_otp
   before_create :generate_jti
   before_commit :generate_otp , on: :create
@@ -16,6 +16,12 @@ class Driver < ApplicationRecord
       self.jti = jti
     end
   end 
+
+  def avatar_url
+    ActiveStorage::Current.set(host: Rails.application.credentials.fetch(:base_url)) do
+      self.avatar.url
+    end
+  end
 
   def update_jti
     self.jti=nil 
