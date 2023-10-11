@@ -21,12 +21,10 @@ json.profile_info do
   json.address @driver.address
 end
 
-json.documents do
-  json.documents @driver.documents do |document|
+json.documents @driver.documents do |document|
     json.name document&.name
     json.front_url document&.front_url
     json.back_url document&. back_url
-  end
 end
 
 json.auth_token @driver.generate_jwt
