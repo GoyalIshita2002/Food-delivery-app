@@ -8,5 +8,3 @@ json.driver do
   json.phone @driver.phone
   json.std_code @driver.std_code
 end  
-
-json.auth_token @driver.generate_jwt
