@@ -15,6 +15,7 @@ json.service_details do
 end
 
 json.profile_info do
+  json.image @driver.avatar_url
   json.name @driver.full_name
   json.email @driver.email
   json.dob @driver.dob
