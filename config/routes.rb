@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       get 'add_ons/:id', to: "add_ons#show"
       put 'profile/update', to: "profile#update"
       post 'profile/upload_image', to: "profile#upload_image"
+      get 'accept_order/:order_id', to: "order#accept_order"
     end
 
     namespace :super_admin do

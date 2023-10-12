@@ -12,6 +12,8 @@ class Restaurant < ApplicationRecord
 
   has_many :open_hours, dependent: :destroy
 
+  has_many :orders, dependent: :destroy
+
   has_many :restaurant_open_days, dependent: :destroy
   has_many :open_days, through: :restaurant_open_days
 

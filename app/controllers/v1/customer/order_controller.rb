@@ -7,7 +7,7 @@ class V1::Customer::OrderController < ApplicationController
     end
 
     def update
-        order = curret_customer.orders.find(params[:order_id])
+        order = current_customer.orders.find(params[:order_id])
        if order.update(status: 1)
         render json: { status: { code: "200", message: "order cancelled succesfully"}}, status: :ok and return
       else
