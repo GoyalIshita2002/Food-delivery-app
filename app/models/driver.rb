@@ -5,8 +5,10 @@ class Driver < ApplicationRecord
   before_create :generate_jti
   before_commit :generate_otp , on: :create
   has_many :documents, as: :documenter
+  has_one :service_location
+  delegate :vehicle, to: :service_location
   delegate :otp, to: :driver_otp
-  has_one :service_detail
+
   def generate_jti
     unless jti.present? 
       jti = SecureRandom.uuid

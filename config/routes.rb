@@ -73,11 +73,11 @@ Rails.application.routes.draw do
     namespace :driver do
       post 'register', to: "registration#create"
       post 'sign_in', to: "session#create"
-      put '/:id/update', to: "profile#update"
+      put 'update', to: "profile#update"
       post 'delete_avatar',to:"profile#delete_avatar"
       post 'service_details',to:"service_details#create"
-      post ':driver_id/documents', to: "documents#create"
-      get ':driver_id/documents', to: "documents#index"
+      post 'documents', to: "documents#create"
+      get 'documents', to: "documents#index"
       delete 'documents/:id', to: "documents#destroy"
       delete 'sign_out', to:"session#destroy"
     end

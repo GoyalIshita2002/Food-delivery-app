@@ -9,8 +9,6 @@ class V1::Driver::ProfileController < ApplicationController
 
   def delete_avatar
     current_driver.avatar.purge
-    current_driver.save
-    current_driver.reload
     render json: {status: {code:"200",message:"profile image deleted successfully"}}
   end
 
