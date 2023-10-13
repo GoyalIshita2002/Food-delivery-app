@@ -1,7 +1,7 @@
 class V1::Driver::ServiceDetailsController < ApplicationController
   def create
-    current_driver.service_location.destroy
-    service_detail=current_driver.build_service_location(service_location_params)
+    current_driver.service_location.destroy if current_driver.service_location.present?
+    service_detail = current_driver.build_service_location(service_location_params)
      if service_detail.save
        render json: { status: { code: "200", message: "service location created succesfully"}}, status: :ok and return
      else
