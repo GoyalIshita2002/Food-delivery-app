@@ -5,6 +5,7 @@ class Order < ApplicationRecord
   belongs_to :restaurant
   belongs_to :customer_address
   has_one :order_note
+  has_one :order_agent
   belongs_to :driver , optional: true
   
   enum :status, [:placed, :accepted, :denied, :under_preparation, :ready_to_pick, :in_transit, :delivered, :cancelled]
