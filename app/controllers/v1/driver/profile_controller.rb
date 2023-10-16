@@ -11,9 +11,8 @@ class V1::Driver::ProfileController < ApplicationController
     render json: {status: {code:"200",message:"profile image deleted successfully"}}
   end
 
-  def index
-    debugger
-    @drivers=Driver.all
+  def show
+    @driver=Driver.find_by(id: params[:id])
   end
 
   protected
