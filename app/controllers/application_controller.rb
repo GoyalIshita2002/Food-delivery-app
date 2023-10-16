@@ -15,7 +15,7 @@ class ApplicationController < ActionController::API
       unless @current_super_admin.present?
         render json: { status: { code: "401", message: "Invalid JWT token"}},status: :unauthorized and return
       end
-    elsif request.url.include?('v1/restaurant_owner')
+    elsif request.url.include?('v1/restaurant_owner') || request.url.include?('v1/admin_users')
       @current_admin_user = AdminUser.find_by(jti: jwt_payload["jti"])
       unless @current_admin_user.present?
         render json: { status: { code: "401", message: "Invalid JWT token"}},status: :unauthorized and return

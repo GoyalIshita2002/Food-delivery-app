@@ -2,7 +2,6 @@ class V1::RestaurantOwner::OrderController < ApplicationController
   
   def accept_order 
     @order = current_restaurant.orders.find(params[:order_id])
-    @order.assign_driver
     if @order.present?
       render template: "v1/restaurant_owner/order/accept_order",status: :ok and return
     else
