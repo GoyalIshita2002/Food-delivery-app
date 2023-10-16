@@ -1,7 +1,7 @@
-class V1::AdminUsers::OrderController < ApplicationController
+class V1::SuperAdmin::OrderController < ApplicationController
 
     def accept_order 
-        @order = current_restaurant.orders.find(params[:order_id])
+        @order = Order.find_by(id: params[:order_id])
         if @order.present?
             @order.update(driver_id: params[:driver_id])
           render json: @order,status: :ok and return
@@ -10,9 +10,7 @@ class V1::AdminUsers::OrderController < ApplicationController
         end   
       end
 
-      private
+      
 
-      def current_restaurant
-        current_admin_user.restaurant
-      end
+     
 end

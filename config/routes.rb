@@ -7,7 +7,6 @@ Rails.application.routes.draw do
     namespace :admin_users do
       post 'documents/create'
       get 'restaurants/details'
-      get 'accept_order/:order_id', to: "order#accept_order"
     end
     get 'admin_user/check_account_availability'
     get 'countries', to: "miscellaneous#list"
@@ -42,6 +41,7 @@ Rails.application.routes.draw do
       post 'restaurant/:restaurant_id/documents', to: "documents#create"
       get 'restaurant/:restaurant_id/documents', to: "documents#index"
       delete 'documents/:id', to: "documents#destroy"
+      get 'accept_order/:order_id', to: "order#accept_order"
       
     end 
 
