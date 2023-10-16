@@ -41,7 +41,7 @@ Rails.application.routes.draw do
       post 'restaurant/:restaurant_id/documents', to: "documents#create"
       get 'restaurant/:restaurant_id/documents', to: "documents#index"
       delete 'documents/:id', to: "documents#destroy"
-      get 'assign_driver/:order_id', to: "order#assign_driver"
+      post 'assign_driver/:order_id', to: "order#assign_driver"
     end 
 
     namespace :customer do
