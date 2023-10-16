@@ -79,6 +79,7 @@ Rails.application.routes.draw do
       post 'documents', to: "documents#create"
       get 'documents', to: "documents#index"
       delete 'documents/:id', to: "documents#destroy"
+      get 'profiles',to:"profile#index"
       delete 'sign_out', to:"session#destroy"
     end
   end
