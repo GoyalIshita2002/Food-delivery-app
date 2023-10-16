@@ -2,6 +2,8 @@ class Restaurant < ApplicationRecord
   has_one :restaurant_user, dependent: :destroy
   has_one :admin_user, through: :restaurant_user
 
+  has_one :service_location, class_name: 'ServiceLocation'
+
   has_one_attached :main_image
   has_many :restaurant_rating, dependent: :destroy
   has_many :restaurant_categories, dependent: :destroy
@@ -11,6 +13,8 @@ class Restaurant < ApplicationRecord
   has_many :cuisines, through: :restaurant_cuisines
 
   has_many :open_hours, dependent: :destroy
+
+  has_many :orders, dependent: :destroy
 
   has_many :restaurant_open_days, dependent: :destroy
   has_many :open_days, through: :restaurant_open_days
@@ -52,4 +56,8 @@ class Restaurant < ApplicationRecord
   def working_hours
     self.open_hours.map(&:slot).join(' ')
   end
+
+
+
+  
 end  

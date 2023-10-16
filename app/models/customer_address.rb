@@ -3,9 +3,10 @@ class CustomerAddress < ApplicationRecord
   validates :address, presence: true
   validates :state, presence: true
   validates :zip_code, presence: true
-
+  belongs_to :customer
   geocoded_by :full_address
   after_validation :geocode
+
 
   enum :address_type => { :home => 0, :office => 1}
 
