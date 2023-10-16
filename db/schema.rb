@@ -212,7 +212,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_083612) do
     t.bigint "documenter_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "driver_id"
     t.index ["documenter_type", "documenter_id"], name: "index_documents_on_documenter"
   end
 
@@ -300,7 +299,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_083612) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
-    t.bigint "driver_id", default: 0
     t.datetime "time"
     t.index ["cart_id"], name: "index_orders_on_cart_id"
     t.index ["customer_address_id"], name: "index_orders_on_customer_address_id"
@@ -370,8 +368,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_083612) do
   end
 
   create_table "restaurant_ratings", force: :cascade do |t|
-    t.bigint "restaurant_id", null: false
     t.bigint "customer_id", null: false
+    t.bigint "restaurant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "rating", default: 0
@@ -398,6 +396,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_083612) do
     t.string "registration_date"
     t.string "std_code"
     t.boolean "lock_menu", default: false
+  end
+
+  create_table "service_details", force: :cascade do |t|
+    t.integer "vehicle"
+    t.text "locality"
+    t.bigint "driver_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["driver_id"], name: "index_service_details_on_driver_id"
   end
 
   create_table "service_locations", force: :cascade do |t|
@@ -480,6 +487,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_083612) do
   add_foreign_key "restaurant_ratings", "restaurants"
   add_foreign_key "restaurant_users", "admin_users"
   add_foreign_key "restaurant_users", "restaurants"
+  add_foreign_key "service_details", "drivers"
   add_foreign_key "service_locations", "drivers"
   add_foreign_key "split_hours", "open_hours"
 end
