@@ -32,6 +32,8 @@ Rails.application.routes.draw do
       get 'add_ons/:id', to: "add_ons#show"
       put 'profile/update', to: "profile#update"
       post 'profile/upload_image', to: "profile#upload_image"
+      get 'accept_order/:order_id', to: "order#accept_order"
+      put 'update_order/:order_id', to: "order#update"
     end
 
     namespace :super_admin do
@@ -39,10 +41,14 @@ Rails.application.routes.draw do
       post 'restaurant/:restaurant_id/documents', to: "documents#create"
       get 'restaurant/:restaurant_id/documents', to: "documents#index"
       delete 'documents/:id', to: "documents#destroy"
+      get 'accept_order/:order_id', to: "order#accept_order"
+      
     end 
 
     namespace :customer do
       post 'resend_otp', to: "profile#resend_otp"
+      post 'create_order', to: "order#create"
+      patch 'update_order/:order_id', to: "order#update"
       get 'check_email_availability', to: "miscellaneous#check_email_availability" 
       post 'verify_customer', to: "profile#verify_otp"
       post 'forget_password',to:"profile#forget_password"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_12_071043) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_13_083612) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -212,6 +212,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_071043) do
     t.bigint "documenter_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "driver_id"
     t.index ["documenter_type", "documenter_id"], name: "index_documents_on_documenter"
   end
 
@@ -283,6 +284,30 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_071043) do
     t.index ["restaurant_id"], name: "index_open_hours_on_restaurant_id"
   end
 
+  create_table "order_notes", force: :cascade do |t|
+    t.text "content"
+    t.bigint "order_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_notes_on_order_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.bigint "cart_id", null: false
+    t.bigint "restaurant_id", null: false
+    t.bigint "customer_address_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status", default: 0
+    t.bigint "driver_id", default: 0
+    t.datetime "time"
+    t.index ["cart_id"], name: "index_orders_on_cart_id"
+    t.index ["customer_address_id"], name: "index_orders_on_customer_address_id"
+    t.index ["customer_id"], name: "index_orders_on_customer_id"
+    t.index ["restaurant_id"], name: "index_orders_on_restaurant_id"
+  end
+
   create_table "restaurant_addresses", force: :cascade do |t|
     t.bigint "restaurant_id", null: false
     t.string "street"
@@ -345,8 +370,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_071043) do
   end
 
   create_table "restaurant_ratings", force: :cascade do |t|
-    t.bigint "customer_id", null: false
     t.bigint "restaurant_id", null: false
+    t.bigint "customer_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "rating", default: 0
@@ -373,15 +398,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_071043) do
     t.string "registration_date"
     t.string "std_code"
     t.boolean "lock_menu", default: false
-  end
-
-  create_table "service_details", force: :cascade do |t|
-    t.integer "vehicle"
-    t.text "locality"
-    t.bigint "driver_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["driver_id"], name: "index_service_details_on_driver_id"
   end
 
   create_table "service_locations", force: :cascade do |t|
@@ -446,6 +462,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_071043) do
   add_foreign_key "fav_restaurants", "restaurants"
   add_foreign_key "items", "dish_add_ons"
   add_foreign_key "open_hours", "restaurants"
+  add_foreign_key "order_notes", "orders"
+  add_foreign_key "orders", "carts"
+  add_foreign_key "orders", "customer_addresses"
+  add_foreign_key "orders", "customers"
+  add_foreign_key "orders", "restaurants"
   add_foreign_key "restaurant_addresses", "restaurants"
   add_foreign_key "restaurant_categories", "categories"
   add_foreign_key "restaurant_categories", "restaurants"
@@ -459,7 +480,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_071043) do
   add_foreign_key "restaurant_ratings", "restaurants"
   add_foreign_key "restaurant_users", "admin_users"
   add_foreign_key "restaurant_users", "restaurants"
-  add_foreign_key "service_details", "drivers"
   add_foreign_key "service_locations", "drivers"
   add_foreign_key "split_hours", "open_hours"
 end

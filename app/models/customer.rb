@@ -5,6 +5,8 @@ class Customer < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
+  has_many :orders, dependent: :destroy
+
 
   has_one_attached :avatar
   has_one :customer_otp
@@ -37,7 +39,7 @@ class Customer < ApplicationRecord
     self.save!
   end
 
-  def verification_
+  def verification_otp
     reload
     create_customer_otp({otp: rand(1000..9999)}) unless self.customer_otp.present?
     customer_otp.otp
