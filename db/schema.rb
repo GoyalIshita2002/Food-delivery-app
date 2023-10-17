@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_13_083612) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_16_114010) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -283,6 +283,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_083612) do
     t.index ["restaurant_id"], name: "index_open_hours_on_restaurant_id"
   end
 
+  create_table "order_agents", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "driver_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["driver_id"], name: "index_order_agents_on_driver_id"
+    t.index ["order_id"], name: "index_order_agents_on_order_id"
+  end
+
   create_table "order_notes", force: :cascade do |t|
     t.text "content"
     t.bigint "order_id", null: false
@@ -469,6 +478,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_083612) do
   add_foreign_key "fav_restaurants", "restaurants"
   add_foreign_key "items", "dish_add_ons"
   add_foreign_key "open_hours", "restaurants"
+  add_foreign_key "order_agents", "drivers"
+  add_foreign_key "order_agents", "orders"
   add_foreign_key "order_notes", "orders"
   add_foreign_key "orders", "carts"
   add_foreign_key "orders", "customer_addresses"

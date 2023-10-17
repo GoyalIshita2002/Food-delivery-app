@@ -9,6 +9,7 @@ class Driver < ApplicationRecord
   delegate :vehicle, to: :service_location
   delegate :otp, to: :driver_otp
   has_many :orders 
+  has_one :order_agent
 
   def generate_jti
     unless jti.present? 
