@@ -5,7 +5,9 @@ json.profile_info do
   json.email @driver.email
   json.dob @driver.dob
   json.address @driver.address
-end   
+  json.phone @driver.phone
+  json.std_code @driver.std_code
+end
 
 service_location = @driver.service_location
 json.service_location do
