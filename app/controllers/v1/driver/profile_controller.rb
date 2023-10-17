@@ -12,7 +12,7 @@ class V1::Driver::ProfileController < ApplicationController
   end
 
   def show
-    @driver=Driver.find_by(id: params[:id])
+    @driver=current_driver
   end
 
   protected
