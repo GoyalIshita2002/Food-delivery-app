@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       post 'assign_driver/:order_id', to: "order#assign_driver"
       get 'users',to:"users#index"
       get 'user/:id',to:"users#show"
+      get 'categories',to:"categories#index"
     end 
 
     namespace :customer do
