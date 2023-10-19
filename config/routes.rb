@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       get 'users',to:"users#index"
       get 'user/:id',to:"users#show"
       get 'categories',to:"categories#index"
+      put 'dish_types', to: "dish_type#update"
     end 
 
     namespace :customer do
@@ -75,6 +76,7 @@ Rails.application.routes.draw do
       get 'favourite_dishes', to: "favourites#list_dishes"
       post 'restaurant_ratings/add_rating' , to: "restaurant_ratings#add_rating"
       get 'order_history',to:"order#index"
+      get 'categories', to: "categories#index"
       # delete 'restaurant_rating/remove_rating', to: "restaurant_rating#remove_rating"
       # patch 'restaurant_rating/update_rating', to: "restaurant_rating#update_rating"
     end
