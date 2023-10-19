@@ -38,8 +38,9 @@ class Driver < ApplicationRecord
   end
 
   def verification_otp
-    create_delivery_otp({otp: rand(1000..9999)}) unless self.delivery_otp.present?
-    delivery_otp.otp
+    reload
+    create_driver_otp({otp: rand(1000..9999)}) unless self.driver_otp.present?
+    driver_otp.otp
   end
 
   def generate_jwt
