@@ -15,6 +15,12 @@ class V1::Driver::ProfileController < ApplicationController
     @driver=current_driver
   end
 
+  def resend_otp
+    current_driver.driver_otp.destroy if current_driver.driver_otp.present?
+    otp = current_driver.verification_otp
+    render json: { status: { success: true, code: "200", message: "OTP resent successfully", new_otp: otp}}
+  end
+
   protected
 
   def profile_params

@@ -92,6 +92,7 @@ Rails.application.routes.draw do
       delete 'documents/:id', to: "documents#destroy"
       get 'profile',to:"profile#show"
       delete 'sign_out', to:"session#destroy"
+      post 'resend_otp', to: "profile#resend_otp"
     end
   end
   devise_for :admin_user, path: 'v1/restaurant_owner', controllers: { sessions: 'v1/restaurant_owner/sessions' }
