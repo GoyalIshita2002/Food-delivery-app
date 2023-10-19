@@ -46,6 +46,7 @@ Rails.application.routes.draw do
       get 'user/:id',to:"users#show"
       get 'categories',to:"categories#index"
       put 'dish_types', to: "dish_type#update"
+      post 'dish_type',to:"dish_type#create"
     end 
 
     namespace :customer do
