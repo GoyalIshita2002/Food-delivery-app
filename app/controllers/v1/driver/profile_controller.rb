@@ -18,7 +18,6 @@ class V1::Driver::ProfileController < ApplicationController
   end
 
   def resend_otp
-    debugger
     if driver.present?
      driver.driver_otp.destroy if driver.driver_otp.present?
      otp = driver.verification_otp
