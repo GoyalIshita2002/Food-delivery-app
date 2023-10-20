@@ -9,3 +9,4 @@ json.customer do
   json.date_of_anniversary current_customer.doa 
   json.is_verified current_customer.is_verified 
 end
+json.auth_token current_customer.generate_jwt

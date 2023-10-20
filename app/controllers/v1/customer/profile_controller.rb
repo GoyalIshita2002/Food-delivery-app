@@ -1,15 +1,15 @@
 class V1::Customer::ProfileController < ApplicationController
-  skip_before_action :authenticate_user! , only: [:forget_password,:reset_password]
+  skip_before_action :authenticate_user! , only: [:forget_password,:reset_password,:resend_otp,:verify_otp]
   def verify_otp
    # unless (CustomerOtp.find_by(otp: params[:otp])&.customer_id == current_customer.id)
      #   render json: { status: { code: "400", message: "Invalid OTP" }}, status: :bad_request and return
      # end
-     customer_otp = CustomerOtp.find_by(otp: params[:otp])&.customer_id == current_customer.id
-     if customer_otp
-       current_customer.update(is_verified: true)
-       render json: {status: {success: true, message: "verified"}}
+     customer_otp = CustomerOtp.find_by(otp: params[:otp])&.customer
+      if customer_otp
+        customer.update(is_verified: true)
+        @customer=customer
       else
-     render json: { status: { success: false, code: "400", message: "Invalid OTP" }}, status: :bad_request and return
+        render json: { status: { success: false, code: "400", message: "Invalid OTP" }}, status: :bad_request and return
        end    
   end 
 
@@ -46,9 +46,13 @@ class V1::Customer::ProfileController < ApplicationController
   end
 
   def resend_otp
-    current_customer.customer_otp.destroy if current_customer.customer_otp.present?
-    otp = current_customer.verification_otp
-    render json: { status: { success: true, code: "200", message: "OTP resent successfully", new_otp: otp}}
+    if customer.present?
+      customer.customer_otp.destroy if customer.customer_otp.present?
+      otp = customer.verification_otp
+      render json: { status: { success: true, code: "200", message: "OTP resent successfully", new_otp: otp}}
+    else
+      render json: { status: { code: "400", message:"customer is not present" }}, status: :bad_request and return
+    end  
   end
 
   def forget_password
@@ -96,5 +100,9 @@ class V1::Customer::ProfileController < ApplicationController
 
   def phone_params
     params.permit(:phone)
+  end
+
+  def customer
+    Customer.find_by(email: params[:email])
   end
 end 

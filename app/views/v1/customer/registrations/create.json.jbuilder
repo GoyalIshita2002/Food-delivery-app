@@ -4,5 +4,3 @@ json.status do
 end
 
 json.partial! 'v1/customer/profile'
-
-json.auth_token current_customer.generate_jwt
