@@ -1,14 +1,5 @@
 class V1::SuperAdmin::DocumentsController < ApplicationController
   before_action :set_restaurant, only: :create
-
-  # def create
-  #   @document = restaurant.documents.create(document_params)
-  #   unless @document.persisted?
-  #     render json: { status: "400", error: "Upload Failed"},status: :bad_request and return
-  #   end
-  # rescue => e
-  #   render json: { status: "400", error: e.message },status: :bad_request and return
-  # end 
   
   def create 
     if params[:documents].present?
