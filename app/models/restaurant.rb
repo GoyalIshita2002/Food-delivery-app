@@ -23,7 +23,7 @@ class Restaurant < ApplicationRecord
 
   has_one :restaurant_address, dependent: :destroy
 
-  has_many :documents, as: :documenter
+  has_many :restaurant_files
 
   has_many :dishes
 
