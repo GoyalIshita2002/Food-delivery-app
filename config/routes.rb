@@ -34,6 +34,8 @@ Rails.application.routes.draw do
       post 'profile/upload_image', to: "profile#upload_image"
       get 'accept_order/:order_id', to: "order#accept_order"
       put 'update_order/:order_id', to: "order#update"
+      get 'total_analysts',to:"dashboards#analysts"
+      get 'weekly_earning',to:"dashboards#weekly_update"
     end
 
     namespace :super_admin do
