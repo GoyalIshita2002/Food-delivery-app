@@ -3,7 +3,7 @@ class V1::RestaurantOwner::DashboardsController < ApplicationController
   def analysts
    @orders=current_restaurant.orders.where(updated_at: Time.zone.yesterday.end_of_day.in_time_zone('CET')..Time.zone.today.end_of_day.in_time_zone('CET'))
    @completed_orders=current_restaurant.orders.where(updated_at: Time.zone.yesterday.end_of_day.in_time_zone('CET')..Time.zone.today.end_of_day.in_time_zone('CET'),status:6)
-   @ongoing_orders=current_restaurant.orders.where(updated_at: Time.zone.yesterday.end_of_day.in_time_zone('CET')..Time.zone.today.end_of_day.in_time_zone('CET'),status:[accepted:1,under_preparation:3,ready_to_pick:4,in_transit:5])
+   @ongoing_orders=current_restaurant.orders.where(updated_at: Time.zone.yesterday.end_of_day.in_time_zone('CET')..Time.zone.today.end_of_day.in_time_zone('CET'),status:[1,3,4,5])
   end
   
   def weekly_update
