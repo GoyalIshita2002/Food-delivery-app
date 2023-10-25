@@ -1,5 +1,5 @@
 json.documents do 
-  json.array! @documents do |document|
+  json.array! @restaurant_files do |document|
     json.partial! 'document', locals: { document: document }
   end
 end

@@ -5,8 +5,8 @@ class V1::SuperAdmin::DocumentsController < ApplicationController
     if params[:documents].present?
       if restaurant.present?
         params[:documents].each do |file|
-          restaurant_file = restaurant.restaurant_files.create(name: params[:name])
-          restaurant_file.file.attach(file)
+          @restaurant_file = restaurant.restaurant_files.create(name: params[:name])
+          @restaurant_file.file.attach(file)
         end
         render json: { success: true, message: 'Files uploaded successfully' }
       else
@@ -19,7 +19,7 @@ class V1::SuperAdmin::DocumentsController < ApplicationController
 
 
   def index
-    @documents = restaurant.documents
+    @documents = restaurant.restaurant_files
   end
 
   def destroy
