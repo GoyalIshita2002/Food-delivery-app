@@ -8,7 +8,7 @@ class Order < ApplicationRecord
   has_one :order_agent
   belongs_to :driver , optional: true
   
-  enum :status, [:placed, :accepted, :denied, :under_preparation, :ready_to_pick, :in_transit, :delivered, :cancelled]
+  enum :status, {placed: 0, accepted:1, denied:2, under_preparation:3, ready_to_pick:4, in_transit:5, delivered:6, cancelled:7}
 
 
   # def assign_driver

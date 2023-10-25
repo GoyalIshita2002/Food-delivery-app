@@ -1,9 +1,9 @@
 class V1::RestaurantOwner::DashboardsController < ApplicationController
   
   def analysts
-   @orders=current_restaurant.orders.where(updated_at: Time.zone.yesterday.end_of_day..Time.zone.today.end_of_day)
-   @completed_orders=current_restaurant.orders.where(updated_at: Time.zone.yesterday.end_of_day..Time.zone.today.end_of_day,status:6)
-   @ongoing_orders=current_restaurant.orders.where(updated_at: Time.zone.yesterday.end_of_day..Time.zone.today.end_of_day,status:[1,3,4,5])
+   @orders=current_restaurant.orders.where(updated_at: Time.zone.yesterday.end_of_day.in_time_zone('CET')..Time.zone.today.end_of_day.in_time_zone('CET'))
+   @completed_orders=current_restaurant.orders.where(updated_at: Time.zone.yesterday.end_of_day.in_time_zone('CET')..Time.zone.today.end_of_day.in_time_zone('CET'),status:6)
+   @ongoing_orders=current_restaurant.orders.where(updated_at: Time.zone.yesterday.end_of_day.in_time_zone('CET')..Time.zone.today.end_of_day.in_time_zone('CET'),status:[accepted:1,under_preparation:3,ready_to_pick:4,in_transit:5])
   end
   
   def weekly_update
@@ -17,7 +17,7 @@ class V1::RestaurantOwner::DashboardsController < ApplicationController
   end
 
   def total_earning
-    orders= current_restaurant.orders.where(updated_at: Date.today.beginning_of_week..Date.today.end_of_week)
+    orders= current_restaurant.orders.where(updated_at: Date.today.beginning_of_week.in_time_zone('CET')..Date.today.end_of_week.in_time_zone('CET'))
     @sum = 0
     orders&.each do |order|
      @sum += order.cart.total_amount
@@ -36,12 +36,10 @@ class V1::RestaurantOwner::DashboardsController < ApplicationController
 
   def calculate_earning(day)
     @earning=earnings_by_day(day)
-    if total_earning.zero? && @earning == 0
-     return
-    else 
-     (( @earning/total_earning)*100).round(3).to_f
+    unless total_earning.zero? && @earning == 0
+      (( @earning/total_earning)*100).round(3).to_f
     end
- end
+  end
 
   def current_restaurant
    current_admin_user.restaurant
