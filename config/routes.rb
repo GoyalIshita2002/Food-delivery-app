@@ -33,6 +33,8 @@ Rails.application.routes.draw do
       put 'profile/update', to: "profile#update"
       post 'profile/upload_image', to: "profile#upload_image"
       get 'accept_order/:order_id', to: "order#accept_order"
+      get 'under_preparation_order', to: "order#under_preparation"
+      get 'prepared', to: "order#prepared"
       put 'update_order/:order_id', to: "order#update"
     end
 
