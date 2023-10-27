@@ -42,8 +42,12 @@ Rails.application.routes.draw do
       resources :restaurants
       post 'restaurant/:restaurant_id/documents', to: "documents#create"
       get 'restaurant/:restaurant_id/documents', to: "documents#index"
-      delete 'documents/:id', to: "documents#destroy"
+      delete 'restaurant/:restaurant_id/documents/:id', to: "documents#destroy"
       post 'assign_driver/:order_id', to: "order#assign_driver"
+      post 'accept_order/:order_id', to: "order#accept_order"
+      get 'placed_order',to: "order#placed_order"
+      get 'order_without_driver', to: "order#orders_without_agent"
+      get 'order_status', to: "order#order_status"
       get 'users',to:"users#index"
       get 'user/:id',to:"users#show"
       get 'categories',to:"categories#index"
