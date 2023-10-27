@@ -2,19 +2,20 @@ class V1::SuperAdmin::OrderController < ApplicationController
   before_action :find_order, only: [:assign_driver, :accept_order]
 
   def placed_order
-    @orders = Order.where(status: 0)
+    @orders = Order.where(status: "placed")
     if @orders.present?
       render template: "v1/super_admin/order/placed_order",status: :ok and return
     else
-      render json: { status: { code: "400", errors: ["No orders found with status 0."] } }, status: :bad_request
+      render json: { status: { code: "400", errors: ["No orders found with status placed."] } }, status: :bad_request
     end
   end
     
   def accept_order
     if @order.present?
-      allowed_statuses = [1, 2]
-      if allowed_statuses.include?(params[:status].to_i)
-        if @order.update(status: params[:status])
+      allowed_statuses = ["accepted","denied"]
+      requested_status = params[:status].to_s.downcase
+      if allowed_statuses.include?(requested_status)
+        if @order.update(status: requested_status)
           render json: @order, status: :ok and return
         else
           render json: { status: { code: "400", errors: ["Invalid order status for acceptance."] }}, status: :bad_request
@@ -47,15 +48,6 @@ class V1::SuperAdmin::OrderController < ApplicationController
       render json: { status: { code: "400", errors: @order.errors.full_messages }}, status: :bad_request 
     end   
   end
-
-  def order_status
-    @orders = Order.where(status: 1)
-    if @orders.present?
-      render template: "v1/super_admin/order/order_status",status: :ok and return
-    else
-     render json: { status: { code: "400", errors: ["No orders found without an assigned order agent."] } }, status: :bad_request
-    end
-   end
 
   private
 
