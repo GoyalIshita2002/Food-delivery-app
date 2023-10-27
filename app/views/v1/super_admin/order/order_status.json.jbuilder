@@ -1,12 +1,22 @@
-json.status do 
-    json.code "200"
-   end
-
-json.orders do 
- json.array! @orders do |orders|
-    json.id orders.id
-    json.restaurant_name orders.restaurant.name
-    json.admin_email orders.restaurant.admin_user.email
-    json
+json.status do
+   json.code "200"
  end
-end
+ json.orders do
+   json.array! @orders do |order|
+     json.id order.id
+     total_amount = 0
+     json.dishes do
+       json.array! order.cart.cart_items do |cart_item|
+         json.name cart_item.dish.name
+         json.price cart_item.dish.price
+         total_amount += cart_item.dish.price.to_f
+       end
+     end
+     json.total_amount total_amount
+     json.restaurant order.restaurant.name
+     json.ordered_by order.customer.username
+     json.delivery_boy order.order_agent&.driver&.full_name
+   end
+ end
+ 
+ 

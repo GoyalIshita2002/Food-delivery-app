@@ -25,7 +25,7 @@ class V1::SuperAdmin::DocumentsController < ApplicationController
       if @restaurant_files.present?
         render template: "v1/super_admin/documents/index",status: :ok and return
       else
-        render json: { error: 'No documents found for the provided restaurant ID' }, status: :not_found
+         render json: { documents: [] }, status: :ok
       end
     else
       render json: { error: 'Restaurant not found with the provided ID' }, status: :unprocessable_entity

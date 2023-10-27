@@ -2,7 +2,7 @@ class V1::SuperAdmin::OrderController < ApplicationController
   before_action :find_order, only: [:assign_driver, :accept_order]
 
   def placed_order
-    @orders = Order.where(status: "placed")
+    @orders = Order.where(status: :placed)
     if @orders.present?
       render template: "v1/super_admin/order/placed_order",status: :ok and return
     else
@@ -12,11 +12,11 @@ class V1::SuperAdmin::OrderController < ApplicationController
     
   def accept_order
     if @order.present?
-      allowed_statuses = ["accepted","denied"]
-      requested_status = params[:status].to_s.downcase
+      allowed_statuses = [:accepted,:denied]
+      requested_status = params[:status].to_s.downcase.to_sym
       if allowed_statuses.include?(requested_status)
         if @order.update(status: requested_status)
-          render json: @order, status: :ok and return
+          render json: @order, status: :ok 
         else
           render json: { status: { code: "400", errors: ["Invalid order status for acceptance."] }}, status: :bad_request
         end
@@ -49,6 +49,35 @@ class V1::SuperAdmin::OrderController < ApplicationController
     end   
   end
 
+  def show_restaurant
+    @restaurant = Restaurant.all
+    if @restaurant.present?
+    render template: "v1/super_admin/order/show_restaurant",status: :ok and return
+    else
+      render json: { status: { code: "400", errors: @restaurant.errors.full_messages }}, status: :bad_request and return
+    end
+  end
+
+  def order_status
+    @restaurant = Restaurant.find_by(id: params[:restaurant_id])
+    if @restaurant.present?
+      accepted_statuses = [:under_preparation, :in_transit, :ready_to_pick]
+      requested_status = params[:status].to_sym
+      if accepted_statuses.include?(requested_status)
+        @orders = @restaurant.orders.where(status: requested_status)
+        if @orders.present?
+          render template: "v1/super_admin/order/order_status", status: :ok
+        else
+          render json: { orders: [] }, status: :ok
+        end
+      else
+        render json: { status: { code: "400", errors: ["Invalid order status. Allowed values are #{accepted_statuses.join(', ')}."] } }, status: :bad_request
+      end
+    else
+      render json: { status: { code: "400", errors: ["Restaurant not found with the provided ID"] } }, status: :bad_request
+    end
+  end
+  
   private
 
   def find_order
