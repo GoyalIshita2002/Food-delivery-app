@@ -11,8 +11,12 @@ json.restaurants do
     admin_user = restaurant.admin_user
       json.id restaurant.id
       json.name restaurant.name
-      json.owner_name admin_user.user_name
-      json.phone admin_user.phone
-      json.email admin_user.email
+      json.phone admin_user&.phone
+      json.email admin_user&.email
+      restaurant.orders&.each do |order|
+        @total_amount ||= 0
+        @total_amount += order.cart.total_amount
+      end
+      json.total_earning @total_amount
   end 
 end

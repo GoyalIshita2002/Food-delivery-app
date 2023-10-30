@@ -33,7 +33,11 @@ Rails.application.routes.draw do
       put 'profile/update', to: "profile#update"
       post 'profile/upload_image', to: "profile#upload_image"
       get 'accept_order/:order_id', to: "order#accept_order"
+      get 'under_preparation_order', to: "order#under_preparation"
+      get 'prepared', to: "order#prepared"
       put 'update_order/:order_id', to: "order#update"
+      get 'total_analysts',to:"dashboards#analysts"
+      get 'weekly_earning',to:"dashboards#weekly_update"
     end
 
     namespace :super_admin do
@@ -46,6 +50,10 @@ Rails.application.routes.draw do
       get 'user/:id',to:"users#show"
       get 'categories',to:"categories#index"
       put 'dish_types', to: "dish_type#update"
+      post 'dish_type',to:"dish_type#create"
+      get 'customer_users',to:"customer_user#index"
+      get 'customer_user/:id',to:"customer_user#show"
+      get 'restaurant/:id/edit',to:"restaurants#edit"
     end 
 
     namespace :customer do
@@ -92,6 +100,7 @@ Rails.application.routes.draw do
       delete 'documents/:id', to: "documents#destroy"
       get 'profile',to:"profile#show"
       delete 'sign_out', to:"session#destroy"
+      post 'resend_otp', to: "profile#resend_otp"
     end
   end
   devise_for :admin_user, path: 'v1/restaurant_owner', controllers: { sessions: 'v1/restaurant_owner/sessions' }

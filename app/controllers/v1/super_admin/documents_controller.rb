@@ -1,17 +1,25 @@
 class V1::SuperAdmin::DocumentsController < ApplicationController
   before_action :set_restaurant, only: :create
-
-  def create
-    @document = restaurant.documents.create(document_params)
-    unless @document.persisted?
-      render json: { status: "400", error: "Upload Failed"},status: :bad_request and return
+  
+  def create 
+    if params[:documents].present?
+      if restaurant.present?
+        params[:documents].each do |file|
+          @restaurant_file = restaurant.restaurant_files.create(name: params[:name])
+          @restaurant_file.file.attach(file)
+        end
+        render json: { success: true, message: 'Files uploaded successfully' }
+      else
+        render json: { error: 'Restaurant not found with the provided ID' }, status: :unprocessable_entity
+      end
+    else
+      render json: { error: 'No files uploaded' }, status: :unprocessable_entity
     end
-  rescue => e
-    render json: { status: "400", error: e.message },status: :bad_request and return
-  end 
+  end
+
 
   def index
-    @documents = restaurant.documents
+    @documents = restaurant.restaurant_files
   end
 
   def destroy

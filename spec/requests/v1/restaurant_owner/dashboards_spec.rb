@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "V1::SuperAdmin::Categories", type: :request do
+RSpec.describe "V1::RestaurantOwner::Dashboards", type: :request do
   describe "GET /index" do
     pending "add some examples (or delete) #{__FILE__}"
   end
