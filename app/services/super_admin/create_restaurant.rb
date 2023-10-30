@@ -28,7 +28,7 @@ class SuperAdmin::CreateRestaurant < ApplicationService
   end
 
   def restaurant_params 
-    params.require(:restaurant).permit(:name, :registration_date, :phone, :lock_menu)
+    params.require(:restaurant).permit(:name, :registration_date, :phone, :lock_menu, :main_image)
   end
 
   def restaurant_address_params
