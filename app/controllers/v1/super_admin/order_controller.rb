@@ -84,7 +84,7 @@ class V1::SuperAdmin::OrderController < ApplicationController
       sorted_orders_by_hour = placed_orders_by_hour.sort.to_h
       render json: { placed_orders_by_hour: sorted_orders_by_hour }, status: :ok
     else
-      render json: { orders: 0 }, status: :ok
+      render json: { placed_orders_by_hour: []}, status: :ok
     end
   end
   
