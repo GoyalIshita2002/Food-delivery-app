@@ -12,7 +12,9 @@ json.restaurants do
       json.id restaurant.id
       json.name restaurant.name
       json.owner_name admin_user.user_name
-      json.phone admin_user.phone
+      json.phone restaurant.phone
       json.email admin_user.email
+      total_price = restaurant&.orders&.reject { |order| order.status == "denied" }&.sum { |order| order.cart&.total_amount.to_f }
+    json.total_price total_price || 0
   end 
 end

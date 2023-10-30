@@ -31,15 +31,16 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
   def index
     restaurants = if params[:search].present?
       search = params[:search].downcase
-      Restaurant.joins(:admin_user).where('lower(admin_users.email) LIKE ?', "%#{search}%")
-      .or(Restaurant.where('lower(name) LIKE ?', "%#{search}%"))
-      .or(Restaurant.where('lower(admin_users.phone) LIKE ?', "%#{search}%"))  
+      Restaurant.joins(:admin_user)
+        .where('lower(admin_users.email) LIKE ?', "%#{search}%")
+        .or(Restaurant.where('lower(name) LIKE ?', "%#{search}%"))
+        .or(Restaurant.where('lower(restaurants.phone) LIKE ?', "%#{search}%"))
     else
       Restaurant.all
     end
-    
     @pagy, @restaurants = pagy(restaurants, items: params[:per_page]&.to_i)
   end
+  
 
   protected
 
