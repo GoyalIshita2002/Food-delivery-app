@@ -36,6 +36,8 @@ Rails.application.routes.draw do
       get 'under_preparation_order', to: "order#under_preparation"
       get 'prepared', to: "order#prepared"
       put 'update_order/:order_id', to: "order#update"
+      get 'total_analysts',to:"dashboards#analysts"
+      get 'weekly_earning',to:"dashboards#weekly_update"
     end
 
     namespace :super_admin do
@@ -59,6 +61,7 @@ Rails.application.routes.draw do
       post 'dish_type',to:"dish_type#create"
       get 'customer_users',to:"customer_user#index"
       get 'customer_user/:id',to:"customer_user#show"
+      get 'restaurant/:id/edit',to:"restaurants#edit"
     end 
 
     namespace :customer do

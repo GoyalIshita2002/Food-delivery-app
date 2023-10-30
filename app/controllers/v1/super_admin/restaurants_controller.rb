@@ -3,7 +3,7 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
 
   before_action :validate_restaurant, only: :update
 
-  def create
+  def create 
     @admin = SuperAdmin::CreateRestaurant.call(restaurant_admin_params)
     unless @admin.persisted?
       render json: { status: { code: "400", message: "Failed to create Restaurant" }},status: :bad_request and return  
@@ -21,7 +21,7 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
     render json: { status: { code: "400", message: e.message }}, status: :bad_request and return
   end 
 
-  def show
+  def edit
     @restaurant = Restaurant.find_by(id: params[:id])
     unless @restaurant.present?
       render json: { status: { code: "404", message: "Invalid Restaurant ID"}},status: :not_found and return
