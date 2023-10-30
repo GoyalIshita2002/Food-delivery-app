@@ -6,14 +6,9 @@ class V1::SuperAdmin::DocumentsController < ApplicationController
       if restaurant.present?
         @restaurant_files = []
         params[:documents].each do |file|
-<<<<<<< HEAD
           restaurant_file = restaurant.restaurant_files.create(name: params[:name])
           restaurant_file.file.attach(file)
           @restaurant_files << rails_blob_url(restaurant_file.file)
-=======
-          @restaurant_file = restaurant.restaurant_files.create(name: params[:name])
-          @restaurant_file.file.attach(file)
->>>>>>> 559ad6a8c39707433ffa18f2412cad4037c33854
         end
         render json: { success: true, message: 'Files uploaded successfully', document_urls: @restaurant_files }
       else
