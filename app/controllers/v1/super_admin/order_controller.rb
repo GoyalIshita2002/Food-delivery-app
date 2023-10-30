@@ -70,56 +70,46 @@ class V1::SuperAdmin::OrderController < ApplicationController
   end
 
   def order_statistics
-    if Order.present?
-      placed_orders = Order.where(status: :placed).count
-      ongoing_orders = Order.where(status: [:accepted, :under_preparation, :ready_to_pick, :in_transit,:assign_driver]).count
-      orders_completed = Order.where(status: :delivered).count
-      merchant_opened = Restaurant.where(open_for_orders: true).joins(:orders).count
-      render json: { placed_orders: placed_orders, ongoing_orders: ongoing_orders,orders_completed: orders_completed,merchant_opened: merchant_opened}, status: :ok
-    else
-      render json: { orders: 0 }, status: :ok
-    end
+    placed_orders = Order.where(status: :placed).count
+    ongoing_orders = Order.where(status: [:accepted, :under_preparation, :ready_to_pick, :in_transit, :assigning]).count
+    orders_completed = Order.where(status: :delivered).count
+    merchant_opened = Restaurant.where(open_for_orders: true).joins(:orders).count
+    render json: { placed_orders: placed_orders, ongoing_orders: ongoing_orders, orders_completed: orders_completed, merchant_opened: merchant_opened }, status: :ok
   end
+  
 
   def placed_orders_by_hours
-      placed_orders_by_hour = Order.where(status: :placed).group("EXTRACT(HOUR FROM created_at)").count
-      if placed_orders_by_hour.present?
+    placed_orders_by_hour = Order.where(status: :placed).group("EXTRACT(HOUR FROM created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Paris')").count
+    if placed_orders_by_hour.present?
       sorted_orders_by_hour = placed_orders_by_hour.sort.to_h
       render json: { placed_orders_by_hour: sorted_orders_by_hour }, status: :ok
     else
       render json: { orders: 0 }, status: :ok
     end
   end
+  
 
   def orders_ongoing_stats
-    if Order.present?
-      ongoing_orders = Order.where(status: [:accepted, :under_preparation, :ready_to_pick, :in_transit,:assign_driver])
-      if ongoing_orders.present?
-        ready_to_pick = ongoing_orders.where(status: :ready_to_pick).count
-        on_the_way = ongoing_orders.where(status: :in_transit).count
-        assigning = ongoing_orders.where(status: :assign_driver).count
-        accepted_by_merchant = ongoing_orders.where(status: :accepted).count
-        render json: { ready_to_pick: ready_to_pick,assigning: assigning ,accepted_by_merchant: accepted_by_merchant, on_the_way: on_the_way }, status: :ok
-      else
-        render json: { ongoing_orders: 0 }, status: :ok
-      end
+    ongoing_orders = Order.where(status: [:accepted, :under_preparation, :ready_to_pick, :in_transit, :assigning])
+    if ongoing_orders.present?
+      ready_to_pick = ongoing_orders.where(status: :ready_to_pick).count
+      on_the_way = ongoing_orders.where(status: :in_transit).count
+      assigning = ongoing_orders.where(status: :assign_driver).count
+      accepted_by_merchant = ongoing_orders.where(status: :accepted).count
+      render json: { ready_to_pick: ready_to_pick, assigning: assigning, accepted_by_merchant: accepted_by_merchant, on_the_way: on_the_way }, status: :ok
     else
-      render json: { orders: 0 }, status: :ok
+      render json: { ongoing_orders: 0 }, status: :ok
     end
   end
-
+  
   def orders_unfilled_stats 
-    if Order.exists?
-      cancelled = Order.where(status: :cancelled).count
-      rejected_by_merchant = Order.where(status: :denied).count
-      current_time = Time.now
-      expired_by_merchant = Order.where(status: :accepted).where("time < ?", current_time).count
-      render json: { cancelled: cancelled, rejected_by_merchant: rejected_by_merchant, expired_by_merchant: expired_by_merchant }, status: :ok
-    else
-      render json: { orders: 0 }, status: :ok
-    end
+    cancelled = Order.where(status: :cancelled).count
+    rejected_by_merchant = Order.where(status: :denied).count
+    expired_by_merchant = Order.where(status: :accepted).where("time AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Paris' < CURRENT_TIMESTAMP").count
+    render json: { cancelled: cancelled, rejected_by_merchant: rejected_by_merchant, expired_by_merchant: expired_by_merchant }, status: :ok
   end
-
+  
+  
   private
 
   def find_order
