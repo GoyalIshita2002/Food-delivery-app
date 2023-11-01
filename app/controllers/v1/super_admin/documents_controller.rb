@@ -20,7 +20,6 @@ class V1::SuperAdmin::DocumentsController < ApplicationController
   end
 
   def index
-    @documents = restaurant.restaurant_files
     if restaurant.present?
       @restaurant_files = restaurant.restaurant_files
       unless @restaurant_files.present?
