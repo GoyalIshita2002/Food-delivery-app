@@ -15,36 +15,33 @@ class V1::SuperAdmin::DocumentsController < ApplicationController
         render json: { error: 'Restaurant not found with the provided ID' }, status: :unprocessable_entity
       end
     else
-      render json: { error: 'No files uploaded' }, status: :unprocessable_entity
+      render json: { documents: [] }, status: :ok
     end
   end
 
   def index
     if restaurant.present?
       @restaurant_files = restaurant.restaurant_files
-      if @restaurant_files.present?
-        render template: "v1/super_admin/documents/index",status: :ok and return
-      else
-         render json: { documents: [] }, status: :ok
-      end
+      unless @restaurant_files.present?
+        render json: { documents: [] }, status: :ok
+      end 
     else
       render json: { error: 'Restaurant not found with the provided ID' }, status: :unprocessable_entity
     end
   end
-
+  
   def destroy
     document = restaurant.restaurant_files.find_by(id: params[:id])
-    unless document.present?
+    unless document
       render json: { status: { code: "400", message: "Invalid Document ID" } }, status: :bad_request and return
     end
-    document_url = rails_blob_url(document.file)
     if document.destroy
-      render json: { status: { code: "200", message: "Document destroyed successfully", document_url: document_url } }, status: :ok and return
+      render json: { status: { code: "200", message: "Document destroyed successfully" } }, status: :ok
     else
-      render json: { status: { code: "400", message: "Failed to destroy document" } }, status: :bad_request and return
+      render json: { status: { code: "400", message: "Failed to destroy document" } }, status: :bad_request
     end
   end
-
+  
   private 
 
   def restaurant_id

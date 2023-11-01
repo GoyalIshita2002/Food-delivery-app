@@ -1,15 +1,14 @@
 class V1::SuperAdmin::OrderController < ApplicationController
-  before_action :find_order, only: [:assign_driver, :accept_order]
+  before_action :order, only: [:assign_driver, :accept_order]
 
   def placed_order
     @orders = Order.where(status: :placed)
     if @orders.present?
-      render template: "v1/super_admin/order/placed_order",status: :ok and return
     else
-      render json: { status: { code: "400", errors: ["No orders found with status placed."] } }, status: :bad_request
+      render json: { status: { code: "400", orders: [] } }, status: :ok 
     end
   end
-    
+   
   def accept_order
     if @order.present?
       allowed_statuses = [:accepted,:denied]
@@ -24,16 +23,15 @@ class V1::SuperAdmin::OrderController < ApplicationController
         render json: { status: { code: "400", errors: ["Invalid order status. Allowed values are #{allowed_statuses.join(', ')}."] }}, status: :bad_request
       end
     else
-      render json: { status: { code: "404", errors: ["Order not found."] }}, status: :not_found
+      render json: { status: { code: "404", orders: [] }}, status: :ok 
     end
   end
 
   def orders_without_agent
     @orders_without_agent = Order.left_outer_joins(:order_agent)
     if @orders_without_agent.present?
-      render template: "v1/super_admin/order/order_without_agent",status: :ok and return
     else
-      render json: { status: { code: "400", errors: ["No orders found without an assigned order agent."] } }, status: :bad_request
+      render json: { status: { code: "400", orders: [] } }, status: :ok
     end
   end
 
@@ -45,7 +43,7 @@ class V1::SuperAdmin::OrderController < ApplicationController
       end
       render json: @order,status: :ok and return
     else
-      render json: { status: { code: "400", errors: @order.errors.full_messages }}, status: :bad_request 
+      render json: { status: { code: "400", orders: [] }}, status: :ok  
     end   
   end
 
@@ -56,11 +54,9 @@ class V1::SuperAdmin::OrderController < ApplicationController
       requested_status = params[:status].to_sym
       if accepted_statuses.include?(requested_status)
         @orders = @restaurant.orders.where(status: requested_status)
-        if @orders.present?
-          render template: "v1/super_admin/order/order_status", status: :ok
-        else
+        unless @orders.present?
           render json: { orders: [] }, status: :ok
-        end
+        end        
       else
         render json: { status: { code: "400", errors: ["Invalid order status. Allowed values are #{accepted_statuses.join(', ')}."] } }, status: :bad_request
       end
@@ -112,8 +108,8 @@ class V1::SuperAdmin::OrderController < ApplicationController
   
   private
 
-  def find_order
-    @order = Order.find_by(id: params[:order_id])
+  def order
+    @order ||= Order.find_by(id: params[:order_id])
   end
 
 end

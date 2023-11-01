@@ -54,6 +54,8 @@ Rails.application.routes.draw do
       get 'placed_orders_by_hours', to: "order#placed_orders_by_hours"
       get 'ongoing_orders_statistics', to: "order#orders_ongoing_stats"
       get 'orders_unfilled_stats', to: "order#orders_unfilled_stats"
+      get 'drivers',to:"driver#index"
+      get 'drivers/:driver_id/orders',to:"driver#driver_order_list"
       get 'users',to:"users#index"
       get 'user/:id',to:"users#show"
       get 'categories',to:"categories#index"
