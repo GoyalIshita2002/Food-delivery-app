@@ -18,12 +18,12 @@ class V1::Customer::CustomerAddressesController < ApplicationController
   def index
     if params[:search].present?
       search = params[:search].downcase
-      customer_address = CustomerAddress.where('lower(street) LIKE ?', "%#{search}%")
+      customer_address = current_customer.addresses.where('lower(street) LIKE ?', "%#{search}%")
                                         .or(CustomerAddress.where('lower(address) LIKE ?', "%#{search}%"))
                                         .or(CustomerAddress.where('lower(zip_code) LIKE ?', "%#{search}%"))
                                         .or(CustomerAddress.where('lower(state) LIKE ?', "%#{search}%"))
     else
-      customer_address = CustomerAddress.all
+      customer_address = current_customer.addresses
     end
     render json: { customer_address: customer_address }, status: :ok
   end
