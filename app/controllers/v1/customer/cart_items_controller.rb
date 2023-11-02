@@ -36,7 +36,7 @@ class V1::Customer::CartItemsController < ApplicationController
   end
 
   def cart_item_params
-    params.require(:cart_item).permit(:dish_id,:quantity)
+    params.require(:cart_item).permit(:dish_id, :quantity, :add_on_item_id)
   end
 
   def validate_item_params 
