@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_02_035501) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_02_051304) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -74,7 +74,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_02_035501) do
 
   create_table "cart_items", force: :cascade do |t|
     t.bigint "cart_id", null: false
-    t.bigint "dish_id", null: false
     t.integer "quantity", default: 1
     t.decimal "ordered_price", default: "0.0"
     t.datetime "created_at", null: false
@@ -83,7 +82,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_02_035501) do
     t.string "itemable_type"
     t.bigint "itemable_id"
     t.index ["cart_id"], name: "index_cart_items_on_cart_id"
-    t.index ["dish_id"], name: "index_cart_items_on_dish_id"
     t.index ["itemable_type", "itemable_id"], name: "index_cart_items_on_itemable"
   end
 
@@ -470,7 +468,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_02_035501) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "avg_pricings", "restaurants"
   add_foreign_key "cart_items", "carts"
-  add_foreign_key "cart_items", "dishes"
   add_foreign_key "carts", "customers"
   add_foreign_key "customer_addresses", "customers"
   add_foreign_key "customer_margins", "restaurants"

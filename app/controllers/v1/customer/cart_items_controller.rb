@@ -4,7 +4,7 @@ class V1::Customer::CartItemsController < ApplicationController
   before_action :validate_item_params, only: :create
 
   def create
-    SuperAdmin::AddCartItem.call(cart_item_params, cart)
+    Customer::AddCartItem.call(cart_item_params, cart)
   end
 
   def update
@@ -40,9 +40,13 @@ class V1::Customer::CartItemsController < ApplicationController
   end
 
   def validate_item_params 
-    unless dish.present?
+    unless dish.present? || add_on_item.present?
       render json: { status: {code: "400", message: "Invalid Item"}},status: :bad_request and return
     end
+  end
+
+  def add_on_item
+    @add_on_item ||= Item.find_by(id: cart_item_params[:add_on_item_id])
   end
 
   def dish

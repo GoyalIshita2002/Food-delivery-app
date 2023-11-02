@@ -1,6 +1,5 @@
 class CartItem < ApplicationRecord
   belongs_to :cart
-  belongs_to :dish
   belongs_to :itemable, polymorphic: true
   after_save :update_cart
 

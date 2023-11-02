@@ -1,4 +1,4 @@
-class SuperAdmin::AddCartItem < ApplicationService
+class Customer::AddCartItem < ApplicationService
 
   def initialize(params, cart)
     @params = params
