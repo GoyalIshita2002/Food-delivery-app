@@ -26,4 +26,22 @@ class V1::SuperAdmin::DriverController < ApplicationController
     end
   end
 
+  def Revenue_by_day
+    driver_id = params[:driver_id].to_i
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+    service = RevenueService.new(driver_id, start_date, end_date)
+    result = service.generate_revenue_data
+    render json: result, status: :ok
+  end
+  
+  def delivery_charges
+    delivery_charges = {
+      '0-3 miles' => '$10',
+      '4-7 miles' => '$20',
+      '8-10 miles' => '$30'
+    }
+    render json: { delivery_charges: delivery_charges }, status: :ok
+  end
+  
 end
