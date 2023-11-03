@@ -7,9 +7,9 @@ json.status do
      total_amount = 0
      json.dishes do
        json.array! order.cart.cart_items do |cart_item|
-         json.name cart_item.dish.name
-         json.price cart_item.dish.price
-         total_amount += cart_item.dish.price.to_f
+         json.name cart_item.itemable.name
+         json.price cart_item.itemable.price
+         total_amount += cart_item.itemable.price.to_f
        end
      end
      json.total_amount total_amount

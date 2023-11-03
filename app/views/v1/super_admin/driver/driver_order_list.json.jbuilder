@@ -8,7 +8,7 @@ json.driver do
     json.restaurant_name order.restaurant.name
     json.status order.status
     json.dishes do
-      json.array! order.cart.cart_items.map { |cart_item| cart_item.dish.name }
+      json.array! order.cart.cart_items.map { |cart_item| cart_item.itemable&.name }
     end
     json.total_amount order.cart.total_amount
   end

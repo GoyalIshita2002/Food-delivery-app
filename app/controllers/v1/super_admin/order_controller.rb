@@ -1,4 +1,5 @@
 class V1::SuperAdmin::OrderController < ApplicationController
+  include Pagy::Backend
   before_action :order, only: [:assign_driver, :accept_order]
 
   def placed_order
@@ -7,6 +8,20 @@ class V1::SuperAdmin::OrderController < ApplicationController
     else
       render json: { status: { code: "400", orders: [] } }, status: :ok 
     end
+  end
+
+  def index
+    orders = if params[:search].present?
+      search = params[:search].downcase
+      Order.joins(:customer, :restaurant)
+        .where(
+          'lower(customers.username) LIKE :search OR lower(restaurants.name) LIKE :search OR lower(CAST(orders.id AS TEXT)) LIKE :search',
+          search: "%#{search}%"
+        )
+    else
+      Order.all
+    end
+    @pagy, @orders = pagy(orders, items: params[:per_page]&.to_i)
   end
    
   def accept_order
