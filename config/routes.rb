@@ -55,9 +55,9 @@ Rails.application.routes.draw do
       get 'ongoing_orders_statistics', to: "order#orders_ongoing_stats"
       get 'orders_unfilled_stats', to: "order#orders_unfilled_stats"
       get 'transaction', to: "order#index"
-      get 'drivers/:driver_id/Revenue_by_day', to: "driver#Revenue_by_day"
+      get 'drivers/:driver_id/revenue_by_day', to: "driver#revenue_by_day"
       get 'drivers',to:"driver#index"
-      get 'drivers/delivery_charges',to: "driver#delivery_charges" 
+      post 'delivery_charges/upsert', to: 'driver#upsert', as: 'upsert_delivery_charge'
       get 'drivers/:driver_id/orders',to:"driver#driver_order_list"
       get 'users',to:"users#index"
       get 'user/:id',to:"users#show"

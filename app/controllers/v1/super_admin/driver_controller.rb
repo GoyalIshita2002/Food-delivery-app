@@ -26,7 +26,7 @@ class V1::SuperAdmin::DriverController < ApplicationController
     end
   end
 
-  def Revenue_by_day
+  def revenue_by_day
     driver_id = params[:driver_id].to_i
     start_date = params[:start_date]
     end_date = params[:end_date]
@@ -35,13 +35,16 @@ class V1::SuperAdmin::DriverController < ApplicationController
     render json: result, status: :ok
   end
   
-  def delivery_charges
-    delivery_charges = {
-      '0-3 miles' => '$10',
-      '4-7 miles' => '$20',
-      '8-10 miles' => '$30'
-    }
-    render json: { delivery_charges: delivery_charges }, status: :ok
+  def upsert
+    min_distance = params[:min_distance].to_f
+    max_distance = params[:max_distance].to_f
+    charge = params[:charge].to_i
+    delivery_charge =  DeliveryCharge.upsert(min_distance, max_distance, charge)
+    if delivery_charge.present?
+      render json: delivery_charge,status: :ok and return
+    else
+      render json: { status: {code: "400", error: delivery_charge.errors.full_message }}, status: :bad_request and return
+    end
   end
   
 end
