@@ -21,6 +21,7 @@ json.restaurant do
     json.city address.city
     json.state address.state
     json.zip_code address.zip_code
+    json.state_code address.state_code
   end
   json.open_hours do 
     json.array! restaurant.open_hours do |open_hour|

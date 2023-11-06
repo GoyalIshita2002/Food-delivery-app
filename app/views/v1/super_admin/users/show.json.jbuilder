@@ -14,5 +14,6 @@ json.user do
     json.address2 address.address2
     json.city address.city
     json.state address.state
+    json.state_code address.state_code
   end
 end
