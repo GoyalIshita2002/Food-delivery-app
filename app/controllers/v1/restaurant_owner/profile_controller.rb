@@ -38,7 +38,7 @@ end
   end
 
   def restaurant_address_params
-    params.require(:restaurant_admin).require(:restaurant).require(:restaurant_address).permit(:address1,:address2,:state,:city,:zip_code)
+    params.require(:restaurant_admin).require(:restaurant).require(:restaurant_address).permit(:address1,:address2,:state,:city,:zip_code, :state_code)
   end
 
   def restaurant_id

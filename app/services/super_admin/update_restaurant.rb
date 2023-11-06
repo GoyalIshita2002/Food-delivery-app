@@ -27,7 +27,7 @@ class SuperAdmin::UpdateRestaurant < ApplicationService
 
   def restaurant_address_params
     if params[:restaurant].present? && params[:restaurant][:restaurant_address].present?
-      params.require(:restaurant).require(:restaurant_address).permit(:address1, :address2, :street, :city, :state, :zip_code)
+      params.require(:restaurant).require(:restaurant_address).permit(:address1, :address2, :street, :city, :state, :zip_code, :state_code)
     end
   end
 

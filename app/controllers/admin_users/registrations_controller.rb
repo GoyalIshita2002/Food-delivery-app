@@ -28,6 +28,6 @@ class AdminUsers::RegistrationsController < Devise::RegistrationsController
   end
 
   def restaurant_params
-    params.require(:admin_user).permit(:restaurant=>[:name, :type, :open_time, :close_time, :restaurant_address=>[:street, :address, :zip_code, :state]])
+    params.require(:admin_user).permit(:restaurant=>[:name, :type, :open_time, :close_time, :restaurant_address=>[:street, :address, :zip_code, :state, :state_code]])
   end
 end

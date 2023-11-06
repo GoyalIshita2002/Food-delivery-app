@@ -9,7 +9,7 @@ class SuperAdmin::CreateRestaurant < ApplicationService
   def call
     admin = ActiveRecord::Base.transaction do 
               admin = AdminUser.create!(restaurant_admin_params)
-              restaurant = admin.create_restaurant(restaurant_params) 
+              restaurant = admin.create_restaurant(restaurant_params)
               restaurant.create_restaurant_address(restaurant_address_params)
               open_hour_params.each do |open_params|
                 open_hour = restaurant.open_hours.create(open_params.except(:split_hours))
@@ -32,7 +32,7 @@ class SuperAdmin::CreateRestaurant < ApplicationService
   end
 
   def restaurant_address_params
-    params.require(:restaurant).require(:restaurant_address).permit(:address1, :address2, :street, :city, :state, :zip_code)
+    params.require(:restaurant).require(:restaurant_address).permit(:address1, :address2, :street, :city, :state, :zip_code, :state_code)
   end
 
   def open_hour_params

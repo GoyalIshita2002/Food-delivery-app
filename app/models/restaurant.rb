@@ -39,7 +39,7 @@ class Restaurant < ApplicationRecord
 
   def address
     location = self.restaurant_address
-    "#{location.street}, #{location.address}, #{location.zip_code}, #{location.state}"
+    "#{location.street}, #{location.address}, #{location.zip_code}, #{location.state},#{location.state_code}"
   end
 
   def main_image_url

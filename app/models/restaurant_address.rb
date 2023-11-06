@@ -5,7 +5,7 @@ class RestaurantAddress < ApplicationRecord
   after_validation :geocode
 
   def address
-    [street, address1, address2, city, state].compact.join(', ')
+    [street, address1, address2, city, state, state_code].compact.join(', ')
   end
 end
  
