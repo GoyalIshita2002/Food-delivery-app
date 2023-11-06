@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
   namespace :v1, defaults: { format: :json } do
     devise_for :super_admin, controllers: {
       sessions: 'v1/super_admin/sessions'
@@ -38,6 +40,7 @@ Rails.application.routes.draw do
       put 'update_order/:order_id', to: "order#update"
       get 'total_analysts',to:"dashboards#analysts"
       get 'weekly_earning',to:"dashboards#weekly_update"
+      get 'profile',to: "profile#show"
     end
 
     namespace :super_admin do
@@ -98,6 +101,7 @@ Rails.application.routes.draw do
       post 'restaurant_ratings/add_rating' , to: "restaurant_ratings#add_rating"
       get 'order_history',to:"order#index"
       get 'categories', to: "categories#index"
+      get 'profile',to: "profile#show"
       # delete 'restaurant_rating/remove_rating', to: "restaurant_rating#remove_rating"
       # patch 'restaurant_rating/update_rating', to: "restaurant_rating#update_rating"
     end
