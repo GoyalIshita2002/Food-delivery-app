@@ -1,7 +1,6 @@
 class SuperAdmin::UpdateRestaurant < ApplicationService
 
   def initialize(params, restaurant)
-    debugger
     @params = params
     @restaurant = restaurant
   end
@@ -9,7 +8,6 @@ class SuperAdmin::UpdateRestaurant < ApplicationService
   attr_reader :params
 
   def call
-    debugger
     ActiveRecord::Base.transaction do 
       @restaurant.update(restaurant_params) 
       @restaurant.restaurant_address.update(restaurant_address_params) if restaurant_address_params.present?
