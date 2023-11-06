@@ -9,7 +9,11 @@ class V1::RestaurantOwner::ProfileController < ApplicationController
       RestaurantOwner::UpdateRestaurantAddress.call(restaurant, restaurant_address_params) if restaurant_address_params.present?
       current_admin_user.reload
     end
-end
+  end
+
+  def show
+    @admin = current_admin_user
+  end
  
   def upload_image 
     unless params[:avatar].present?

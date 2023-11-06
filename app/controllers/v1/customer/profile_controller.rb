@@ -25,6 +25,10 @@ class V1::Customer::ProfileController < ApplicationController
     render template: "v1/customer/profile/update"
   end
 
+  def show
+   @customer = current_customer
+  end
+
   def update
     unless current_customer.update(profile_params)
       render json: { status: { code: "400", message: "Invalid params"}, errors: current_customer.errors.full_messages }, status: :bad_request and return

@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       put 'update_order/:order_id', to: "order#update"
       get 'total_analysts',to:"dashboards#analysts"
       get 'weekly_earning',to:"dashboards#weekly_update"
+      get 'profile',to: "profile#show"
     end
 
     namespace :super_admin do
@@ -98,6 +99,7 @@ Rails.application.routes.draw do
       post 'restaurant_ratings/add_rating' , to: "restaurant_ratings#add_rating"
       get 'order_history',to:"order#index"
       get 'categories', to: "categories#index"
+      get 'profile',to: "profile#show"
       # delete 'restaurant_rating/remove_rating', to: "restaurant_rating#remove_rating"
       # patch 'restaurant_rating/update_rating', to: "restaurant_rating#update_rating"
     end
