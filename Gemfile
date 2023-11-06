@@ -63,3 +63,5 @@ gem "countries", "~> 5.6"
 gem "geocoder", "~> 1.8"
 
 gem "pagy", "~> 6.0"
+
+gem "rswag", "~> 2.11"
