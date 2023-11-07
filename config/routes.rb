@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
   namespace :v1, defaults: { format: :json } do
     devise_for :super_admin, controllers: {
       sessions: 'v1/super_admin/sessions'
