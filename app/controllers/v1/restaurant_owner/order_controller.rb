@@ -9,23 +9,20 @@ class V1::RestaurantOwner::OrderController < ApplicationController
     end   
   end
 
-  def under_preparation
-    @orders_under_preparation = current_restaurant.orders.where(status: :under_preparation)
-    if @orders_under_preparation.present?
-      render template: "v1/restaurant_owner/order/under_preparation",status: :ok and return
+  def prepared
+    accepted_statuses = [:restaurant_accepted, :ready_to_pick]
+    status_param = params[:status].to_sym
+    unless accepted_statuses.include?(status_param)
+      render json: { status: { code: "400", errors: "Invalid status parameter." }}, status: :bad_request and return
+    end
+    @orders = current_restaurant.orders.where(status: status_param)
+    if @orders.present?
+      render template: "v1/restaurant_owner/order/prepared", status: :ok and return
     else
       render json: { status: { code: "400", errors: "No orders under preparation or ready to pick." }}, status: :bad_request 
-    end 
-  end
-
-  def prepared
-    @orders_prepared = current_restaurant.orders.where(status: :ready_to_pick)
-    if @orders_prepared.present?
-      render template: "v1/restaurant_owner/order/prepared",status: :ok and return
-    else
-     render json: { status: { code: "400", errors: "No orders under preparation or ready to pick." }}, status: :bad_request 
     end
   end
+  
 
   def update
     order = current_restaurant.orders.find(params[:order_id])

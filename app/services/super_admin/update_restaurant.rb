@@ -10,6 +10,7 @@ class SuperAdmin::UpdateRestaurant < ApplicationService
   def call
     ActiveRecord::Base.transaction do 
       @restaurant.update(restaurant_params) 
+      attach_blob(@restaurant)
       @restaurant.restaurant_address.update(restaurant_address_params) if restaurant_address_params.present?
       open_hour_params.each do |open_params|
         open_hour = @restaurant.open_hours.find_by(id: open_params[:id])
@@ -26,9 +27,16 @@ class SuperAdmin::UpdateRestaurant < ApplicationService
       @restaurant.restaurant_margin.update(margin_percent: restaurant_margin) if restaurant_margin.present?
     end
   end
+
+  def attach_blob(restaurant)
+    blob_id = params.dig(:restaurant, :blob_id)
+    return unless blob_id.present?
+    blob = ActiveStorage::Blob.find_by(id: blob_id)
+    restaurant.main_image.attach(blob) if blob.present?
+  end
   
   def restaurant_params 
-    params.require(:restaurant).permit(:name, :registration_date, :phone, :lock_menu, :main_image)
+    params.require(:restaurant).permit(:name, :registration_date, :phone, :lock_menu,:main_image)
   end
 
   def restaurant_address_params

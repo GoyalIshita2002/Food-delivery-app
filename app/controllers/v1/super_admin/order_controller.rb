@@ -3,7 +3,7 @@ class V1::SuperAdmin::OrderController < ApplicationController
   before_action :order, only: [:assign_driver, :accept_order]
 
   def placed_order
-    @orders = Order.where(status: :placed)
+    @orders = Order.where(status: :pending)
     if @orders.present?
     else
       render json: { status: { code: "400", orders: [] } }, status: :ok 
@@ -26,7 +26,7 @@ class V1::SuperAdmin::OrderController < ApplicationController
    
   def accept_order
     if @order.present?
-      allowed_statuses = [:accepted,:denied]
+      allowed_statuses = [:admin_accepted,:admin_cancelled]
       requested_status = params[:status].to_s.downcase.to_sym
       if allowed_statuses.include?(requested_status)
         if @order.update(status: requested_status)
@@ -65,7 +65,7 @@ class V1::SuperAdmin::OrderController < ApplicationController
   def order_status
     @restaurant = Restaurant.find_by(id: params[:restaurant_id])
     if @restaurant.present?
-      accepted_statuses = [:under_preparation, :in_transit, :ready_to_pick]
+      accepted_statuses = [:restaurant_accepted,:driver_picked_up, :delivered]
       requested_status = params[:status].to_sym
       if accepted_statuses.include?(requested_status)
         @orders = @restaurant.orders.where(status: requested_status)
@@ -81,8 +81,8 @@ class V1::SuperAdmin::OrderController < ApplicationController
   end
 
   def order_statistics
-    placed_orders = Order.where(status: :placed).count
-    ongoing_orders = Order.where(status: [:accepted, :under_preparation, :ready_to_pick, :in_transit, :assigning]).count
+    placed_orders = Order.where(status: :pending).count
+    ongoing_orders = Order.where(status: [:admin_accepted, :restaurant_accepted,:ready_to_pick, :driver_picked_up]).count
     orders_completed = Order.where(status: :delivered).count
     merchant_opened = Restaurant.where(open_for_orders: true).joins(:orders).count
     render json: { placed_orders: placed_orders, ongoing_orders: ongoing_orders, orders_completed: orders_completed, merchant_opened: merchant_opened }, status: :ok
@@ -90,7 +90,7 @@ class V1::SuperAdmin::OrderController < ApplicationController
   
 
   def placed_orders_by_hours
-    placed_orders_by_hour = Order.where(status: :placed).group("EXTRACT(HOUR FROM created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Paris')").count
+    placed_orders_by_hour = Order.where(status: :pending).group("EXTRACT(HOUR FROM created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Paris')").count
     if placed_orders_by_hour.present?
       sorted_orders_by_hour = placed_orders_by_hour.sort.to_h
       render json: { placed_orders_by_hour: sorted_orders_by_hour }, status: :ok
@@ -101,22 +101,21 @@ class V1::SuperAdmin::OrderController < ApplicationController
   
 
   def orders_ongoing_stats
-    ongoing_orders = Order.where(status: [:accepted, :under_preparation, :ready_to_pick, :in_transit, :assigning])
+    ongoing_orders = Order.where(status: [:admin_accepted , :ready_to_pick, :restaurant_accepted, :driver_picked_up])
     if ongoing_orders.present?
       ready_to_pick = ongoing_orders.where(status: :ready_to_pick).count
-      on_the_way = ongoing_orders.where(status: :in_transit).count
-      assigning = ongoing_orders.where(status: :assign_driver).count
-      accepted_by_merchant = ongoing_orders.where(status: :accepted).count
-      render json: { ready_to_pick: ready_to_pick, assigning: assigning, accepted_by_merchant: accepted_by_merchant, on_the_way: on_the_way }, status: :ok
+      on_the_way = ongoing_orders.where(status: :driver_picked_up).count
+      accepted_by_merchant = ongoing_orders.where(status: :restaurant_accepted).count
+      render json: { ready_to_pick: ready_to_pick, accepted_by_merchant: accepted_by_merchant, on_the_way: on_the_way }, status: :ok
     else
       render json: { ongoing_orders: 0 }, status: :ok
     end
   end
   
   def orders_unfilled_stats 
-    cancelled = Order.where(status: :cancelled).count
-    rejected_by_merchant = Order.where(status: :denied).count
-    expired_by_merchant = Order.where(status: :accepted).where("time AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Paris' < CURRENT_TIMESTAMP").count
+    cancelled = Order.where(status: :admin_cancelled).count
+    rejected_by_merchant = Order.where(status: :restaurant_cancelled).count
+    expired_by_merchant = Order.where(status: :restaurant_accepted).where("time AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Paris' < CURRENT_TIMESTAMP").count
     render json: { cancelled: cancelled, rejected_by_merchant: rejected_by_merchant, expired_by_merchant: expired_by_merchant }, status: :ok
   end
   
