@@ -3,6 +3,13 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
 
   before_action :validate_restaurant, only: :update
 
+  def blob_creation
+    blob = create_blob_from_image(params[:avatar])
+    render json: { status: { code: "200", message: "Blob created successfully", blob_id: blob.id }}, status: :ok
+  rescue => e
+    render json: { status: { code: "400", message: e.message }}, status: :bad_request
+  end
+
   def create 
     @admin = SuperAdmin::CreateRestaurant.call(restaurant_admin_params)
     unless @admin.persisted?
@@ -45,11 +52,11 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
   protected
 
   def restaurant_admin_params
-    params.require(:restaurant_admin).permit(:email,:user_name, :password, :phone, :avatar, :restaurant => {})
+    params.require(:restaurant_admin).permit(:email,:user_name, :password, :phone, :restaurant => {})
   end
 
   def restaurant_admin_update_params
-    params.require(:restaurant_admin).permit(:email,:user_name, :phone, :avatar) if params[:restaurant_admin].present?
+    params.require(:restaurant_admin).permit(:email,:user_name, :phone) if params[:restaurant_admin].present?
   end
 
   def restaurant_update_params
@@ -68,6 +75,14 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
     unless restaurant.present?
       render json: { status: { code: "400", message: "Invalid Restaurant Id"}}, status: :bad_request and return
     end
+  end
+
+  def create_blob_from_image(image)
+    ActiveStorage::Blob.create_and_upload!(
+      io: image.open,
+      filename: image.original_filename,
+      content_type: image.content_type
+    )
   end
 end
  

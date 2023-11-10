@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       post 'profile/upload_image', to: "profile#upload_image"
       get 'accept_order/:order_id', to: "order#accept_order"
       get 'under_preparation_order', to: "order#under_preparation"
-      get 'prepared', to: "order#prepared"
+      get 'list', to: "order#prepared"
       put 'update_order/:order_id', to: "order#update"
       get 'total_analysts',to:"dashboards#analysts"
       get 'weekly_earning',to:"dashboards#weekly_update"
@@ -68,6 +68,7 @@ Rails.application.routes.draw do
       get 'customer_users',to:"customer_user#index"
       get 'customer_user/:id',to:"customer_user#show"
       get 'restaurant/:id/edit',to:"restaurants#edit"
+      post 'blob_creation', to: "restaurants#blob_creation"
     end 
 
     namespace :customer do
@@ -85,6 +86,7 @@ Rails.application.routes.draw do
       post 'delete_avatar', to: "profile#delete_avatar"
       patch 'update_password', to: "profile#update_password"  
       patch 'update_phone', to: "profile#update_phone"
+      get 'order_list', to: "order#show"
       resources :restaurants, only: [ :index, :show ]
       resources :dishes, only: [ :index, :show ]
       resources :cart_items
@@ -98,6 +100,7 @@ Rails.application.routes.draw do
       get 'favourite_dishes', to: "favourites#list_dishes"
       post 'restaurant_ratings/add_rating' , to: "restaurant_ratings#add_rating"
       get 'order_history',to:"order#index"
+      get 'customer_contact',to: "order#customer_contact"
       get 'categories', to: "categories#index"
       get 'profile',to: "profile#show"
       # delete 'restaurant_rating/remove_rating', to: "restaurant_rating#remove_rating"
