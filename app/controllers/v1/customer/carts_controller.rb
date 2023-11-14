@@ -15,7 +15,7 @@ class V1::Customer::CartsController < ApplicationController
   end
 
   def create_cart
-    current_customer.carts.create
+    current_customer.carts.create 
     cart
   end
 end

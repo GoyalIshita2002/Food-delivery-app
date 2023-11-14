@@ -87,6 +87,8 @@ Rails.application.routes.draw do
       patch 'update_password', to: "profile#update_password"  
       patch 'update_phone', to: "profile#update_phone"
       get 'order_list', to: "order#show"
+      get 'order/:order_id/order_details', to: "order#order_details"
+      post 'order/:order_id/customer_feedback', to: "order#customer_feedback"
       resources :restaurants, only: [ :index, :show ]
       resources :dishes, only: [ :index, :show ]
       resources :cart_items
@@ -100,9 +102,9 @@ Rails.application.routes.draw do
       get 'favourite_dishes', to: "favourites#list_dishes"
       post 'restaurant_ratings/add_rating' , to: "restaurant_ratings#add_rating"
       get 'order_history',to:"order#index"
-      get 'customer_contact',to: "order#customer_contact"
       get 'categories', to: "categories#index"
       get 'profile',to: "profile#show"
+      
       # delete 'restaurant_rating/remove_rating', to: "restaurant_rating#remove_rating"
       # patch 'restaurant_rating/update_rating', to: "restaurant_rating#update_rating"
     end
@@ -119,6 +121,8 @@ Rails.application.routes.draw do
       get 'profile',to:"profile#show"
       delete 'sign_out', to:"session#destroy"
       post 'resend_otp', to: "profile#resend_otp"
+      post ':driver_id/update', to: "order#update"
+      get ':driver_id/index', to: "order#index"
     end
   end
   devise_for :admin_user, path: 'v1/restaurant_owner', controllers: { sessions: 'v1/restaurant_owner/sessions' }

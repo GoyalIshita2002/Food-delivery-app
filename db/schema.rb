@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_05_111628) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_14_072732) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -122,6 +122,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_05_111628) do
     t.boolean "is_default", default: false
     t.integer "address_type", default: 0
     t.index ["customer_id"], name: "index_customer_addresses_on_customer_id"
+  end
+
+  create_table "customer_feedbacks", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.string "title"
+    t.string "description"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_customer_feedbacks_on_order_id"
   end
 
   create_table "customer_margins", force: :cascade do |t|
@@ -471,6 +481,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_05_111628) do
   add_foreign_key "cart_items", "carts"
   add_foreign_key "carts", "customers"
   add_foreign_key "customer_addresses", "customers"
+  add_foreign_key "customer_feedbacks", "orders"
   add_foreign_key "customer_margins", "restaurants"
   add_foreign_key "customer_otps", "customers"
   add_foreign_key "dish_add_ons", "restaurants"
