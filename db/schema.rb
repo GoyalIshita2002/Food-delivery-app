@@ -231,7 +231,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_072732) do
     t.bigint "documenter_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "driver_id"
     t.index ["documenter_type", "documenter_id"], name: "index_documents_on_documenter"
   end
 
@@ -406,8 +405,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_072732) do
   end
 
   create_table "restaurant_ratings", force: :cascade do |t|
-    t.bigint "restaurant_id", null: false
     t.bigint "customer_id", null: false
+    t.bigint "restaurant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "rating", default: 0
