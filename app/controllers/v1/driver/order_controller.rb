@@ -1,7 +1,7 @@
 class V1::Driver::OrderController < ApplicationController
 
  def update
-  orders = Order.where(id: params[:order_id])
+  orders = Order.find_by(id: params[:order_id])
    if orders.present?
     allowed_statuses = [:driver_picked_up,:delivered]
     requested_status = params[:status].to_s.downcase.to_sym
