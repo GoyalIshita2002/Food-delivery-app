@@ -121,7 +121,7 @@ Rails.application.routes.draw do
       get 'profile',to:"profile#show"
       delete 'sign_out', to:"session#destroy"
       post 'resend_otp', to: "profile#resend_otp"
-      post ':driver_id/update', to: "order#update"
+      put 'order/:order_id/update', to: "order#update"
       get ':driver_id/index', to: "order#index"
     end
   end
