@@ -14,7 +14,7 @@ class Customer::OrderCreationService < ApplicationService
       if order.save
         create_order_note(order) if @note_content.present?
         @customer.cart.update(status: :ordered) if (@customer.present? && @customer.cart.present?)
-        { status: { code: "200", message: "order created successfully" } }
+        { status: { code: "200", message: "order created successfully",order: order } }
       else
         { status: { code: "400", errors: order.errors.full_messages } }
       end
