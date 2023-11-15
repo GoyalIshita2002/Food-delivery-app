@@ -6,27 +6,31 @@ class V1::Customer::OrderController < ApplicationController
   end
 
   def update
-      order = current_customer.orders.find(params[:order_id])
+    order = current_customer.orders.find_by(id: params[:order_id])
+    if order
       if order.update(status: :customer_denied)
-      render json: { status: { code: "200", message: "order cancelled succesfully"}}, status: :ok and return
+        render json: { status: { code: "200", message: "Order cancelled successfully" } }, status: :ok
+      else
+        render json: { status: { code: "400", errors: order.errors.full_messages } }, status: :bad_request
+      end
     else
-      render json: { status: { code: "400", errors: order.errors.full_messages }}, status: :bad_request and return
-    end 
+      render json: { status: { code: "404", message: "Order not found" } }, status: :not_found
+    end
   end
+  
 
   def index 
     status = params[:status]&.downcase
     case status
     when 'ongoing'
-      orders = current_customer.orders.where(status: [:pending, :admin_accepted, :restaurant_accepted, :ready_to_pick, :driver_picked_up])
+      @orders = current_customer.orders.where(status: [:pending, :admin_accepted, :restaurant_accepted, :ready_to_pick, :driver_picked_up])
     when 'past'
-      orders = current_customer.orders.where(status: [:delivered, :admin_cancelled, :restaurant_cancelled, :expired_at_restaurant, :customer_denied])
+      @orders = current_customer.orders.where(status: [:delivered, :admin_cancelled, :restaurant_cancelled, :expired_at_restaurant, :customer_denied])
     else
       valid_statuses = ['ongoing', 'past']
       render json: { status: { code: "400", errors: ["Invalid status. Accepted values are: #{valid_statuses.join(', ')}"] } }, status: :bad_request
       return
     end
-    render json: orders, status: :ok
   end
   
   def show

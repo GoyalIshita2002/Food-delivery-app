@@ -12,12 +12,11 @@ json.order_history do
       json.state_code address.state_code
     end
     json.items order.restaurant&.dishes.map(&:name)
-
     order.restaurant&.dishes&.each do |dish| 
       @total_price ||= 0
       @total_price += dish.price.to_f
     end
     json.total_price @total_price
-    json.date "18/10/2023"
+    json.date order.created_at
   end
 end
