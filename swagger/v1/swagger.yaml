@@ -3,6 +3,17 @@ openapi: 3.0.1
 info:
   title: API V1
   version: v1
+
+components:
+  securitySchemes:
+    bearerAuth:           
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: [] 
+        
 paths:
   "/v1/super_admin/assign_driver/{order_id}":
     parameters:
@@ -14,7 +25,9 @@ paths:
         type: string
     post:
       summary: assign_driver order
-      parameters:
+      security:
+        - bearerAuth: []
+      headers:
       - name: Authorization
         in: header
         description: Authentication token
