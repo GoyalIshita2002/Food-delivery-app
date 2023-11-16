@@ -1,5 +1,6 @@
 json.order_history do 
   json.array! @orders do |order|
+    json.order_id order.id
     json.restaurant_name order.restaurant&.name
     address= order.restaurant&.restaurant_address
     json.address do
