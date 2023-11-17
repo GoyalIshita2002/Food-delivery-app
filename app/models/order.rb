@@ -11,6 +11,8 @@ class Order < ApplicationRecord
   
   enum :status, { pending: 0, admin_accepted: 1, restaurant_accepted: 2, ready_to_pick: 3, driver_picked_up: 4, delivered: 5, admin_cancelled: 6, restaurant_cancelled: 7, expired_at_restaurant: 8 , customer_denied: 9}
 
+  RESTAURANT_STATUSES = [ :restaurant_accepted, :ready_to_pick, :restaurant_cancelled, :expired_at_restaurant]
+  
   # def assign_driver
   #   driver_localities = ServiceLocation.all
   #   if driver_localities.present?
