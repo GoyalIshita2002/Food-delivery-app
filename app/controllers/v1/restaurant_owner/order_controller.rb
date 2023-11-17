@@ -44,7 +44,7 @@ class V1::RestaurantOwner::OrderController < ApplicationController
   private
 
   def permitted_params
-   params.permit!(:status,:time)
+   params = params.permit(:status,:time)
    params[:time] = Time.now + params[:time].to_i.minutes if params[:time].present?
    params
   end
