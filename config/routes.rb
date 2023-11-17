@@ -33,7 +33,6 @@ Rails.application.routes.draw do
       put 'profile/update', to: "profile#update"
       post 'profile/upload_image', to: "profile#upload_image"
       get 'accept_order/:order_id', to: "order#accept_order"
-      get 'under_preparation_order', to: "order#under_preparation"
       get 'list', to: "order#index"
       put 'update_order/:order_id', to: "order#update"
       get 'total_analysts',to:"dashboards#analysts"
@@ -104,9 +103,6 @@ Rails.application.routes.draw do
       get 'order_history',to:"order#index"
       get 'categories', to: "categories#index"
       get 'profile',to: "profile#show"
-      
-      # delete 'restaurant_rating/remove_rating', to: "restaurant_rating#remove_rating"
-      # patch 'restaurant_rating/update_rating', to: "restaurant_rating#update_rating"
     end
 
     namespace :driver do
