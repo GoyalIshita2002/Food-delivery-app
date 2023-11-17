@@ -1,11 +1,11 @@
-class V1::Customer::OrderController < ApplicationController
+class V1::Customer::OrdersController < ApplicationController
     
   def create
     result = Customer::OrderCreationService.call(current_customer, order_params, params[:content])
     render json: result, status: (result[:status][:code] == "200" ? :ok : :bad_request)
   end
 
-  def update
+  def denied
     order = current_customer.orders.find_by(id: params[:order_id])
     if order
       if order.update(status: :customer_denied)
@@ -18,8 +18,7 @@ class V1::Customer::OrderController < ApplicationController
     end
   end
   
-
-  def index 
+  def order_history
     status = params[:status]&.downcase
     case status
     when 'ongoing'
@@ -33,7 +32,7 @@ class V1::Customer::OrderController < ApplicationController
     end
   end
   
-  def show
+  def index
      orders = current_customer.orders
     if orders.present?
       render json: orders, status: :ok
@@ -42,7 +41,7 @@ class V1::Customer::OrderController < ApplicationController
     end
   end
 
-  def order_details
+  def show
     order = current_customer.orders.find_by(id: params[:order_id])
     if order.present?
       render json: order, status: :ok

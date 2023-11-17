@@ -7,7 +7,7 @@ class Customer < ApplicationRecord
          :jwt_authenticatable, jwt_revocation_strategy: self
   has_many :orders, dependent: :destroy
 
-
+  has_many :devices
   has_one_attached :avatar
   has_one :customer_otp
   has_many :addresses, class_name: 'CustomerAddress', foreign_key: 'customer_id'

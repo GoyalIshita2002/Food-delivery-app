@@ -72,8 +72,8 @@ Rails.application.routes.draw do
 
     namespace :customer do
       post 'resend_otp', to: "profile#resend_otp"
-      post 'create_order', to: "order#create"
-      patch 'update_order/:order_id', to: "order#update"
+      post 'orders', to: "orders#create"
+      put 'orders/:order_id', to: "orders#denied"
       get 'check_email_availability', to: "miscellaneous#check_email_availability" 
       post 'verify_customer', to: "profile#verify_otp"
       post 'forget_password',to:"profile#forget_password"
@@ -85,9 +85,9 @@ Rails.application.routes.draw do
       post 'delete_avatar', to: "profile#delete_avatar"
       patch 'update_password', to: "profile#update_password"  
       patch 'update_phone', to: "profile#update_phone"
-      get 'order_list', to: "order#show"
-      get 'order/:order_id/order_details', to: "order#order_details"
-      post 'order/:order_id/customer_feedback', to: "order#customer_feedback"
+      get 'orders', to: "orders#index"
+      get 'orders/:order_id', to: "orders#show"
+      post 'order/:order_id/customer_feedback', to: "orders#customer_feedback"
       resources :restaurants, only: [ :index, :show ]
       resources :dishes, only: [ :index, :show ]
       resources :cart_items
@@ -100,9 +100,10 @@ Rails.application.routes.draw do
       get 'favourite_restaurants', to: "favourites#list_restaurants"
       get 'favourite_dishes', to: "favourites#list_dishes"
       post 'restaurant_ratings/add_rating' , to: "restaurant_ratings#add_rating"
-      get 'order_history',to:"order#index"
+      get 'order_history', to: "orders#order_history"
       get 'categories', to: "categories#index"
       get 'profile',to: "profile#show"
+      post ':customer_id/devices',to: "device#create"
     end
 
     namespace :driver do
