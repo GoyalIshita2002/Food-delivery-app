@@ -1,4 +1,4 @@
-class V1::RestaurantOwner::OrderController < ApplicationController 
+class V1::RestaurantOwner::OrdersController < ApplicationController 
   before_action :validate_order, only: :update
 
   def show  

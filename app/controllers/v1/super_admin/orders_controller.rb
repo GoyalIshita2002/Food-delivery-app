@@ -1,4 +1,4 @@
-class V1::SuperAdmin::OrderController < ApplicationController
+class V1::SuperAdmin::OrdersController < ApplicationController
   include Pagy::Backend
   before_action :order, only: [:assign_driver, :accept_order]
 
