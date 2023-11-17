@@ -68,6 +68,6 @@ class V1::RestaurantOwner::OrderController < ApplicationController
   end
 
   def order
-    @order ||= current_restaurant.orders.find_by(id: params[:id])
+    @order ||= current_restaurant.orders.find_by(id: params[:order_id])
   end
 end
