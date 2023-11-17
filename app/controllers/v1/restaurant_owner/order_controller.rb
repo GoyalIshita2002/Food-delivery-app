@@ -1,5 +1,6 @@
 class V1::RestaurantOwner::OrderController < ApplicationController 
   before_action :validate_order, only: :update
+
   def accept_order  
     @order = current_restaurant.orders.find(params[:order_id])
     if @order.present?
@@ -7,6 +8,14 @@ class V1::RestaurantOwner::OrderController < ApplicationController
     else
       render json: { status: { code: "400", errors: @order.errors.full_messages }}, status: :bad_request 
     end   
+  end
+
+  def index
+    @orders = unless params[:status].present?
+       current_restaurant.orders
+    else
+      current_restaurant.orders.where(status: params[:statuses].map(&:to_sym))
+    end
   end
 
   def prepared

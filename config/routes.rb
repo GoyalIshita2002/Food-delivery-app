@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       post 'profile/upload_image', to: "profile#upload_image"
       get 'accept_order/:order_id', to: "order#accept_order"
       get 'under_preparation_order', to: "order#under_preparation"
-      get 'list', to: "order#prepared"
+      get 'list', to: "order#index"
       put 'update_order/:order_id', to: "order#update"
       get 'total_analysts',to:"dashboards#analysts"
       get 'weekly_earning',to:"dashboards#weekly_update"
