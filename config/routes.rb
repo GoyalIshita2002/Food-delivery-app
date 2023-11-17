@@ -103,7 +103,7 @@ Rails.application.routes.draw do
       get 'order_history', to: "orders#order_history"
       get 'categories', to: "categories#index"
       get 'profile',to: "profile#show"
-      post ':customer_id/devices',to: "device#create"
+      post 'devices',to: "device#create"
     end
 
     namespace :driver do

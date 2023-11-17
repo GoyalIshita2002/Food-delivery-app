@@ -2,7 +2,6 @@ class V1::Customer::DeviceController < ApplicationController
 
   def create
     device = current_customer.devices.build(device_params)
-  
     if device.save
       render json: device, status: :ok
     else
@@ -13,7 +12,7 @@ class V1::Customer::DeviceController < ApplicationController
   private
   
   def device_params
-    params.require(:device).permit(:device_type, :device_token).merge(customer_id: current_customer.id)
+    params.require(:device).permit(:device_type, :device_token)
   end
       
 end
