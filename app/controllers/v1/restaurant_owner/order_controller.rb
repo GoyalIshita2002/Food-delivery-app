@@ -14,7 +14,8 @@ class V1::RestaurantOwner::OrderController < ApplicationController
     @orders = unless params[:status].present?
        current_restaurant.orders
     else
-      current_restaurant.orders.where(status: params[:statuses].map(&:to_sym))
+      status = params[:status].is_a?(Array) ? params[:status].map(&:to_sym) : params[:status]
+      current_restaurant.orders.where(status: status)
     end
   end
 
