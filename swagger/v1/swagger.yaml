@@ -1,0 +1,121 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+
+components:
+  securitySchemes:
+    bearerAuth:           
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: [] 
+        
+paths:
+  "/v1/super_admin/assign_driver/{order_id}":
+    parameters:
+    - name: order_id
+      in: path
+      description: order_id
+      required: true
+      schema:
+        type: string
+    post:
+      summary: assign_driver order
+      security:
+        - bearerAuth: []
+      headers:
+      - name: Authorization
+        in: header
+        description: Authentication token
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                driver_id:
+                  type: integer
+              required:
+              - driver_id
+  "/v1/super_admin/accept_order/{order_id}":
+    parameters:
+    - name: order_id
+      in: path
+      description: order_id
+      required: true
+      schema:
+        type: string
+    post:
+      summary: accept_order order
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/placed_order":
+    get:
+      summary: placed_order order
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/order_without_driver":
+    get:
+      summary: orders_without_agent order
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/restaurant/{restaurant_id}/order_status":
+    parameters:
+    - name: restaurant_id
+      in: path
+      description: restaurant_id
+      required: true
+      schema:
+        type: string
+    post:
+      summary: order_status order
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/orders/statistics":
+    get:
+      summary: order_statistics order
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/placed_orders_by_hours":
+    get:
+      summary: placed_orders_by_hours order
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/ongoing_orders_statistics":
+    get:
+      summary: orders_ongoing_stats order
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/orders_unfilled_stats":
+    get:
+      summary: orders_unfilled_stats order
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/transaction":
+    get:
+      summary: list orders
+      responses:
+        '200':
+          description: successful
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000/

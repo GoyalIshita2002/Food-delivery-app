@@ -15,3 +15,5 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       expose: ["Authorization"]
   end
 end
+
+# Rails.application.config.content_security_policy_report_only = false
