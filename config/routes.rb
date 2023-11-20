@@ -32,9 +32,9 @@ Rails.application.routes.draw do
       get 'add_ons/:id', to: "add_ons#show"
       put 'profile/update', to: "profile#update"
       post 'profile/upload_image', to: "profile#upload_image"
-      get 'accept_order/:order_id', to: "order#accept_order"
-      get 'list', to: "order#index"
-      put 'update_order/:order_id', to: "order#update"
+      get 'orders/:order_id', to: "orders#show"
+      get 'orders', to: "orders#index"
+      put 'orders/:order_id', to: "orders#update"
       get 'total_analysts',to:"dashboards#analysts"
       get 'weekly_earning',to:"dashboards#weekly_update"
       get 'profile',to: "profile#show"
@@ -45,16 +45,16 @@ Rails.application.routes.draw do
       post 'restaurant/:restaurant_id/documents', to: "documents#create"
       get 'restaurant/:restaurant_id/documents', to: "documents#index"
       delete 'restaurant/:restaurant_id/documents/:id', to: "documents#destroy"
-      post 'assign_driver/:order_id', to: "order#assign_driver"
-      put 'accept_order/:order_id', to: "order#accept_order"
-      get 'placed_order',to: "order#placed_order"
-      get 'order_without_driver', to: "order#orders_without_agent"
-      post 'restaurant/:restaurant_id/order_status', to: "order#order_status"
-      get 'orders/statistics', to: "order#order_statistics"
-      get 'placed_orders_by_hours', to: "order#placed_orders_by_hours"
-      get 'ongoing_orders_statistics', to: "order#orders_ongoing_stats"
-      get 'orders_unfilled_stats', to: "order#orders_unfilled_stats"
-      get 'transaction', to: "order#index"
+      post 'assign_driver/:order_id', to: "orders#assign_driver"
+      put 'accept_order/:order_id', to: "orders#accept_order"
+      get 'placed_order',to: "orders#placed_order"
+      get 'order_without_driver', to: "orders#orders_without_agent"
+      post 'restaurant/:restaurant_id/order_status', to: "orders#order_status"
+      get 'orders/statistics', to: "orders#order_statistics"
+      get 'placed_orders_by_hours', to: "orders#placed_orders_by_hours"
+      get 'ongoing_orders_statistics', to: "orders#orders_ongoing_stats"
+      get 'orders_unfilled_stats', to: "orders#orders_unfilled_stats"
+      get 'orders', to: "orders#index"
       get 'drivers/:driver_id/revenue_by_day', to: "driver#revenue_by_day"
       get 'drivers',to:"driver#index"
       post 'delivery_charges/upsert', to: 'driver#upsert', as: 'upsert_delivery_charge'
@@ -72,8 +72,8 @@ Rails.application.routes.draw do
 
     namespace :customer do
       post 'resend_otp', to: "profile#resend_otp"
-      post 'create_order', to: "order#create"
-      patch 'update_order/:order_id', to: "order#update"
+      post 'orders', to: "orders#create"
+      put 'orders/:order_id', to: "orders#denied"
       get 'check_email_availability', to: "miscellaneous#check_email_availability" 
       post 'verify_customer', to: "profile#verify_otp"
       post 'forget_password',to:"profile#forget_password"
@@ -85,9 +85,9 @@ Rails.application.routes.draw do
       post 'delete_avatar', to: "profile#delete_avatar"
       patch 'update_password', to: "profile#update_password"  
       patch 'update_phone', to: "profile#update_phone"
-      get 'order_list', to: "order#show"
-      get 'order/:order_id/order_details', to: "order#order_details"
-      post 'order/:order_id/customer_feedback', to: "order#customer_feedback"
+      get 'orders', to: "orders#index"
+      get 'orders/:order_id', to: "orders#show"
+      post 'order/:order_id/customer_feedback', to: "orders#customer_feedback"
       resources :restaurants, only: [ :index, :show ]
       resources :dishes, only: [ :index, :show ]
       resources :cart_items
@@ -100,9 +100,10 @@ Rails.application.routes.draw do
       get 'favourite_restaurants', to: "favourites#list_restaurants"
       get 'favourite_dishes', to: "favourites#list_dishes"
       post 'restaurant_ratings/add_rating' , to: "restaurant_ratings#add_rating"
-      get 'order_history',to:"order#index"
+      get 'order_history', to: "orders#order_history"
       get 'categories', to: "categories#index"
       get 'profile',to: "profile#show"
+      post 'devices',to: "device#create"
     end
 
     namespace :driver do
@@ -117,8 +118,8 @@ Rails.application.routes.draw do
       get 'profile',to:"profile#show"
       delete 'sign_out', to:"session#destroy"
       post 'resend_otp', to: "profile#resend_otp"
-      put 'order/:order_id/update', to: "order#update"
-      get ':driver_id/index', to: "order#index"
+      put 'orders/:order_id', to: "orders#update"
+      get ':driver_id/orders', to: "orders#index"
     end
   end
   devise_for :admin_user, path: 'v1/restaurant_owner', controllers: { sessions: 'v1/restaurant_owner/sessions' }

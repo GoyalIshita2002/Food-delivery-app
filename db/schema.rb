@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_14_072732) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_17_093422) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -178,6 +178,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_072732) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "devices", force: :cascade do |t|
+    t.string "device_type"
+    t.string "device_token"
+    t.bigint "customer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_devices_on_customer_id"
+  end
+
   create_table "dish_add_ons", force: :cascade do |t|
     t.string "name"
     t.integer "max_quantity"
@@ -231,6 +240,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_072732) do
     t.bigint "documenter_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "driver_id"
     t.index ["documenter_type", "documenter_id"], name: "index_documents_on_documenter"
   end
 
@@ -405,8 +415,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_072732) do
   end
 
   create_table "restaurant_ratings", force: :cascade do |t|
-    t.bigint "customer_id", null: false
     t.bigint "restaurant_id", null: false
+    t.bigint "customer_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "rating", default: 0
@@ -433,15 +443,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_072732) do
     t.string "registration_date"
     t.string "std_code"
     t.boolean "lock_menu", default: false
-  end
-
-  create_table "service_details", force: :cascade do |t|
-    t.integer "vehicle"
-    t.text "locality"
-    t.bigint "driver_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["driver_id"], name: "index_service_details_on_driver_id"
   end
 
   create_table "service_locations", force: :cascade do |t|
@@ -492,6 +493,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_072732) do
   add_foreign_key "customer_feedbacks", "orders"
   add_foreign_key "customer_margins", "restaurants"
   add_foreign_key "customer_otps", "customers"
+  add_foreign_key "devices", "customers"
   add_foreign_key "dish_add_ons", "restaurants"
   add_foreign_key "dish_categories", "dish_types"
   add_foreign_key "dish_categories", "dishes"
@@ -527,7 +529,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_072732) do
   add_foreign_key "restaurant_ratings", "restaurants"
   add_foreign_key "restaurant_users", "admin_users"
   add_foreign_key "restaurant_users", "restaurants"
-  add_foreign_key "service_details", "drivers"
   add_foreign_key "service_locations", "drivers"
   add_foreign_key "split_hours", "open_hours"
 end
