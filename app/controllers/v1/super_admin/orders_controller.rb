@@ -43,8 +43,7 @@ class V1::SuperAdmin::OrdersController < ApplicationController
   end
 
   def orders_without_agent
-    order = Order.where(status: :admin_accepted)
-    @orders_without_agent = order.left_outer_joins(:order_agent)
+    @orders_without_agent = Order.left_outer_joins(:order_agent).where(status: :admin_accepted)
     if @orders_without_agent.present?
     else
       render json: { status: { code: "400", orders: [] } }, status: :ok
