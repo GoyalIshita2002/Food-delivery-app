@@ -6,13 +6,8 @@ RSpec.describe 'v1/super_admin/order', type: :request do
     
     post('assign_driver order') do
       response(200, 'successful') do
-        let(:order_id) { '7' }
         consumes 'application/json'
-        
-        # Add the following lines to include the authentication token in the header
         parameter name: 'Authorization', in: :header, type: :string, description: 'Authentication token'
-        let(:Authorization) { 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlNzA4Y2NkYS0xODNiLTQ1ZTUtOGFhZS0zNjY1MTcyN2QyOTYiLCJzdWIiOjEsInNjcCI6InN1cGVyX2FkbWluIiwiYXVkIjpudWxsLCJpYXQiOjE2OTkzNjE0NDIsImV4cCI6MTY5OTM2NTA0Mn0.JD9VgIOstdTzfj4Y9VHdh71gQLGzngPq0P4QVZC8eXQ' }
-
         parameter name: :order_id, in: :body, schema: {          
           type: :object,          
           properties: {            
@@ -20,7 +15,6 @@ RSpec.describe 'v1/super_admin/order', type: :request do
           },          
           required: %w[driver_id]  
         }
-  
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -34,12 +28,10 @@ RSpec.describe 'v1/super_admin/order', type: :request do
   end
   
   path '/v1/super_admin/accept_order/{order_id}' do
-    # You'll want to customize the parameter types...
     parameter name: 'order_id', in: :path, type: :string, description: 'order_id'
 
     post('accept_order order') do
       response(200, 'successful') do
-        let(:order_id) { '123' }
 
         after do |example|
           example.metadata[:response][:content] = {
