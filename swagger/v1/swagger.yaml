@@ -170,11 +170,22 @@ paths:
       - SuperAdminAuth: []
       responses:
         '200':
-          description: successful, allow the user to provide a value and set this value as default
-
-
-            
-
+          description: successfull
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: search
+          description: 'Search restaurants by email, name, or phone number'
+          schema:
+            type: string
+             
   "/v1/super_admin/restaurants/{id}":
     parameters:
     - name: id
