@@ -1,11 +1,40 @@
 require 'swagger_helper'
 
-RSpec.describe 'v1/customer/cart_items', type: :request do
+RSpec.describe 'v1/customer/orders', type: :request do
 
-  path '/v1/customer/cart_items' do
-
-    get('list cart_items') do
+  path '/v1/customer/orders' do
+    post('create order') do
       response(200, 'successful') do
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+
+    get('list orders') do
+      response(200, 'successful') do
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+  end
+
+  path '/v1/customer/orders/{order_id}' do
+    parameter name: 'order_id', in: :path, type: :string, description: 'order_id'
+    put('denied order') do
+      response(200, 'successful') do
+        let(:order_id) { '123' }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -18,8 +47,26 @@ RSpec.describe 'v1/customer/cart_items', type: :request do
       end
     end
 
-    post('create cart_item') do
+    get('show order') do
       response(200, 'successful') do
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+  end
+
+  path '/v1/customer/order/{order_id}/customer_feedback' do
+    parameter name: 'order_id', in: :path, type: :string, description: 'order_id'
+
+    post('customer_feedback order') do
+      response(200, 'successful') do
+        let(:order_id) { '123' }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -33,58 +80,10 @@ RSpec.describe 'v1/customer/cart_items', type: :request do
     end
   end
 
-  path '/v1/customer/cart_items/{id}' do
-    # You'll want to customize the parameter types...
-    parameter name: 'id', in: :path, type: :string, description: 'id'
+  path '/v1/customer/order_history' do
 
-    get('show cart_item') do
+    get('order_history order') do
       response(200, 'successful') do
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-
-    patch('update cart_item') do
-      response(200, 'successful') do
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-
-    put('update cart_item') do
-      response(200, 'successful') do
-        let(:id) { '123' }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-
-    delete('delete cart_item') do
-      response(200, 'successful') do
-        let(:id) { '123' }
 
         after do |example|
           example.metadata[:response][:content] = {

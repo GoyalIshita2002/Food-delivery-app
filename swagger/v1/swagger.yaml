@@ -3,18 +3,962 @@ openapi: 3.0.1
 info:
   title: API V1
   version: v1
-
 components:
   securitySchemes:
-    bearerAuth:           
+    SuperAdminAuth:           
       type: http
       scheme: bearer
       bearerFormat: JWT
-
-security:
-  - bearerAuth: [] 
-        
+    customerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    RestaurantOwnerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 paths:
+  "/v1/super_admin/sign_in":
+    post:
+      summary: create session
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                super_admin:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      default: "abc@kbc.com"
+                    password:
+                      type: string
+                      default: "Avinash@345"
+                  required:
+                  - email
+                  - password
+              required:
+              - super_admin
+  "/v1/super_admin/blob_creation":
+    post:
+      summary: blob_creation restaurant
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                   type: string
+                   format: binary
+            required:
+              - avatar
+  "/v1/super_admin/restaurants":
+    post:
+      summary: create restaurant
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successfull     
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                restaurant_admin:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      default: "restaurant38@fasthome.com"
+                    user_name:
+                      type: string
+                      default: "sigireddy"
+                    password:
+                      type: string
+                      default: "Avinash@123"
+                    restaurant:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          default: "Bottega Restorentae"
+                        registration_date:
+                          type: string
+                          format: date
+                          default: "15/11/2023"
+                        phone:
+                          type: string
+                          default: "9848022339"
+                        lock_menu:
+                          type: boolean
+                          default: true
+                        blob_id:
+                          type: string
+                          default: "1167"
+                        restaurant_address:
+                          type: object
+                          properties:
+                            street:
+                              type: string
+                              default: "madhura"
+                            address1:
+                              type: string
+                              default: "Swan square, Sai nagar, Srinivasa Nagar"
+                            address2:
+                              type: string
+                              default: "Madhurawada"
+                            zip_code:
+                              type: string
+                              default: "530048"
+                            state:
+                              type: string
+                              default: "Andhra Pradesh"
+                            city:
+                              type: string
+                              default: "Visakhapatnam"
+                            state_code:
+                              type: string
+                              default: "AP"
+                        margins:
+                          type: object
+                          properties:
+                            restaurant_percent:
+                              type: integer
+                              default: 10
+                            customer_percent:
+                              type: integer
+                              default: 20
+                        open_hours:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              day:
+                                type: string
+                              start_time:
+                                type: string
+                              end_time:
+                                type: string
+                              split_hours:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    start_at:
+                                      type: string
+                                    end_at:
+                                      type: string
+            required:
+              - restaurant_admin
+              - restaurant
+    get:
+      summary: list restaurants
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successful, allow the user to provide a value and set this value as default
+
+
+            
+
+  "/v1/super_admin/restaurants/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show restaurant
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update restaurant
+      responses:
+        '200':
+          description: successful
+    put:
+      summary: update restaurant
+      responses:
+        '200':
+          description: successful
+    delete:
+      summary: delete restaurant
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/restaurant/{id}/edit":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: edit restaurant
+      responses:
+        '200':
+          description: successful
+
+  "/v1/customer/cart_items":
+    get:
+      summary: list cart_items
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: create cart_item
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/cart_items/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show cart_item
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update cart_item
+      responses:
+        '200':
+          description: successful
+    put:
+      summary: update cart_item
+      responses:
+        '200':
+          description: successful
+    delete:
+      summary: delete cart_item
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/show_cart":
+    get:
+      summary: show cart
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/categories":
+    get:
+      summary: list categories
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/addresses":
+    post:
+      summary: create customer_address
+      responses:
+        '200':
+          description: successful
+    get:
+      summary: list customer_addresses
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/addresses/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: update customer_address
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/devices":
+    post:
+      summary: create device
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/dishes":
+    get:
+      summary: list dishes
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/dishes/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show dish
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/grouped_dishes":
+    get:
+      summary: grouped_dishes dish
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/favourites/add_restaurant":
+    post:
+      summary: add_restaurant favourite
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/favourites/add_dish":
+    post:
+      summary: add_dish favourite
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/favourites/remove_restaurant":
+    delete:
+      summary: remove_restaurant favourite
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/favourites/remove_dish":
+    delete:
+      summary: remove_dish favourite
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/favourite_restaurants":
+    get:
+      summary: list_restaurants favourite
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/favourite_dishes":
+    get:
+      summary: list_dishes favourite
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/check_email_availability":
+    get:
+      summary: check_email_availability miscellaneou
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/orders":
+    post:
+      summary: create order
+      responses:
+        '200':
+          description: successful
+    get:
+      summary: list orders
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/orders/{order_id}":
+    parameters:
+    - name: order_id
+      in: path
+      description: order_id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: denied order
+      responses:
+        '200':
+          description: successful
+    get:
+      summary: show order
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/order/{order_id}/customer_feedback":
+    parameters:
+    - name: order_id
+      in: path
+      description: order_id
+      required: true
+      schema:
+        type: string
+    post:
+      summary: customer_feedback order
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/order_history":
+    get:
+      summary: order_history order
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/resend_otp":
+    post:
+      summary: resend_otp profile
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/verify_customer":
+    post:
+      summary: verify_otp profile
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/forget_password":
+    post:
+      summary: forget_password profile
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/reset_password":
+    post:
+      summary: reset_password profile
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/profile":
+    put:
+      summary: update profile
+      responses:
+        '200':
+          description: successful
+    get:
+      summary: show profile
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/delete_avatar":
+    post:
+      summary: delete_avatar profile
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/update_password":
+    patch:
+      summary: update_password profile
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/update_phone":
+    patch:
+      summary: update_phone profile
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/cancel":
+    get:
+      summary: cancel registration
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/sign_up":
+    get:
+      summary: new registration
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/edit":
+    get:
+      summary: edit registration
+      responses:
+        '200':
+          description: successful
+  "/v1/customer":
+    patch:
+      summary: update registration
+      responses:
+        '200':
+          description: successful
+    put:
+      summary: update registration
+      responses:
+        '200':
+          description: successful
+    delete:
+      summary: delete registration
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: create registration
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/restaurant_ratings/add_rating":
+    post:
+      summary: add_rating restaurant_rating
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/restaurants":
+    get:
+      summary: list restaurants
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/restaurants/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show restaurant
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/sign_in":
+    get:
+      summary: new session
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: create session
+      responses:
+        '200':
+          description: successful
+  "/v1/customer/sign_out":
+    delete:
+      summary: delete session
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/documents":
+    post:
+      summary: create document
+      responses:
+        '200':
+          description: successful
+    get:
+      summary: list documents
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/documents/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    delete:
+      summary: delete document
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/orders/{order_id}":
+    parameters:
+    - name: order_id
+      in: path
+      description: order_id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: update order
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/{driver_id}/orders":
+    parameters:
+    - name: driver_id
+      in: path
+      description: driver_id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: list orders
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/update":
+    put:
+      summary: update profile
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/delete_avatar":
+    post:
+      summary: delete_avatar profile
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/profile":
+    get:
+      summary: show profile
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/resend_otp":
+    post:
+      summary: resend_otp profile
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/register":
+    post:
+      summary: create registration
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/service_details":
+    post:
+      summary: create service_detail
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/sign_in":
+    post:
+      summary: create session
+      responses:
+        '200':
+          description: successful
+  "/v1/driver/sign_out":
+    delete:
+      summary: delete session
+      responses:
+        '200':
+          description: successful
+  "/v1/countries":
+    get:
+      summary: list miscellaneou
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/add_ons":
+    post:
+      summary: create add_on
+      responses:
+        '200':
+          description: successful
+    get:
+      summary: list add_ons
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/add_ons/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: update add_on
+      responses:
+        '200':
+          description: successful
+    delete:
+      summary: delete add_on
+      responses:
+        '200':
+          description: successful
+    get:
+      summary: show add_on
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/total_analysts":
+    get:
+      summary: analysts dashboard
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/weekly_earning":
+    get:
+      summary: weekly_update dashboard
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/dishes":
+    post:
+      summary: create dish
+      responses:
+        '200':
+          description: successful
+    get:
+      summary: list dishes
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/dishes/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: update dish
+      responses:
+        '200':
+          description: successful
+    get:
+      summary: show dish
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/dish/{id}/upload_image":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: upload_image dish
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/dish_types":
+    get:
+      summary: types dish
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/dish/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    delete:
+      summary: delete dish
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/grouped_dishes":
+    get:
+      summary: dishes_by_type dish
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/popular_dishes":
+    get:
+      summary: popular dish
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/dishes_availability":
+    put:
+      summary: dishes_availability dish
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/update_popular_dishes":
+    put:
+      summary: popular_dishes dish
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/orders/{order_id}":
+    parameters:
+    - name: order_id
+      in: path
+      description: order_id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show order
+      responses:
+        '200':
+          description: successful
+    put:
+      summary: update order
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/orders":
+    get:
+      summary: list orders
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/password":
+    put:
+      summary: update password
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/profile/update":
+    put:
+      summary: update profile
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/profile/upload_image":
+    post:
+      summary: upload_image profile
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/profile":
+    get:
+      summary: show profile
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/restaurants/update":
+    put:
+      summary: update restaurant
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/sign_in":
+    get:
+      summary: new session
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: create session
+      responses:
+        '200':
+          description: successful
+  "/v1/restaurant_owner/sign_out":
+    delete:
+      summary: delete session
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/customer_users":
+    get:
+      summary: list customer_users
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/customer_user/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show customer_user
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/dish_types":
+    put:
+      summary: update dish_type
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/dish_type":
+    post:
+      summary: create dish_type
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/restaurant/{restaurant_id}/documents":
+    parameters:
+    - name: restaurant_id
+      in: path
+      description: restaurant_id
+      required: true
+      schema:
+        type: string
+    post:
+      summary: create document
+      responses:
+        '200':
+          description: successful
+    get:
+      summary: list documents
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/restaurant/{restaurant_id}/documents/{id}":
+    parameters:
+    - name: restaurant_id
+      in: path
+      description: restaurant_id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    delete:
+      summary: delete document
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/drivers/{driver_id}/revenue_by_day":
+    parameters:
+    - name: driver_id
+      in: path
+      description: driver_id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: revenue_by_day driver
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/drivers":
+    get:
+      summary: list drivers
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/delivery_charges/upsert":
+    post:
+      summary: upsert driver
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/drivers/{driver_id}/orders":
+    parameters:
+    - name: driver_id
+      in: path
+      description: driver_id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: driver_order_list driver
+      responses:
+        '200':
+          description: successful
   "/v1/super_admin/assign_driver/{order_id}":
     parameters:
     - name: order_id
@@ -25,9 +969,7 @@ paths:
         type: string
     post:
       summary: assign_driver order
-      security:
-        - bearerAuth: []
-      headers:
+      parameters:
       - name: Authorization
         in: header
         description: Authentication token
@@ -54,11 +996,35 @@ paths:
       required: true
       schema:
         type: string
-    post:
+    put:
       summary: accept_order order
+      parameters:
+      - name: Authorization
+        in: header
+        description: Authentication token
+        schema:
+          type: string
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                  - admin_accepted
+                  - admin_denied
+              required:
+              - status
   "/v1/super_admin/placed_order":
     get:
       summary: placed_order order
@@ -108,9 +1074,28 @@ paths:
       responses:
         '200':
           description: successful
-  "/v1/super_admin/transaction":
+  "/v1/super_admin/orders":
     get:
       summary: list orders
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/users":
+    get:
+      summary: list users
+      responses:
+        '200':
+          description: successful
+  "/v1/super_admin/user/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show user
       responses:
         '200':
           description: successful

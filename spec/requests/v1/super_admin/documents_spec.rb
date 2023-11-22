@@ -1,11 +1,14 @@
 require 'swagger_helper'
 
-RSpec.describe 'v1/customer/customer_addresses', type: :request do
+RSpec.describe 'v1/super_admin/documents', type: :request do
 
-  path '/v1/customer/addresses' do
+  path '/v1/super_admin/restaurant/{restaurant_id}/documents' do
+    # You'll want to customize the parameter types...
+    parameter name: 'restaurant_id', in: :path, type: :string, description: 'restaurant_id'
 
-    post('create customer_address') do
+    post('create document') do
       response(200, 'successful') do
+        let(:restaurant_id) { '123' }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -18,8 +21,9 @@ RSpec.describe 'v1/customer/customer_addresses', type: :request do
       end
     end
 
-    get('list customer_addresses') do
+    get('list documents') do
       response(200, 'successful') do
+        let(:restaurant_id) { '123' }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -33,12 +37,14 @@ RSpec.describe 'v1/customer/customer_addresses', type: :request do
     end
   end
 
-  path '/v1/customer/addresses/{id}' do
+  path '/v1/super_admin/restaurant/{restaurant_id}/documents/{id}' do
     # You'll want to customize the parameter types...
+    parameter name: 'restaurant_id', in: :path, type: :string, description: 'restaurant_id'
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
-    put('update customer_address') do
+    delete('delete document') do
       response(200, 'successful') do
+        let(:restaurant_id) { '123' }
         let(:id) { '123' }
 
         after do |example|

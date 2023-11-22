@@ -1,25 +1,85 @@
-require 'rails_helper'
+require 'swagger_helper'
 
-RSpec.describe "V1::RestaurantOwner::AddOns", type: :request do
-  describe "GET /create" do
-    it "returns http success" do
-      get "/v1/restaurant_owner/add_ons/create"
-      expect(response).to have_http_status(:success)
+RSpec.describe 'v1/restaurant_owner/add_ons', type: :request do
+
+  path '/v1/restaurant_owner/add_ons' do
+
+    post('create add_on') do
+      response(200, 'successful') do
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+
+    get('list add_ons') do
+      response(200, 'successful') do
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
     end
   end
 
-  describe "GET /update" do
-    it "returns http success" do
-      get "/v1/restaurant_owner/add_ons/update"
-      expect(response).to have_http_status(:success)
+  path '/v1/restaurant_owner/add_ons/{id}' do
+    # You'll want to customize the parameter types...
+    parameter name: 'id', in: :path, type: :string, description: 'id'
+
+    put('update add_on') do
+      response(200, 'successful') do
+        let(:id) { '123' }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+
+    delete('delete add_on') do
+      response(200, 'successful') do
+        let(:id) { '123' }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+
+    get('show add_on') do
+      response(200, 'successful') do
+        let(:id) { '123' }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
     end
   end
-
-  describe "GET /destroy" do
-    it "returns http success" do
-      get "/v1/restaurant_owner/add_ons/destroy"
-      expect(response).to have_http_status(:success)
-    end
-  end
-
 end

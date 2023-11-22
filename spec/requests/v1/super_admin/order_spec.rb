@@ -3,7 +3,6 @@ require 'swagger_helper'
 RSpec.describe 'v1/super_admin/order', type: :request do
   path '/v1/super_admin/assign_driver/{order_id}' do
     parameter name: 'order_id', in: :path, type: :string, description: 'order_id'
-    
     post('assign_driver order') do
       response(200, 'successful') do
         consumes 'application/json'
@@ -29,10 +28,18 @@ RSpec.describe 'v1/super_admin/order', type: :request do
   
   path '/v1/super_admin/accept_order/{order_id}' do
     parameter name: 'order_id', in: :path, type: :string, description: 'order_id'
-
-    post('accept_order order') do
+    put('accept_order order') do
       response(200, 'successful') do
-
+        consumes 'application/json'
+        parameter name: 'Authorization', in: :header, type: :string, description: 'Authentication token'
+        parameter name: :order_id, in: :path, type: :string, required: true
+        parameter name: :body, in: :body, schema: {
+          type: :object,
+          properties: {
+            status: { type: :string, enum: ['admin_accepted', 'admin_denied'] },
+          },
+          required: %w[status]
+        }
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -44,9 +51,8 @@ RSpec.describe 'v1/super_admin/order', type: :request do
       end
     end
   end
-
+  
   path '/v1/super_admin/placed_order' do
-
     get('placed_order order') do
       response(200, 'successful') do
 
@@ -63,7 +69,6 @@ RSpec.describe 'v1/super_admin/order', type: :request do
   end
 
   path '/v1/super_admin/order_without_driver' do
-
     get('orders_without_agent order') do
       response(200, 'successful') do
 
@@ -167,7 +172,7 @@ RSpec.describe 'v1/super_admin/order', type: :request do
     end
   end
 
-  path '/v1/super_admin/transaction' do
+  path '/v1/super_admin/orders' do
 
     get('list orders') do
       response(200, 'successful') do
