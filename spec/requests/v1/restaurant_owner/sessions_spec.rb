@@ -1,12 +1,9 @@
 require 'swagger_helper'
 
 RSpec.describe 'v1/restaurant_owner/sessions', type: :request do
-
   path '/v1/restaurant_owner/sign_in' do
-
     get('new session') do
       response(200, 'successful') do
-
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -20,7 +17,6 @@ RSpec.describe 'v1/restaurant_owner/sessions', type: :request do
 
     post('create session') do
       response(200, 'successful') do
-
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -34,10 +30,8 @@ RSpec.describe 'v1/restaurant_owner/sessions', type: :request do
   end
 
   path '/v1/restaurant_owner/sign_out' do
-
     delete('delete session') do
       response(200, 'successful') do
-
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {

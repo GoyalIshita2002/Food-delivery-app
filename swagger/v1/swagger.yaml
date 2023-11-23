@@ -453,6 +453,20 @@ paths:
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                   type: string
+                   format: binary
+                title:
+                    type: string
+            required:
+              - image
+              - title
 
   "/v1/super_admin/dish_types":
     put:
@@ -462,7 +476,233 @@ paths:
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                   type: string
+                   format: binary
+                title:
+                    type: string
+                id:
+                    type: integer
+            required:
+              - image
+              - title
+              - id
+    
+  "/v1/restaurant_owner/sign_in":
+    post:
+      summary: create session
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  default: "restaurant12@fasthome.com"
+                password:
+                  type: string
+                  default: "Avinash@123"
+              required:
+              - email
+              - password
 
+  "/v1/restaurant_owner/sign_out":
+    delete:
+      summary: delete session
+      security:
+      -  RestaurantOwnerAuth: []
+      responses:
+        '200':
+          description: successful
+
+  "/v1/restaurant_owner/password":
+    put:
+      summary: update password
+      security:
+      -  RestaurantOwnerAuth: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                restaurant_owner:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      default: "restaurant12@fasthome.com"
+                    current_password:
+                      type: string
+                      default: "Avinash@123"
+                    password:
+                      type: string
+                    password_confirmation:
+                      type: string  
+              required:
+              - email
+              - current_password
+              - password
+              - password_confirmation
+
+  "/v1/restaurant_owner/dishes":
+    post:
+      summary: create dish
+      security:
+        - RestaurantOwnerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: header
+          description: The ID of the restaurant
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dish:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      default: "pizza"
+                    dish_type:
+                      type: integer
+                      default: 2
+                    price:
+                      type: integer
+                      default: 300
+                    description:
+                      type: string
+                      default: "its traditional"
+                    is_popular:
+                      type: Boolean
+                    add_ons:
+                      type: array
+                      items:
+                        type: object
+                        properties: 
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          sub_item_ids:
+                             type: array
+                             items:
+                                type: integer 
+                                
+              required:
+              - dish
+    get:
+      summary: list all dishes of particular restaurant
+      security:
+        - RestaurantOwnerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: header
+          description: The ID of the restaurant
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful
+
+  "/v1/restaurant_owner/dishes/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: update dish
+      security:
+        - RestaurantOwnerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: header
+          description: The ID of the restaurant
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dish:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      default: "pizza"
+                    dish_type:
+                      type: integer
+                      default: 2
+                    price:
+                      type: integer
+                      default: 300
+                    description:
+                      type: string
+                      default: "its traditional"
+                    is_popular:
+                      type: Boolean
+                    add_ons:
+                      type: array
+                      items:
+                        type: object
+                        properties: 
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          sub_item_ids:
+                             type: array
+                             items:
+                                type: integer 
+                                
+              required:
+              - dish
+      
+    get:
+      summary: show dish
+      security:
+        - RestaurantOwnerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: header
+          description: The ID of the restaurant
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful
 
   "/v1/customer/cart_items":
     get:
@@ -944,35 +1184,6 @@ paths:
       responses:
         '200':
           description: successful
-  "/v1/restaurant_owner/dishes":
-    post:
-      summary: create dish
-      responses:
-        '200':
-          description: successful
-    get:
-      summary: list dishes
-      responses:
-        '200':
-          description: successful
-  "/v1/restaurant_owner/dishes/{id}":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: update dish
-      responses:
-        '200':
-          description: successful
-    get:
-      summary: show dish
-      responses:
-        '200':
-          description: successful
   "/v1/restaurant_owner/dish/{id}/upload_image":
     parameters:
     - name: id
@@ -1053,12 +1264,6 @@ paths:
       responses:
         '200':
           description: successful
-  "/v1/restaurant_owner/password":
-    put:
-      summary: update password
-      responses:
-        '200':
-          description: successful
   "/v1/restaurant_owner/profile/update":
     put:
       summary: update profile
@@ -1080,23 +1285,6 @@ paths:
   "/v1/restaurant_owner/restaurants/update":
     put:
       summary: update restaurant
-      responses:
-        '200':
-          description: successful
-  "/v1/restaurant_owner/sign_in":
-    get:
-      summary: new session
-      responses:
-        '200':
-          description: successful
-    post:
-      summary: create session
-      responses:
-        '200':
-          description: successful
-  "/v1/restaurant_owner/sign_out":
-    delete:
-      summary: delete session
       responses:
         '200':
           description: successful
