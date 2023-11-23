@@ -3,13 +3,14 @@ class V1::SuperAdmin::OrdersController < ApplicationController
   before_action :order, only: [:assign_driver, :accept_order]
 
   def placed_order
-    @orders = Order.where(status: :pending)
-    if @orders.present?
+    @orders = if params[:search].present?
+      search = params[:search].downcase
+      Order.where('lower(CAST(id AS TEXT)) = :search', search: search).where(status: :pending)
     else
-      render json: { status: { code: "400", orders: [] } }, status: :ok 
-    end
+      Order.where(status: :pending)
+    end 
   end
-
+  
   def index
     orders = if params[:search].present?
       search = params[:search].downcase
@@ -43,13 +44,14 @@ class V1::SuperAdmin::OrdersController < ApplicationController
   end
 
   def orders_without_agent
-    @orders_without_agent = Order.left_outer_joins(:order_agent).where(status: :admin_accepted)
-    if @orders_without_agent.present?
+    @orders_without_agent = if params[:search].present?
+      search = params[:search].downcase
+      Order.where('lower(CAST(id AS TEXT)) = :search', search: search).where(status: :admin_accepted)
     else
-      render json: { status: { code: "400", orders: [] } }, status: :ok
+      Order.left_outer_joins(:order_agent).where(status: :admin_accepted)
     end
   end
-
+  
   def assign_driver 
     if @order.present? 
       if params[:driver_id].present?
