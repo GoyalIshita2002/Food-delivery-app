@@ -61,6 +61,7 @@ Rails.application.routes.draw do
       get 'drivers/:driver_id/orders',to:"driver#driver_order_list"
       get 'users',to:"users#index"
       get 'user/:id',to:"users#show"
+      put 'users/:id', to: "users#update"
       get 'categories',to:"categories#index"
       put 'dish_types', to: "dish_type#update"
       post 'dish_type',to:"dish_type#create"

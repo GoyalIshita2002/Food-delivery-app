@@ -6,6 +6,7 @@ json.user do
   json.email @user.email
   json.phone @user.phone
   json.restaurant_name @user.restaurant&.name
+  json.is_blocked @user.is_blocked
   address= @user.restaurant.restaurant_address
   json.address do
     json.zip_code address.zip_code
