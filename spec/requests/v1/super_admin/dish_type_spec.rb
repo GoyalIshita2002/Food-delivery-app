@@ -3,10 +3,8 @@ require 'swagger_helper'
 RSpec.describe 'v1/super_admin/dish_type', type: :request do
 
   path '/v1/super_admin/dish_types' do
-
     put('update dish_type') do
       response(200, 'successful') do
-
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -20,10 +18,8 @@ RSpec.describe 'v1/super_admin/dish_type', type: :request do
   end
 
   path '/v1/super_admin/dish_type' do
-
     post('create dish_type') do
       response(200, 'successful') do
-
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {

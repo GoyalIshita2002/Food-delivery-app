@@ -194,26 +194,107 @@ paths:
       required: true
       schema:
         type: string
-    get:
-      summary: show restaurant
-      responses:
-        '200':
-          description: successful
-    patch:
-      summary: update restaurant
-      responses:
-        '200':
-          description: successful
     put:
       summary: update restaurant
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
-    delete:
-      summary: delete restaurant
-      responses:
-        '200':
-          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                restaurant_admin:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      default: "restaurant38@fasthome.com"
+                    user_name:
+                      type: string
+                      default: "sigireddy"
+                    password:
+                      type: string
+                      default: "Avinash@123"
+                    restaurant:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          default: "Bottega Restorentae"
+                        registration_date:
+                          type: string
+                          format: date
+                          default: "15/11/2023"
+                        phone:
+                          type: string
+                          default: "9848022339"
+                        lock_menu:
+                          type: boolean
+                          default: true
+                        blob_id:
+                          type: string
+                          default: "1167"
+                        restaurant_address:
+                          type: object
+                          properties:
+                            street:
+                              type: string
+                              default: "madhura"
+                            address1:
+                              type: string
+                              default: "Swan square, Sai nagar, Srinivasa Nagar"
+                            address2:
+                              type: string
+                              default: "Madhurawada"
+                            zip_code:
+                              type: string
+                              default: "530048"
+                            state:
+                              type: string
+                              default: "Andhra Pradesh"
+                            city:
+                              type: string
+                              default: "Visakhapatnam"
+                            state_code:
+                              type: string
+                              default: "AP"
+                        margins:
+                          type: object
+                          properties:
+                            restaurant_percent:
+                              type: integer
+                              default: 10
+                            customer_percent:
+                              type: integer
+                              default: 20
+                        open_hours:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              day:
+                                type: string
+                              start_time:
+                                type: string
+                              end_time:
+                                type: string
+                              split_hours:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    start_at:
+                                      type: string
+                                    end_at:
+                                      type: string
+            required:
+              - restaurant_admin
+              - restaurant
+
   "/v1/super_admin/restaurant/{id}/edit":
     parameters:
     - name: id
@@ -224,9 +305,164 @@ paths:
         type: string
     get:
       summary: edit restaurant
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
+
+  "/v1/super_admin/restaurant/{restaurant_id}/documents":
+    parameters:
+    - name: restaurant_id
+      in: path
+      description: restaurant_id
+      required: true
+      schema:
+        type: string
+    post:
+      summary: create document
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                document:
+                   type: array
+                   items:
+                     type: string
+                     format: binary
+                name:
+                  type: string
+              required:
+              - document
+              - name
+    get:
+      summary: list documents
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successful
+
+  "/v1/super_admin/restaurant/{restaurant_id}/documents/{id}":
+    parameters:
+    - name: restaurant_id
+      in: path
+      description: restaurant_id
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    delete:
+      summary: delete document
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successful
+
+  "/v1/super_admin/users":
+    get:
+      summary: list users
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successfull
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+        - in: query
+          name: page
+          schema:
+            type: integer
+
+  "/v1/super_admin/user/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show user
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successful
+
+  "/v1/super_admin/customer_users":
+    get:
+      summary: list customer_users
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successfull
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: search
+          description: 'Search customer by email, username, or phone number'
+          schema:
+            type: string
+
+  "/v1/super_admin/customer_user/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show customer_user
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successful
+
+  "/v1/super_admin/dish_type":
+    post:
+      summary: create dish_type
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successful
+
+  "/v1/super_admin/dish_types":
+    put:
+      summary: update dish_type
+      security:
+      - SuperAdminAuth: []
+      responses:
+        '200':
+          description: successful
+
 
   "/v1/customer/cart_items":
     get:
@@ -864,74 +1100,6 @@ paths:
       responses:
         '200':
           description: successful
-  "/v1/super_admin/customer_users":
-    get:
-      summary: list customer_users
-      responses:
-        '200':
-          description: successful
-  "/v1/super_admin/customer_user/{id}":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
-    get:
-      summary: show customer_user
-      responses:
-        '200':
-          description: successful
-  "/v1/super_admin/dish_types":
-    put:
-      summary: update dish_type
-      responses:
-        '200':
-          description: successful
-  "/v1/super_admin/dish_type":
-    post:
-      summary: create dish_type
-      responses:
-        '200':
-          description: successful
-  "/v1/super_admin/restaurant/{restaurant_id}/documents":
-    parameters:
-    - name: restaurant_id
-      in: path
-      description: restaurant_id
-      required: true
-      schema:
-        type: string
-    post:
-      summary: create document
-      responses:
-        '200':
-          description: successful
-    get:
-      summary: list documents
-      responses:
-        '200':
-          description: successful
-  "/v1/super_admin/restaurant/{restaurant_id}/documents/{id}":
-    parameters:
-    - name: restaurant_id
-      in: path
-      description: restaurant_id
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
-    delete:
-      summary: delete document
-      responses:
-        '200':
-          description: successful
   "/v1/super_admin/drivers/{driver_id}/revenue_by_day":
     parameters:
     - name: driver_id
@@ -1091,25 +1259,7 @@ paths:
       responses:
         '200':
           description: successful
-  "/v1/super_admin/users":
-    get:
-      summary: list users
-      responses:
-        '200':
-          description: successful
-  "/v1/super_admin/user/{id}":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
-    get:
-      summary: show user
-      responses:
-        '200':
-          description: successful
+
 servers:
 - url: http://{defaultHost}
   variables:
