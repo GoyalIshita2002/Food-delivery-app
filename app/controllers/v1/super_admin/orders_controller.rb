@@ -120,7 +120,16 @@ class V1::SuperAdmin::OrdersController < ApplicationController
     expired_by_merchant = Order.where(status: :restaurant_accepted).where("time AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Paris' < CURRENT_TIMESTAMP").count
     render json: { cancelled: cancelled, rejected_by_merchant: rejected_by_merchant, expired_by_merchant: expired_by_merchant }, status: :ok
   end
-  
+
+  def todays_order
+    today_start = Time.zone.now.beginning_of_day
+    today_end = Time.zone.now.end_of_day
+    orders = Order.where(created_at: today_start..today_end)
+    on_the_way = orders.where(status: [:restaurant_accepted, :ready_to_pick, :driver_picked_up])
+    delivered = orders.where(status: :delivered)
+    cancelled = orders.where(status: :admin_cancelled)
+    render json: { on_the_way: on_the_way, delivered: delivered, cancelled: cancelled }, status: :ok
+  end
   
   private
 
