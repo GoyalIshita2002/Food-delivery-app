@@ -17,9 +17,20 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+tags:
+  - name: Superadmin
+    description: Operations related to the superadmin endpoint
+  - name: RestaurantOwner
+    description: Operations related to the restaurant owner endpoint
+  - name: Customer
+    description: Operations related to the customer endpoint
+  - name: Driver
+    description: Operations related to the driver endpoint
 paths:
   "/v1/super_admin/sign_in":
     post:
+      tags:
+        - Superadmin
       summary: create session
       responses:
         '200':
@@ -704,6 +715,89 @@ paths:
         '200':
           description: successful
 
+  "/v1/restaurant_owner/dish/{id}/upload_image":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: upload_image dish
+      security:
+        - RestaurantOwnerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: header
+          description: The ID of the restaurant
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                   type: string
+                   format: binary
+            required:
+              - image
+
+  "/v1/restaurant_owner/dish_types":
+    get:
+      summary: types dish
+      responses:
+        '200':
+          description: successful
+
+  "/v1/restaurant_owner/dish/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    delete:
+      summary: delete dish
+      responses:
+        '200':
+          description: successful
+
+  "/v1/restaurant_owner/grouped_dishes":
+    get:
+      summary: dishes_by_type dish
+      responses:
+        '200':
+          description: successful
+
+  "/v1/restaurant_owner/popular_dishes":
+    get:
+      summary: popular dish
+      responses:
+        '200':
+          description: successful
+
+  "/v1/restaurant_owner/dishes_availability":
+    put:
+      summary: dishes_availability dish
+      responses:
+        '200':
+          description: successful
+
+  "/v1/restaurant_owner/update_popular_dishes":
+    put:
+      summary: popular_dishes dish
+      responses:
+        '200':
+          description: successful
+
   "/v1/customer/cart_items":
     get:
       summary: list cart_items
@@ -1181,62 +1275,6 @@ paths:
   "/v1/restaurant_owner/weekly_earning":
     get:
       summary: weekly_update dashboard
-      responses:
-        '200':
-          description: successful
-  "/v1/restaurant_owner/dish/{id}/upload_image":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
-    put:
-      summary: upload_image dish
-      responses:
-        '200':
-          description: successful
-  "/v1/restaurant_owner/dish_types":
-    get:
-      summary: types dish
-      responses:
-        '200':
-          description: successful
-  "/v1/restaurant_owner/dish/{id}":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
-    delete:
-      summary: delete dish
-      responses:
-        '200':
-          description: successful
-  "/v1/restaurant_owner/grouped_dishes":
-    get:
-      summary: dishes_by_type dish
-      responses:
-        '200':
-          description: successful
-  "/v1/restaurant_owner/popular_dishes":
-    get:
-      summary: popular dish
-      responses:
-        '200':
-          description: successful
-  "/v1/restaurant_owner/dishes_availability":
-    put:
-      summary: dishes_availability dish
-      responses:
-        '200':
-          description: successful
-  "/v1/restaurant_owner/update_popular_dishes":
-    put:
-      summary: popular_dishes dish
       responses:
         '200':
           description: successful
