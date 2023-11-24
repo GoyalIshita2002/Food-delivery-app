@@ -66,22 +66,17 @@ class V1::SuperAdmin::OrdersController < ApplicationController
 
   def order_status
     @restaurant = Restaurant.find_by(id: params[:restaurant_id])
-    if @restaurant.present?
-      accepted_statuses = [:restaurant_accepted,:driver_picked_up, :delivered]
-      requested_status = params[:status].to_sym
-      if accepted_statuses.include?(requested_status)
-        @orders = @restaurant.orders.where(status: requested_status)
-        unless @orders.present?
-          render json: { orders: [] }, status: :ok
-        end        
-      else
-        render json: { status: { code: "400", errors: ["Invalid order status. Allowed values are #{accepted_statuses.join(', ')}."] } }, status: :bad_request
-      end
+    if @restaurant
+      @orders = {
+        under_preparation: @restaurant.orders.where(status: :restaurant_accepted),
+        on_the_way: @restaurant.orders.where(status: :driver_picked_up),
+        delivered: @restaurant.orders.where(status: :delivered)
+      }
     else
-      render json: { status: { code: "400", errors: ["Restaurant not found with the provided ID"] } }, status: :bad_request
+      render json: { status: "error", error: "Restaurant not found with the provided ID" }, status: :not_found
     end
   end
-
+  
   def order_statistics
     placed_orders = Order.where(status: :pending).count
     ongoing_orders = Order.where(status: [:admin_accepted, :restaurant_accepted,:ready_to_pick, :driver_picked_up]).count
