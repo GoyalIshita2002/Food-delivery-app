@@ -41,8 +41,6 @@ admin_user = restaurant.admin_user
 json.restaurant_admin do
   json.id admin_user.id
   json.email admin_user.email
-  json.password admin_user.encrypted_password
-  json.jti admin_user.jti
   json.owner_name admin_user.user_name
   json.avatar_url admin_user.avatar_url 
 end

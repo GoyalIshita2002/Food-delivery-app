@@ -1,6 +1,10 @@
 json.status do
   json.code "200"
 end
+json.details do
+  json.total_count @pagy.count
+  json.total_pages @pagy.pages
+end
 json.transaction do
   json.array! @orders do |order|
     json.order_id order.id

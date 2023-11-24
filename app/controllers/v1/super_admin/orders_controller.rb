@@ -67,11 +67,7 @@ class V1::SuperAdmin::OrdersController < ApplicationController
   def order_status
     @restaurant = Restaurant.find_by(id: params[:restaurant_id])
     if @restaurant
-      @orders = {
-        under_preparation: @restaurant.orders.where(status: :restaurant_accepted),
-        on_the_way: @restaurant.orders.where(status: :driver_picked_up),
-        delivered: @restaurant.orders.where(status: :delivered)
-      }
+      @orders = @restaurant.orders.group_by(&:status)
     else
       render json: { status: "error", error: "Restaurant not found with the provided ID" }, status: :not_found
     end
@@ -120,9 +116,9 @@ class V1::SuperAdmin::OrdersController < ApplicationController
     today_start = Time.zone.now.beginning_of_day
     today_end = Time.zone.now.end_of_day
     orders = Order.where(created_at: today_start..today_end)
-    on_the_way = orders.where(status: [:restaurant_accepted, :ready_to_pick, :driver_picked_up])
-    delivered = orders.where(status: :delivered)
-    cancelled = orders.where(status: :admin_cancelled)
+    on_the_way = orders.where(status: [:ready_to_pick, :driver_picked_up]).count
+    delivered = orders.where(status: :delivered).count
+    cancelled = orders.where(status: :admin_cancelled).count
     render json: { on_the_way: on_the_way, delivered: delivered, cancelled: cancelled }, status: :ok
   end
   
