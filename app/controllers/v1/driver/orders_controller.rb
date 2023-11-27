@@ -1,4 +1,4 @@
-class V1::Driver::OrderController < ApplicationController
+class V1::Driver::OrdersController < ApplicationController
 
  def update
   orders = Order.find_by(id: params[:order_id])
