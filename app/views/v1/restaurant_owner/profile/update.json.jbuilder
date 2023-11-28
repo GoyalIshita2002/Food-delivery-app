@@ -9,9 +9,9 @@ json.restaurant do
   json.name restaurant.name
   json.phone restaurant.phone
   json.std_code restaurant.std_code
-  json.rating restaurant.avg_rating
+  json.rating restaurant.avg_rating || 0
   json.registration_date restaurant.registration_date
-  json.avg_rating restaurant.avg_rating
+  json.avg_rating restaurant.avg_rating || 0
   json.open_for_orders restaurant.open_for_orders
   address = restaurant.restaurant_address
   json.address do
