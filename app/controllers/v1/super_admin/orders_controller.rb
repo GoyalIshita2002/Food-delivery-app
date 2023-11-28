@@ -66,22 +66,13 @@ class V1::SuperAdmin::OrdersController < ApplicationController
 
   def order_status
     @restaurant = Restaurant.find_by(id: params[:restaurant_id])
-    if @restaurant.present?
-      accepted_statuses = [:restaurant_accepted,:driver_picked_up, :delivered]
-      requested_status = params[:status].to_sym
-      if accepted_statuses.include?(requested_status)
-        @orders = @restaurant.orders.where(status: requested_status)
-        unless @orders.present?
-          render json: { orders: [] }, status: :ok
-        end        
-      else
-        render json: { status: { code: "400", errors: ["Invalid order status. Allowed values are #{accepted_statuses.join(', ')}."] } }, status: :bad_request
-      end
+    if @restaurant
+      @orders = @restaurant.orders.group_by(&:status)
     else
-      render json: { status: { code: "400", errors: ["Restaurant not found with the provided ID"] } }, status: :bad_request
+      render json: { status: "error", error: "Restaurant not found with the provided ID" }, status: :not_found
     end
   end
-
+  
   def order_statistics
     placed_orders = Order.where(status: :pending).count
     ongoing_orders = Order.where(status: [:admin_accepted, :restaurant_accepted,:ready_to_pick, :driver_picked_up]).count
@@ -120,7 +111,16 @@ class V1::SuperAdmin::OrdersController < ApplicationController
     expired_by_merchant = Order.where(status: :restaurant_accepted).where("time AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Paris' < CURRENT_TIMESTAMP").count
     render json: { cancelled: cancelled, rejected_by_merchant: rejected_by_merchant, expired_by_merchant: expired_by_merchant }, status: :ok
   end
-  
+
+  def todays_order
+    today_start = Time.zone.now.beginning_of_day
+    today_end = Time.zone.now.end_of_day
+    orders = Order.where(created_at: today_start..today_end)
+    on_the_way = orders.where(status: [:ready_to_pick, :driver_picked_up]).count
+    delivered = orders.where(status: :delivered).count
+    cancelled = orders.where(status: :admin_cancelled).count
+    render json: { on_the_way: on_the_way, delivered: delivered, cancelled: cancelled }, status: :ok
+  end
   
   private
 
