@@ -1,6 +1,11 @@
 json.code "200"
 json.success true
 
+json.details do
+  json.total_count @pagy.count
+  json.total_pages @pagy.pages
+end
+
 json.driver do 
   json.array! @orders do |order|
     json.id order.id
