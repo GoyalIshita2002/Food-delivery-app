@@ -2,8 +2,7 @@ class V1::RestaurantOwner::OrdersController < ApplicationController
   before_action :validate_order, only: :update
 
   def show  
-    @order = current_restaurant.orders.find(params[:order_id])
-    unless @order.present?
+    unless order.present?
       render json: {status: { code: "400", error: "Invalid/unauthorized order ID"}},status: :bad_request and return
     end
   end
