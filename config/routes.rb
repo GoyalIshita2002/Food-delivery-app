@@ -70,6 +70,9 @@ Rails.application.routes.draw do
       get 'customer_user/:id',to:"customer_user#show"
       get 'restaurant/:id/edit',to:"restaurants#edit"
       post 'blob_creation', to: "restaurants#blob_creation"
+      get 'revenue_stats', to: "orders#revenue_stats"
+      put 'update_charges', to: "orders#update_charges"
+      get 'delivery_charges', to: "orders#delivery_charges"
     end 
 
     namespace :customer do

@@ -121,6 +121,46 @@ class V1::SuperAdmin::OrdersController < ApplicationController
     cancelled = orders.where(status: :admin_cancelled).count
     render json: { on_the_way: on_the_way, delivered: delivered, cancelled: cancelled }, status: :ok
   end
+
+  def revenue_stats 
+    grouped_orders = {}
+    if params[:start_date].present? && params[:end_date].present?
+      start_date = Date.parse(params[:start_date])
+      end_date = Date.parse(params[:end_date])
+      Order.joins(:cart).where(created_at: start_date..end_date)
+                        .pluck("carts.total_amount","orders.created_at")
+                        .map{|arr| [arr[0],arr[1].strftime("%A")]}
+                        .group_by{|arr| arr[1]}.each do |k,v|
+                              count = 0
+                              v.each do |arr|
+                              count += arr[0]
+                              end
+                              grouped_orders[k] = count.to_f
+      end
+      render json: grouped_orders
+    else
+      render json: { status: { code: 400, message: "missing required params"}},status: :bad_request and return
+    end
+  end
+
+  def update_charges
+    unless params[:charges].present?
+      render json: { status: {code: 400, message: "Request missing charges"}}, status: :bad_request and return
+    end
+    params[:charges].each do |del_charge|
+      delivery_charge = DeliveryCharge.find_by(id: del_charge[:id])
+      delivery_charge.update(charge: del_charge[:charge]) if delivery_charge.present?
+    end
+    
+    render json: { status:{code:200}, data: DeliveryCharge.all },status: :ok 
+  end
+
+  def delivery_charges
+    unless DeliveryCharge.exists?
+      DeliveryCharge.create_default_charges
+    end 
+    render json: { status:{code:200}, data: DeliveryCharge.all },status: :ok 
+  end
   
   private
 

@@ -14,7 +14,14 @@ class V1::RestaurantOwner::OrdersController < ApplicationController
       status = params[:status].is_a?(Array) ? params[:status].map(&:to_sym) : params[:status]
       current_restaurant.orders.where(status: status)
     end
-  end
+    if params[:duration].present? && ["weekly","monthly","total"].include?(params[:duration])
+      @orders = if ["weekly","monthly"].include?(params[:duration])
+        @orders.where(status: :delivered).filter_by_duration(params[:duration])
+      else
+        @orders.where(status: :delivered)
+      end
+    end
+  end  
   
   def update 
     if order.update(update_params)

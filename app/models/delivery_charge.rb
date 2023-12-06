@@ -13,4 +13,10 @@ class DeliveryCharge < ApplicationRecord
         create(min_distance: min_distance, max_distance: max_distance, charge: charge)
       end
     end
+
+    def self.create_default_charges
+      DeliveryCharge.create([{min_distance: 0, max_distance:3, charge: 0},
+      {min_distance: 3, max_distance:7, charge: 0},
+      {min_distance: 7, max_distance:10, charge: 0}])
+    end
 end
