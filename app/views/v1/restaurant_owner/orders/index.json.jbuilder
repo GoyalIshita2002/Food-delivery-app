@@ -1,7 +1,7 @@
 json.status do 
     json.code "200"
 end
-
+json.total_amount @orders.joins(:cart).sum("carts.total_amount").to_f
 json.orders do 
     json.array! @orders do |order| 
       json.id order.id

@@ -123,7 +123,8 @@ class V1::SuperAdmin::OrdersController < ApplicationController
   end
 
   def revenue_stats 
-    grouped_orders = {}
+    grouped_orders = []
+    total_revenue = 0
     if params[:start_date].present? && params[:end_date].present?
       start_date = Date.parse(params[:start_date])
       end_date = Date.parse(params[:end_date])
@@ -135,9 +136,10 @@ class V1::SuperAdmin::OrdersController < ApplicationController
                               v.each do |arr|
                               count += arr[0]
                               end
-                              grouped_orders[k] = count.to_f
+                              grouped_orders << { day: k, value: count.to_f}
+                              total_revenue += count.to_f
       end
-      render json: grouped_orders
+      render json: { total_revenue: total_revenue, data: grouped_orders}, status: :ok and return
     else
       render json: { status: { code: 400, message: "missing required params"}},status: :bad_request and return
     end
