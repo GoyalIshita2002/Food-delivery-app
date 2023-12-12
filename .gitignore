@@ -34,3 +34,4 @@
 # /config/credentials/production.key
 
 /.STARTSERVER.sh
+/db/schema.rb

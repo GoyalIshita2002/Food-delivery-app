@@ -8,15 +8,6 @@ class Customer::AddCartItem < ApplicationService
   attr_reader :params, :cart
 
   def call
-    cart_item = cart.cart_items.find_by(dish_id: dish.id)
-    if cart_item.present?
-      cart_item.update!(item_params)
-    else
-      cart.cart_items.create!(item_params)
-    end
-  end
-
-  def call
     cart_item = cart.cart_items.find_by(itemable_id: current_item.id, itemable_type: current_item.class.to_s)
     if cart_item.present?
       cart_item.update!(item_params)

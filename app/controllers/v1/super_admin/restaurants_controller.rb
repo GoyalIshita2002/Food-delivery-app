@@ -1,7 +1,7 @@
 class V1::SuperAdmin::RestaurantsController < ApplicationController
   include Pagy::Backend
 
-  before_action :validate_restaurant, only: :update
+  before_action :validate_restaurant, only: [:update, :suspend]
 
   def blob_creation
     blob = create_blob_from_image(params[:avatar])
@@ -29,7 +29,7 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
   end 
 
   def edit
-    @restaurant = Restaurant.find_by(id: params[:id])
+    @restaurant = Restaurant.unscope(where: :suspended).find_by(id: params[:id])
     unless @restaurant.present?
       render json: { status: { code: "404", message: "Invalid Restaurant ID"}},status: :not_found and return
     end
@@ -38,16 +38,23 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
   def index
     restaurants = if params[:search].present?
       search = params[:search].downcase
-      Restaurant.joins(:admin_user)
+      Restaurant.unscope(where: :suspended).joins(:admin_user)
         .where('lower(admin_users.email) LIKE ?', "%#{search}%")
-        .or(Restaurant.where('lower(name) LIKE ?', "%#{search}%"))
-        .or(Restaurant.where('lower(restaurants.phone) LIKE ?', "%#{search}%"))
+        .or(Restaurant.unscope(where: :suspended).where('lower(name) LIKE ?', "%#{search}%"))
+        .or(Restaurant.unscope(where: :suspended).where('lower(restaurants.phone) LIKE ?', "%#{search}%"))
     else
-      Restaurant.all
+      Restaurant.unscope(where: :suspended).all
     end
     @pagy, @restaurants = pagy(restaurants, items: params[:per_page]&.to_i)
   end
   
+  def suspend
+    if restaurant.update(suspended: true)
+      render json:{status: { code: "200", message: "suspended successfully"}}, status: :ok
+    else
+      render json: {status: { code: "400", errors: restaurant.errors.full_messgaes }}, status: :bad_request
+    end
+  end
 
   protected
 
@@ -64,7 +71,7 @@ class V1::SuperAdmin::RestaurantsController < ApplicationController
   end
 
   def restaurant
-    @restaurant ||= Restaurant.find_by(id: params[:id])
+    @restaurant ||= Restaurant.unscope(where: :suspended).find_by(id: params[:id])
   end
 
   def restaurant_owner
