@@ -8,6 +8,16 @@ class Customer::AddCartItem < ApplicationService
   attr_reader :params, :cart
 
   def call
+    restaurant_ids = if params[:dish_id].present?
+      cart.cart_items.where(itemable_type: "Dish").map(&:itemable).pluck(:restaurant_id).uniq.compact
+    elsif params[:add_on_item_id].present?
+      cart.cart_items.where(itemable_type: "Item").map(&:itemable).map(&:dish_add_on).pluck(:restaurant_id).uniq.compact
+    end
+
+    if restaurant_ids.present? && (restaurant_ids.length != 1 || restaurant_ids.last != current_item.restaurant_id)
+      cart.cart_items.destroy_all
+    end
+    
     cart_item = cart.cart_items.find_by(itemable_id: current_item.id, itemable_type: current_item.class.to_s)
     if cart_item.present?
       cart_item.update!(item_params)
