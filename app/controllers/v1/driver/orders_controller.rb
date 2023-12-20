@@ -19,15 +19,13 @@ class V1::Driver::OrdersController < ApplicationController
    end
  end
  
-
- def index
-  order_ids = OrderAgent.where(driver_id: params[:driver_id]).pluck(:order_id)
-  orders = Order.where(id: order_ids)
-   if orders.present?
-    render json: orders,status: :ok and return
-   else
-    render json: { status: { code: "400", orders: [] }}, status: :ok  
-   end
- end
+  def index
+    if params[:driver_id].present?
+    order_ids = OrderAgent.where(driver_id: params[:driver_id]).pluck(:order_id)
+    @orders = Order.includes(:customer, :customer_address,:customer,:cart).where(id: order_ids)
+    else
+      render json: { status: { code: "400", orders: [] } }, status: :ok
+    end
+  end
   
 end

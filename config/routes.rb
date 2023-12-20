@@ -94,6 +94,7 @@ Rails.application.routes.draw do
       get 'orders', to: "orders#index"
       get 'orders/:order_id', to: "orders#show"
       post 'order/:order_id/customer_feedback', to: "orders#customer_feedback"
+      get 'restaurants/filter_restaurants' , to: "restaurants#search"
       resources :restaurants, only: [ :index, :show ]
       resources :dishes, only: [ :index, :show ]
       resources :cart_items
