@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       get 'add_ons', to: "add_ons#index"
       put 'add_ons/:id', to: "add_ons#update"
       delete 'add_ons/:id', to: "add_ons#destroy"
+      delete 'add_ons/:id/item/:item_id', to: "add_ons#items_destroy"
       get 'add_ons/:id', to: "add_ons#show"
       put 'profile/update', to: "profile#update"
       post 'profile/upload_image', to: "profile#upload_image"
