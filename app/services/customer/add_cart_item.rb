@@ -10,7 +10,7 @@ class Customer::AddCartItem < ApplicationService
   def call
     restaurant_ids = if params[:dish_id].present?
       cart.cart_items.where(itemable_type: "Dish").map(&:itemable).pluck(:restaurant_id).uniq.compact
-    elsif params[:add_on_item_id].present?
+    elsif params[:add_on_item_id].present? 
       cart.cart_items.where(itemable_type: "Item").map(&:itemable).map(&:dish_add_on).pluck(:restaurant_id).uniq.compact
     end
 
@@ -41,11 +41,11 @@ class Customer::AddCartItem < ApplicationService
   end
 
   def dish
-    @dish ||= Dish.find_by(id: params[:dish_id])
-  end 
-
+    @dish ||= Dish.deleted_dish.find_by(id: params[:dish_id])
+  end
+  
   def add_on_item
-    @add_on_item ||= Item.find_by(id: params[:add_on_item_id])
+    @add_on_item ||= Item.deleted_item.find_by(id: params[:add_on_item_id])
   end
 
   def item_price

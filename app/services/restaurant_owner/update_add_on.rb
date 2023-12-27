@@ -11,7 +11,7 @@ class RestaurantOwner::UpdateAddOn < ApplicationService
       add_on = @add_on.update(add_on_params)
       @add_on.items.where.not(id: item_params.pluck(:id).compact).destroy_all
       item_params.each do |current_item|
-        if current_item[:id].present? && @add_on.items.find_by(id: current_item[:id]).present? && current_item[:is_delete] == false
+        if current_item[:id].present? && @add_on.items.find_by(id: current_item[:id]).present? && current_item[:is_deleted] == false
           @add_on.items.find_by(id: current_item[:id])&.update(current_item)
         else
           @add_on.items.create(current_item.except(:id))

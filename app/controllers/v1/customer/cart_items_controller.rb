@@ -46,10 +46,10 @@ class V1::Customer::CartItemsController < ApplicationController
   end
 
   def add_on_item
-    @add_on_item ||= Item.find_by(id: cart_item_params[:add_on_item_id])
+    @add_on_item ||= Item.deleted_item.find_by(id: cart_item_params[:add_on_item_id])
   end
 
   def dish
-    @dish ||= Dish.find_by(id: cart_item_params[:dish_id])
+    @dish ||= Dish.deleted_dish.find_by(id: cart_item_params[:dish_id])
   end
 end

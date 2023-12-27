@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_26_100651) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_27_095659) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -195,7 +195,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_26_100651) do
     t.bigint "restaurant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "is_delete", default: false
+    t.boolean "is_deleted", default: false
     t.index ["restaurant_id"], name: "index_dish_add_ons_on_restaurant_id"
   end
 
@@ -234,7 +234,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_26_100651) do
     t.bigint "restaurant_id", null: false
     t.boolean "is_popular", default: false
     t.boolean "is_available", default: true
-    t.boolean "is_delete", default: false
+    t.boolean "is_deleted", default: false
     t.index ["restaurant_id"], name: "index_dishes_on_restaurant_id"
   end
 
@@ -295,7 +295,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_26_100651) do
     t.datetime "updated_at", null: false
     t.integer "min_quantity"
     t.integer "max_quantity"
-    t.boolean "is_delete", default: false
+    t.boolean "is_deleted", default: false
     t.index ["dish_add_on_id"], name: "index_items_on_dish_add_on_id"
   end
 

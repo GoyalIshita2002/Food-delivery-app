@@ -11,7 +11,8 @@ class Dish < ApplicationRecord
   has_many :items, through: :dish_items
 
   scope :popular, -> { where(is_popular: true) }
-  
+  scope :deleted_dish, -> { where(is_deleted: false) }
+
   def image_url
     ActiveStorage::Current.set(host: Rails.application.credentials.fetch(:base_url)) do
       image.url

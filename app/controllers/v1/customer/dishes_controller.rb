@@ -3,7 +3,7 @@ class V1::Customer::DishesController < ApplicationController
   before_action :check_restaurant
 
   def index
-    @dishes = current_restaurant.dishes
+    @dishes = current_restaurant.dishes.deleted_dish
    if params[:type]&.downcase == "popular"
     @dishes = @dishes.where(is_popular: true)
    else

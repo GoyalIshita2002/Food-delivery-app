@@ -8,30 +8,22 @@ class V1::RestaurantOwner::AddOnsController < ApplicationController
   end
 
   def show
-    @add_on = add_on
-    if @add_on
-    else
-      render json: { status: { code: "400", message: "No add-on present" } }, status: :bad_request
-    end
   end
   
   def update
-    @add_on=add_on
-    @add_on = RestaurantOwner::UpdateAddOn.call(@add_on, add_on_params)
-     if @add_on.reload
+    @add_on = RestaurantOwner::UpdateAddOn.call(add_on, add_on_params)
+    @add_on.reload
     render template: "v1/restaurant_owner/add_ons/show"
-    else 
-    render json: { status: { code: "400", message: "No add-on present"} }, status: :bad_request
-    end
   end
 
   def index
-    @add_ons = add_ons_items
+    @add_ons = add_on_items
   end
   
   def destroy
-    if add_on.update!(is_delete: true)
-      @add_ons = restaurant.add_ons.where(is_delete: false)
+    if add_on.update!(is_deleted: true)
+       add_on.items.update!(is_deleted: true)
+       @add_ons = restaurant.add_ons.deleted_dish_add_on
       render template: "v1/restaurant_owner/add_ons/index"
     else
       render json: { status: { code: "400", message: "Failed to destroy add-on"}, errors: add_on.errors.map(&:full_messages)  }, status: :bad_request
@@ -41,7 +33,7 @@ class V1::RestaurantOwner::AddOnsController < ApplicationController
   def items_destroy
    item = add_on.items.find_by(id: params[:item_id])
     if item.present?
-     item.update(is_delete: true)
+     item.update(is_deleted: true)
      render template: "v1/restaurant_owner/add_ons/show"
     else
       render json: { status: { code: "400", message: "Failed to destroy items of add-on"}, errors: add_on.errors.map(&:full_messages)  }, status: :bad_request
@@ -50,16 +42,16 @@ class V1::RestaurantOwner::AddOnsController < ApplicationController
 
   protected
    
-  def add_ons_items 
-    restaurant.add_ons.where(is_delete: false).includes(:items).where(items: { is_delete: false })
-  end
+  def add_on_items 
+    restaurant.add_ons.deleted_dish_add_on.includes(:items).where(items: { is_deleted: false })
+    end
   
   def check_restaurant
     render json: { status: "400", message: "Request Missing RestaurantId"}, status: :bad_request  unless restaurant.present?
   end
 
   def add_on_params
-    params.require(:add_ons).permit(:name ,:items=>[ :id, :name, :price, :min_quantity, :max_quantity,:is_delete ])
+    params.require(:add_ons).permit(:name ,:items=>[ :id, :name, :price, :min_quantity, :max_quantity,:is_deleted ])
   end
 
   def item_params
@@ -75,7 +67,7 @@ class V1::RestaurantOwner::AddOnsController < ApplicationController
   end
 
   def add_on
-    @add_on ||= restaurant.add_ons.find_by(id: params[:id], is_delete: false)
+    @add_on ||= restaurant.add_ons.find_by(id: params[:id], is_deleted: false)
   end
 
   def check_add_on
@@ -83,5 +75,4 @@ class V1::RestaurantOwner::AddOnsController < ApplicationController
       render json: { status: {code: "400", message:"Invalid addOn params"} }, status: :bad_request
     end
   end
-  
 end
