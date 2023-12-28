@@ -17,7 +17,7 @@ class V1::RestaurantOwner::DishesController < ApplicationController
   end
 
   def index
-    @dishes = Dish.deleted_dish
+    @dishes = Dish.all
   end
 
   def types 

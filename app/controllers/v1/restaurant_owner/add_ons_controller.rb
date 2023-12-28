@@ -23,7 +23,7 @@ class V1::RestaurantOwner::AddOnsController < ApplicationController
   def destroy
     if add_on.update!(is_deleted: true)
        add_on.items.update!(is_deleted: true)
-       @add_ons = restaurant.add_ons.deleted_dish_add_on
+       @add_ons = restaurant.add_ons
       render template: "v1/restaurant_owner/add_ons/index"
     else
       render json: { status: { code: "400", message: "Failed to destroy add-on"}, errors: add_on.errors.map(&:full_messages)  }, status: :bad_request
@@ -43,7 +43,7 @@ class V1::RestaurantOwner::AddOnsController < ApplicationController
   protected
    
   def add_on_items 
-    restaurant.add_ons.deleted_dish_add_on.includes(:items).where(items: { is_deleted: false })
+    restaurant.add_ons.includes(:items).where(items: { is_deleted: false })
     end
   
   def check_restaurant

@@ -41,11 +41,11 @@ class Customer::AddCartItem < ApplicationService
   end
 
   def dish
-    @dish ||= Dish.deleted_dish.find_by(id: params[:dish_id])
+    @dish ||= Dish.find_by(id: params[:dish_id])
   end
   
   def add_on_item
-    @add_on_item ||= Item.deleted_item.find_by(id: params[:add_on_item_id])
+    @add_on_item ||= Item.find_by(id: params[:add_on_item_id])
   end
 
   def item_price
