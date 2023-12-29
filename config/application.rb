@@ -22,7 +22,6 @@ module FastHomeAPI
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
-
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
@@ -43,5 +42,8 @@ module FastHomeAPI
     config.i18n.available_locales = [:en, :fr]
     config.i18n.default_locale = :en
     config.i18n.fallbacks = true
+    config.action_dispatch.default_headers = {
+      'Content-Security-Policy' => "default-src 'self'; img-src 'self' data: https://validator.swagger.io; connect-src 'self' http://localhost:3000"
+    } 
   end
 end

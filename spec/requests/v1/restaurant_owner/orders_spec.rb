@@ -1,11 +1,13 @@
 require 'swagger_helper'
 
-RSpec.describe 'v1/customer/customer_addresses', type: :request do
+RSpec.describe 'v1/restaurant_owner/orders', type: :request do
 
-  path '/v1/customer/addresses' do
+  path '/v1/restaurant_owner/orders/{order_id}' do
+    parameter name: 'order_id', in: :path, type: :string, description: 'order_id'
 
-    post('create customer_address') do
+    get('show order') do
       response(200, 'successful') do
+        let(:order_id) { '123' }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -18,8 +20,9 @@ RSpec.describe 'v1/customer/customer_addresses', type: :request do
       end
     end
 
-    get('list customer_addresses') do
+    put('update order') do
       response(200, 'successful') do
+        let(:order_id) { '123' }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -33,13 +36,10 @@ RSpec.describe 'v1/customer/customer_addresses', type: :request do
     end
   end
 
-  path '/v1/customer/addresses/{id}' do
-    # You'll want to customize the parameter types...
-    parameter name: 'id', in: :path, type: :string, description: 'id'
+  path '/v1/restaurant_owner/orders' do
 
-    put('update customer_address') do
+    get('list orders') do
       response(200, 'successful') do
-        let(:id) { '123' }
 
         after do |example|
           example.metadata[:response][:content] = {
