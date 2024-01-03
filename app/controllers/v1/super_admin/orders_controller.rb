@@ -6,6 +6,7 @@ class V1::SuperAdmin::OrdersController < ApplicationController
     @orders = if params[:search].present?
       search = params[:search].downcase
       Order.where('lower(CAST(id AS TEXT)) = :search', search: search).where(status: :pending)
+      .includes(cart: { cart_items: :item })
     else
       Order.where(status: :pending)
     end 
