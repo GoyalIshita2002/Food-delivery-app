@@ -40,6 +40,10 @@ class V1::Customer::ProfileController < ApplicationController
       render json: { status: { code: "400", message: "invalid current credentials" }}, status: :bad_request and return
     end
 
+    unless current_customer.valid_password?(current_password) && (password_params[:password] != current_password)
+      render json: { status: { code: "400", message: "New password can't be same as current password"}}, status: :bad_request and return
+    end
+
     unless current_customer.update(password_update_params)
       render json: { status: { code: "400", message: "Password update failed"}}, status: :bad_request and return
     else

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_17_093422) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_27_095659) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,6 +55,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_093422) do
     t.string "user_name"
     t.boolean "is_verified"
     t.string "phone"
+    t.boolean "is_blocked", default: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["jti"], name: "index_admin_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
@@ -165,6 +166,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_093422) do
     t.date "doa"
     t.string "jti", null: false
     t.boolean "is_verified", default: false
+    t.boolean "is_blocked", default: false
     t.index ["email"], name: "index_customers_on_email", unique: true
     t.index ["jti"], name: "index_customers_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_customers_on_reset_password_token", unique: true
@@ -193,6 +195,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_093422) do
     t.bigint "restaurant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_deleted", default: false
     t.index ["restaurant_id"], name: "index_dish_add_ons_on_restaurant_id"
   end
 
@@ -231,6 +234,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_093422) do
     t.bigint "restaurant_id", null: false
     t.boolean "is_popular", default: false
     t.boolean "is_available", default: true
+    t.boolean "is_deleted", default: false
     t.index ["restaurant_id"], name: "index_dishes_on_restaurant_id"
   end
 
@@ -240,7 +244,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_093422) do
     t.bigint "documenter_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "driver_id"
     t.index ["documenter_type", "documenter_id"], name: "index_documents_on_documenter"
   end
 
@@ -292,6 +295,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_093422) do
     t.datetime "updated_at", null: false
     t.integer "min_quantity"
     t.integer "max_quantity"
+    t.boolean "is_deleted", default: false
     t.index ["dish_add_on_id"], name: "index_items_on_dish_add_on_id"
   end
 
@@ -415,8 +419,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_093422) do
   end
 
   create_table "restaurant_ratings", force: :cascade do |t|
-    t.bigint "restaurant_id", null: false
     t.bigint "customer_id", null: false
+    t.bigint "restaurant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "rating", default: 0
@@ -443,6 +447,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_093422) do
     t.string "registration_date"
     t.string "std_code"
     t.boolean "lock_menu", default: false
+    t.boolean "suspended", default: false
   end
 
   create_table "service_locations", force: :cascade do |t|

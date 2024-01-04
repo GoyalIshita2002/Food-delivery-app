@@ -17,7 +17,7 @@ class V1::RestaurantOwner::DishesController < ApplicationController
   end
 
   def index
-    @dishes = restaurant.dishes
+    @dishes = Dish.all
   end
 
   def types 
@@ -33,8 +33,8 @@ class V1::RestaurantOwner::DishesController < ApplicationController
   end
 
   def destroy
-    destroyed_dish = dish.destroy
-    unless destroyed_dish.persisted?
+    destroyed_dish = dish.update!(is_deleted: true)
+    if destroyed_dish
       render json: { status: { code: "200", message: "Dish deleted successfully"}}, status: :ok
     else
       render json: { status: { code: "400", message: "Failed to destroy dish"}}, status: :bad_request
@@ -95,7 +95,7 @@ class V1::RestaurantOwner::DishesController < ApplicationController
   end
 
   def dish
-    @dish ||= restaurant.dishes.find_by(id: params[:id])
+    @dish ||= restaurant.dishes.find_by(id: params[:id], is_deleted: false)
   end
 
   def check_dish

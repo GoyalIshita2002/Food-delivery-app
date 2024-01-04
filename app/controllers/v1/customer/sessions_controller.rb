@@ -13,6 +13,12 @@ class V1::Customer::SessionsController < Devise::SessionsController
         message: I18n.t('session.signin.failure')
       },status: :unauthorized
     end
+    if customer.present? && customer.is_blocked
+      render json: {
+        status: 401,
+        message: "Blocked user"
+      },status: :unauthorized and return
+    end
     @current_customer = customer
   end
 

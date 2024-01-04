@@ -17,6 +17,10 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    DriverAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 tags:
   - name: Superadmin
     description: Operations related to the superadmin endpoint
@@ -986,440 +990,1194 @@ paths:
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                add_ons:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      default: "beverages"
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        properties: 
+                          name:
+                            type: string
+                            default: "limca"
+                          min_quantity:
+                            type: integer
+                            default: "1"
+                          max_quantity:
+                            type: integer
+                            default: "10"
+                          price:
+                            type: integer
+                            default: "25"
+                      items:
+                        -type: object
+                        properties: 
+                          name:
+                            type: string
+                            default: "cocola"
+                          min_quantity:
+                            type: integer
+                            default: "2"
+                          max_quantity:
+                            type: integer
+                            default: "4"
+                          price:
+                            type: integer
+                            default: "298"
+            
+                                
+              required:
+              - add_ons
     get:
+      tags:
+        - RestaurantOwner
       summary: list add_ons
+      security:
+        - RestaurantOwnerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: header
+          description: The ID of the restaurant
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
 
   "/v1/restaurant_owner/add_ons/{id}":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
     put:
+      tags:
+        - RestaurantOwner
       summary: update add_on
       responses:
         '200':
           description: successful
+      security:
+        - RestaurantOwnerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: header
+          description: The ID of the restaurant
+          required: true
+          schema:
+            type: string 
+        - name: id
+          in: path
+          description: The ID of the add_on to delete
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                add_ons:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      default: "beverages"
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        properties: 
+                          name:
+                            type: string
+                            default: "limca"
+                          min_quantity:
+                            type: integer
+                            default: "1"
+                          max_quantity:
+                            type: integer
+                            default: "10"
+                          price:
+                            type: integer
+                            default: "25"
+                      items:
+                        -type: object
+                        properties: 
+                          name:
+                            type: string
+                            default: "cocola"
+                          min_quantity:
+                            type: integer
+                            default: "2"
+                          max_quantity:
+                            type: integer
+                            default: "4"
+                          price:
+                            type: integer
+                            default: "298"
+            
+                                
+              required:
+              - add_ons
+    "/v1/restaurant_owner/add_ons/{id}":
     delete:
+      tags:
+        - RestaurantOwner
       summary: delete add_on
+      security:
+        - RestaurantOwnerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: header
+          description: The ID of the restaurant
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: The ID of the add_on to delete
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
+    "/v1/restaurant_owner/add_ons/{id}":
     get:
+      tags:
+        - RestaurantOwner
       summary: show add_on
+      security:
+        - RestaurantOwnerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: header
+          description: The ID of the restaurant
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: The ID of the add_on to delete
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
-  
-  "/v1/customer/cart_items":
-    get:
-      summary: list cart_items
-      responses:
-        '200':
-          description: successful
+
+    "/v1/customer/cart_items":
     post:
       summary: create cart_item
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cart_item:
+                  type: object
+                  properties:
+                    dish_id:
+                      type: integer
+                      default: "2"
+                    quantity:
+                      type: integer
+                      defualt: "3"
+        required:
+        - cart_items
+
   "/v1/customer/cart_items/{id}":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
     get:
+      tags:
+        - Customer
       summary: show cart_item
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
-    patch:
-      summary: update cart_item
-      responses:
-        '200':
-          description: successful
-    put:
-      summary: update cart_item
-      responses:
-        '200':
-          description: successful
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string
+
+    "/v1/customer/cart_items/{id}":
     delete:
+      tags:
+        - Customer
       summary: delete cart_item
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string 
+
   "/v1/customer/show_cart":
     get:
+      tags:
+        - Customer
       summary: show cart
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+
   "/v1/customer/categories":
     get:
+      tags:
+        - Customer
       summary: list categories
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+
   "/v1/customer/addresses":
     post:
+      tags:
+        - Customer
       summary: create customer_address
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: object
+                  properties:
+                    street:
+                      type: string
+                      default: "burujupeta"
+                    address:
+                      type: string
+                      default: "town kotha road"
+                    city:
+                      type: string
+                      default: "visakhapatnam"
+                    state:
+                      type: string
+                      default: "Andhra Pradesh"
+                    zip_code:
+                      type: integer
+                      default: "530001"
+                    address_type:
+                      type: string
+                      default: "office"
+                    is_default:
+                      type: boolean
+                      default: "true"
+                    
+        required:
+        - address
+
+  "/v1/customer/addresses/":
     get:
+      tags:
+        - Customer
       summary: list customer_addresses
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+          
+
   "/v1/customer/addresses/{id}":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
     put:
+      tags:
+        - Customer
       summary: update customer_address
+      security:
+        - customerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
-  "/v1/customer/devices":
-    post:
-      summary: create device
-      responses:
-        '200':
-          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: object
+                  properties:
+                    is_default:
+                      type: boolean
+                      default: "true"
+                    address_type:
+                      type: string
+                      default: "home"
+      required:
+        - address
+
   "/v1/customer/dishes":
     get:
+      tags:
+        - Customer
       summary: list dishes
+      security:
+        - customerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: query
+          description: The ID of the restaurant
+          required: true
+          schema:
+            type: integer
+        - name: type
+          in: query
+          description: The Dish type
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
-  "/v1/customer/dishes/{id}":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
-    get:
-      summary: show dish
-      responses:
-        '200':
-          description: successful
+
   "/v1/customer/grouped_dishes":
     get:
+      tags:
+        - Customer
       summary: grouped_dishes dish
+      security:
+        - customerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: query
+          description: The Id of restaurant
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: successful
+
   "/v1/customer/favourites/add_restaurant":
     post:
+      tags:
+        - Customer
       summary: add_restaurant favourite
+      security:
+        - customerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: query
+          description: The Id of restaurant
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: successful
+
   "/v1/customer/favourites/add_dish":
     post:
+      tags:
+        - Customer
       summary: add_dish favourite
+      security:
+        - customerAuth: []
+      parameters:
+        - name: dish_id
+          in: query
+          description: The Id of dish
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: successful
+
   "/v1/customer/favourites/remove_restaurant":
     delete:
+      tags:
+        - Customer
+      security:
+        - customerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: query
+          description: The Id of restaurant
+          required: true
+          schema:
+            type: integer
       summary: remove_restaurant favourite
       responses:
         '200':
           description: successful
+
+          
   "/v1/customer/favourites/remove_dish":
     delete:
+      tags:
+        - Customer
       summary: remove_dish favourite
+      security:
+        - customerAuth: []
+      parameters:
+        - name: dish_id
+          in: query
+          description: The Id of dish
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: successful
+
+
   "/v1/customer/favourite_restaurants":
     get:
+      tags:
+        - Customer
       summary: list_restaurants favourite
+      security:
+        - customerAuth: []
+      parameters:
+        - name: per_page
+          in: query
+          description: The per page restaurants
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: The page number
+          required: true
+          schema:
+            type: integer
+        - name: search
+          in: query
+          description: The search parameter
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: successful
+
+
   "/v1/customer/favourite_dishes":
     get:
+      tags:
+        - Customer
       summary: list_dishes favourite
+      security:
+        - customerAuth: []
+      parameters:
+        - name: per_page
+          in: query
+          description: The per page restaurants
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: The page number
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: successful
+
+
   "/v1/customer/check_email_availability":
     get:
       summary: check_email_availability miscellaneou
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+
   "/v1/customer/orders":
     post:
+      tags:
+        - Customer
       summary: create order
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cart_id:
+                  type: integer
+                  default: "1"
+                restaurant_id:
+                  type: integer
+                  default: "1"
+                customer_address_id:
+                  type: integer
+                  default: "1"
+                content:
+                  type: string
+                  default: "Dont add onion"
+                    
+      required:
+        - cart     
+
+  "/v1/customer/orders":
     get:
+      tags:
+        - Customer
       summary: list orders
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      
   "/v1/customer/orders/{order_id}":
-    parameters:
-    - name: order_id
-      in: path
-      description: order_id
-      required: true
-      schema:
-        type: string
     put:
+      tags:
+        - Customer
       summary: denied order
+      security:
+        - customerAuth: []
+      parameters:
+        - name: order_id
+          in: path
+          description: order_id
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
+
+  "/v1/customer/orders/{order_id}":
     get:
+      tags:
+        - Customer
       summary: show order
+      security:
+        - customerAuth: []
+      parameters:
+        - name: order_id
+          in: path
+          description: order_id
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
+
   "/v1/customer/order/{order_id}/customer_feedback":
-    parameters:
-    - name: order_id
-      in: path
-      description: order_id
-      required: true
-      schema:
-        type: string
     post:
+      tags:
+        - Customer
       summary: customer_feedback order
+      security:
+        - customerAuth: []
+      parameters:
+        - name: order_id
+          in: path
+          description: order_id
+          required: true
+          schema:
+          type: string
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  default: "Delay"
+                description:
+                  type: string
+                  default: "Food is not received on time"   
+      required:
+        - order   
+
   "/v1/customer/order_history":
     get:
+      tags:
+        - Customer
       summary: order_history order
+      security:
+        - customerAuth: []
+      parameters:
+      - name: status
+        in: query
+        description: The status of the orders
+        required: true
+        schema:
+          type: string
+          default: "ongoing"
       responses:
         '200':
           description: successful
+
+
+  
   "/v1/customer/resend_otp":
     post:
+      tags:
+        - Customer
       summary: resend_otp profile
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  default: "shivani@12gmail.com"
+        
   "/v1/customer/verify_customer":
     post:
+      tags:
+        - Customer
       summary: verify_otp profile
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  default: "shivani@12gmail.com"
+                otp:
+                  type: integer
+                  default: "3474"
+                  
   "/v1/customer/forget_password":
     post:
+      tags:
+        - Customer
       summary: forget_password profile
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  default: "shivani@12gmail.com"
+                  
   "/v1/customer/reset_password":
     post:
+      tags:
+        - Customer
       summary: reset_password profile
+      security:
+        - customerAuth: []
+      parameters:
+        - name: reset_token
+          in: query
+          description: The reset token 
+          required: true
+          schema:
+            type: string
+            default: "Br_iaJgxZwVr_HjjuS11LQ"
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: integer
+                  default: "123456"
+
   "/v1/customer/profile":
     put:
+      tags:
+        - Customer
       summary: update profile
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  default: "avinash"
+                std_code:
+                  type: integer
+                  default: "91"
+                dob:
+                  type: integer
+                  default: "04/01/1995"
+
+  "/v1/customer/profile":
     get:
+      tags:
+        - Customer
       summary: show profile
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+
   "/v1/customer/delete_avatar":
     post:
+      tags:
+        - Customer
       summary: delete_avatar profile
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+                  default: "Screenshot from 2024-01-03 11-32-18.png"
+
   "/v1/customer/update_password":
     patch:
+      tags:
+        - Customer
       summary: update_password profile
+      security:
+        - customerAuth: []
       responses:
         '200':
-          description: successful
+          description: successfulc
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password:
+                  type: string
+                  default: "Shiv@123"
+                password:
+                  type: string
+                  default: "Avinash@1234"
+                password_confirmation:
+                  type: string
+                  default: "Avinash@1234"
+
   "/v1/customer/update_phone":
     patch:
+      tags:
+        - Customer
       summary: update_phone profile
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
-  "/v1/customer/cancel":
-    get:
-      summary: cancel registration
-      responses:
-        '200':
-          description: successful
-  "/v1/customer/sign_up":
-    get:
-      summary: new registration
-      responses:
-        '200':
-          description: successful
-  "/v1/customer/edit":
-    get:
-      summary: edit registration
-      responses:
-        '200':
-          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: integer
+                  default: "987654321`"
+
+    
   "/v1/customer":
-    patch:
-      summary: update registration
-      responses:
-        '200':
-          description: successful
-    put:
-      summary: update registration
-      responses:
-        '200':
-          description: successful
-    delete:
-      summary: delete registration
-      responses:
-        '200':
-          description: successful
     post:
-      summary: create registration
+      tags:
+        - Customer
+      summary: registration a user
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                      default: "shivani"
+                    email:
+                      type: string
+                      default: "shiv@12gmail.com"
+                    phone:
+                      type: integer
+                      default: "7654321"
+                    std_code:
+                      type: integer
+                      default: "91"
+                    password:
+                      type: string
+                      default: "11234567"
+                    password_confirmation:
+                      type: string
+                      default: "11234567"  
+                    
   "/v1/customer/restaurant_ratings/add_rating":
     post:
+      tags:
+        - Customer
       summary: add_rating restaurant_rating
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                  default: "3"
+                restaurant_id:
+                  type: integer
+                  default: "1"
+
   "/v1/customer/restaurants":
     get:
+      tags:
+        - Customer
       summary: list restaurants
+      security:
+        - customerAuth: []
+      parameters:
+        - name: per_page
+          in: query
+          description: per page 
+          required: true
+          schema:
+            type: integer
+            default: 4
+            
+        - name: page
+          in: query   
+          description:  page 
+          required: true
+          schema:
+            type: integer
+            default: 1
       responses:
         '200':
           description: successful
+
   "/v1/customer/restaurants/{id}":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
     get:
+      tags:
+        - Customer
       summary: show restaurant
+      security:
+        - customerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
+
   "/v1/customer/sign_in":
-    get:
-      summary: new session
-      responses:
-        '200':
-          description: successful
     post:
+      tags:
+        - Customer
       summary: create session
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: integer
+                  default: "shiv@1234gmail.com"
+                password:
+                  type: integer
+                  default: "Avinash@123"
+
   "/v1/customer/sign_out":
     delete:
+      tags:
+        - Customer
       summary: delete session
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      
+
   "/v1/driver/documents":
     post:
+      tags: 
+        - Driver
       summary: create document
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                front:
+                  type: string
+                  format: binary
+                  default: "Screenshot from 2024-01-03 11-32-18.png"
+                back:
+                  type: string
+                  format: binary
+                  default: "Screenshot from 2024-01-03 11-32-18.png"
+
     get:
+      tags: 
+        - Driver
       summary: list documents
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
+          
   "/v1/driver/documents/{id}":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
     delete:
+      tags: 
+        - Driver
       summary: delete document
+      security:
+        - DriverAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
-  "/v1/driver/orders/{order_id}":
-    parameters:
-    - name: order_id
-      in: path
-      description: order_id
-      required: true
-      schema:
-        type: string
+
+  "/v1/driver/orders/{id}":
     put:
+      tags: 
+        - Driver
       summary: update order
+      security:
+        - DriverAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
-          description: successful
+          '200':
+            description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  default: "driver_picked_up"
+
   "/v1/driver/{driver_id}/orders":
-    parameters:
-    - name: driver_id
-      in: path
-      description: driver_id
-      required: true
-      schema:
-        type: string
     get:
+      tags: 
+        - Driver
       summary: list orders
+      security:
+        - DriverAuth: []
+      parameters:
+        - name: driver_id
+          in: path
+          description: driver_id
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
+
+
   "/v1/driver/update":
     put:
+      tags: 
+        - Driver
       summary: update profile
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                  default: "sharma Mittal"
+                dob:
+                  type: string
+                  default: "1/08/2007"
+                email:
+                  type: string
+                  default: "sha5678@gmail.com"
+                address:
+                  type: string
+                  default: "Panna"
+
   "/v1/driver/delete_avatar":
     post:
+      tags: 
+        - Driver
       summary: delete_avatar profile
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+                  default: "Screenshot from 2024-01-03 11-32-18.png"
+
   "/v1/driver/profile":
     get:
+      tags: 
+        - Driver
       summary: show profile
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
+
   "/v1/driver/resend_otp":
     post:
+      tags: 
+        - Driver
       summary: resend_otp profile
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: integer
+                  default: 876544344
+                std_code:
+                  type: integer
+                  default: 91
+            
+
   "/v1/driver/register":
     post:
       summary: create registration
@@ -1762,9 +2520,14 @@ paths:
       responses:
         '200':
           description: successful
+
   "/v1/super_admin/orders":
     get:
+      tags:
+        - Superadmin
       summary: list orders
+      security: 
+      -  SuperAdminAuth: []
       responses:
         '200':
           description: successful

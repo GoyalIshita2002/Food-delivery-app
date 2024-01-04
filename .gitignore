@@ -30,6 +30,8 @@
 
 /config/credentials/development.key
 
-/config/credentials/production.key
+# temporarily commenting need to revert post ec2 deployment 
+# /config/credentials/production.key
 
 /.STARTSERVER.sh
+/db/schema.rb

@@ -9,18 +9,16 @@ class V1::SuperAdmin::DriverController < ApplicationController
         .or(Driver.where('lower(phone) LIKE ?', "%#{search}%"))
     else
       Driver.all
-    end
+    end 
     @pagy, @driver = pagy(driver, items: params[:per_page]&.to_i)
   end
 
-  def driver_order_list
+  def driver_order_list 
     driver = Driver.find_by(id: params[:driver_id]) 
     if driver.present?
       order_ids = OrderAgent.where(driver_id: driver.id).pluck(:order_id)
-      @orders = Order.where(id: order_ids)
-      unless @orders.present?
-        render json: { orders: [] }, status: :ok
-      end
+      orders = Order.where(id: order_ids)
+      @pagy, @orders = pagy(orders, items: params[:per_page]&.to_i)
     else
       render json: { error: 'Driver not found with the provided ID' }, status: :unprocessable_entity
     end

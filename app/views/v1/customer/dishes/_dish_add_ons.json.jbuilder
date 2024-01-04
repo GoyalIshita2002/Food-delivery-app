@@ -6,7 +6,7 @@ json.add_ons do
       json.array! add_on.items do |item|
         json.id item.id
         json.name item.name
-        json.price item.price
+        json.price item.customer_price
         json.min_quantity item.min_quantity
         json.max_quantity item.max_quantity
       end

@@ -35,9 +35,9 @@ class Restaurant < ApplicationRecord
 
   validates_presence_of :name
 
-  scope :opened, -> { where(open_for_orders: true)}
+  scope :opened, -> { where(open_for_orders: true, suspended: false) }
 
-  def address
+  def address 
     location = self.restaurant_address
     "#{location.street}, #{location.address}, #{location.zip_code}, #{location.state},#{location.state_code}"
   end

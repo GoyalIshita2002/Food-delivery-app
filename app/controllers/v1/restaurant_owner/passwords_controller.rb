@@ -26,8 +26,15 @@ class V1::RestaurantOwner::PasswordsController < ApplicationController
     unless restaurant_admin.present?
       render json: { status: { code: "422", message: "invalid user ID"} }, status: :bad_request and return
     end
+    
     unless restaurant_admin&.valid_for_authentication? { restaurant_admin.valid_password?(password_params[:current_password]) }
       render json: { status: { code: "422", message: "invalid current password"} }, status: :bad_request and return
     end
+    
+    if restaurant_admin.valid_password?(password_params[:current_password]) && (password_params[:password] == password_params[:current_password])
+      render json: { status: { code: "400", message: "New password can't be same as current password"}}, status: :bad_request and return
+    end
   end
+
+
 end

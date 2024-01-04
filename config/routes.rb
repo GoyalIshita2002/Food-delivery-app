@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       get 'add_ons', to: "add_ons#index"
       put 'add_ons/:id', to: "add_ons#update"
       delete 'add_ons/:id', to: "add_ons#destroy"
+      delete 'add_ons/:id/item/:item_id', to: "add_ons#items_destroy"
       get 'add_ons/:id', to: "add_ons#show"
       put 'profile/update', to: "profile#update"
       post 'profile/upload_image', to: "profile#upload_image"
@@ -56,6 +57,7 @@ Rails.application.routes.draw do
       get 'placed_orders_by_hours', to: "orders#placed_orders_by_hours"
       get 'ongoing_orders_statistics', to: "orders#orders_ongoing_stats"
       get 'orders_unfilled_stats', to: "orders#orders_unfilled_stats"
+      get 'today_order', to: "orders#todays_order"
       get 'orders', to: "orders#index"
       get 'drivers/:driver_id/revenue_by_day', to: "driver#revenue_by_day"
       get 'drivers',to:"driver#index"
@@ -63,6 +65,7 @@ Rails.application.routes.draw do
       get 'drivers/:driver_id/orders',to:"driver#driver_order_list"
       get 'users',to:"users#index"
       get 'user/:id',to:"users#show"
+      patch 'users/:id', to: "users#update"
       get 'categories',to:"categories#index"
       put 'dish_types', to: "dish_type#update"
       post 'dish_type',to:"dish_type#create"
@@ -70,6 +73,10 @@ Rails.application.routes.draw do
       get 'customer_user/:id',to:"customer_user#show"
       get 'restaurant/:id/edit',to:"restaurants#edit"
       post 'blob_creation', to: "restaurants#blob_creation"
+      patch 'restaurants/:id/suspend', to: "restaurants#suspend"
+      get 'revenue_stats', to: "orders#revenue_stats"
+      put 'update_charges', to: "orders#update_charges"
+      get 'delivery_charges', to: "orders#delivery_charges"
     end 
 
     namespace :customer do
@@ -90,6 +97,7 @@ Rails.application.routes.draw do
       get 'orders', to: "orders#index"
       get 'orders/:order_id', to: "orders#show"
       post 'order/:order_id/customer_feedback', to: "orders#customer_feedback"
+      get 'restaurants/filter_restaurants' , to: "restaurants#search"
       resources :restaurants, only: [ :index, :show ]
       resources :dishes, only: [ :index, :show ]
       resources :cart_items

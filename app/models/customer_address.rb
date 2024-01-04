@@ -7,7 +7,7 @@ class CustomerAddress < ApplicationRecord
   geocoded_by :full_address
   after_validation :geocode
 
-
+  scope :default, -> { find_by(is_default: true ) }
   enum :address_type => { :home => 0, :office => 1}
 
   before_save :update_default
