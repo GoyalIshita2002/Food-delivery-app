@@ -17,6 +17,10 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    DriverAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 tags:
   - name: Superadmin
     description: Operations related to the superadmin endpoint
@@ -1980,86 +1984,200 @@ paths:
 
   "/v1/customer/sign_out":
     delete:
+      tags:
+        - Customer
       summary: delete session
+      security:
+        - customerAuth: []
       responses:
         '200':
           description: successful
+      
 
   "/v1/driver/documents":
     post:
+      tags: 
+        - Driver
       summary: create document
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                front:
+                  type: string
+                  format: binary
+                  default: "Screenshot from 2024-01-03 11-32-18.png"
+                back:
+                  type: string
+                  format: binary
+                  default: "Screenshot from 2024-01-03 11-32-18.png"
+
     get:
+      tags: 
+        - Driver
       summary: list documents
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
           
   "/v1/driver/documents/{id}":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
     delete:
+      tags: 
+        - Driver
       summary: delete document
+      security:
+        - DriverAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
-  "/v1/driver/orders/{order_id}":
-    parameters:
-    - name: order_id
-      in: path
-      description: order_id
-      required: true
-      schema:
-        type: string
+
+  "/v1/driver/orders/{id}":
     put:
+      tags: 
+        - Driver
       summary: update order
+      security:
+        - DriverAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
-          description: successful
+          '200':
+            description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  default: "driver_picked_up"
+
   "/v1/driver/{driver_id}/orders":
-    parameters:
-    - name: driver_id
-      in: path
-      description: driver_id
-      required: true
-      schema:
-        type: string
     get:
+      tags: 
+        - Driver
       summary: list orders
+      security:
+        - DriverAuth: []
+      parameters:
+        - name: driver_id
+          in: path
+          description: driver_id
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful
+
+
   "/v1/driver/update":
     put:
+      tags: 
+        - Driver
       summary: update profile
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                  default: "sharma Mittal"
+                dob:
+                  type: string
+                  default: "1/08/2007"
+                email:
+                  type: string
+                  default: "sha5678@gmail.com"
+                address:
+                  type: string
+                  default: "Panna"
+
   "/v1/driver/delete_avatar":
     post:
+      tags: 
+        - Driver
       summary: delete_avatar profile
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+                  default: "Screenshot from 2024-01-03 11-32-18.png"
+
   "/v1/driver/profile":
     get:
+      tags: 
+        - Driver
       summary: show profile
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
+
   "/v1/driver/resend_otp":
     post:
+      tags: 
+        - Driver
       summary: resend_otp profile
+      security:
+        - DriverAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: integer
+                  default: 876544344
+                std_code:
+                  type: integer
+                  default: 91
+            
+
   "/v1/driver/register":
     post:
       summary: create registration
@@ -2297,9 +2415,14 @@ paths:
       responses:
         '200':
           description: successful
+
   "/v1/super_admin/orders":
     get:
+      tags:
+        - Superadmin
       summary: list orders
+      security: 
+      -  SuperAdminAuth: []
       responses:
         '200':
           description: successful
