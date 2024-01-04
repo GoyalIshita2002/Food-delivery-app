@@ -1504,6 +1504,7 @@ paths:
       responses:
         '200':
           description: successful
+
   "/v1/super_admin/drivers/{driver_id}/revenue_by_day":
     parameters:
     - name: driver_id
@@ -1513,22 +1514,62 @@ paths:
       schema:
         type: string
     get:
+      tags:
+        - Superadmin
       summary: revenue_by_day driver
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
+      parameters:
+        - in: query
+          name: start_date
+          schema:
+            type: datetime
+        - in: query
+          name: end_date
+          schema:
+            type: datetime
   "/v1/super_admin/drivers":
     get:
+      tags:
+        - Superadmin
       summary: list drivers
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
+      parameters:
+        - in: query
+          name: search
+          description: 'Search driver by email, full name, or phone number'
+          schema:
+            type: string
   "/v1/super_admin/delivery_charges/upsert":
     post:
+      tags:
+        - Superadmin
       summary: upsert driver
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
+      parameters:
+        - in: query
+          name: min_distance
+          schema:
+            type: integer
+        - in: query
+          name: max_distance
+          schema:
+            type: integer
+        - in: query
+          name: charge
+          schema:
+            type: integer       
   "/v1/super_admin/drivers/{driver_id}/orders":
     parameters:
     - name: driver_id
@@ -1538,7 +1579,11 @@ paths:
       schema:
         type: string
     get:
-      summary: driver_order_list driver
+      tags:
+        - Superadmin
+      summary: Show all order of particular driver
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
@@ -1551,13 +1596,12 @@ paths:
       schema:
         type: string
     post:
+      tags:
+        - Superadmin
       summary: assign_driver order
+      security:
+      - SuperAdminAuth: []
       parameters:
-      - name: Authorization
-        in: header
-        description: Authentication token
-        schema:
-          type: string
       responses:
         '200':
           description: successful
@@ -1572,21 +1616,13 @@ paths:
               required:
               - driver_id
   "/v1/super_admin/accept_order/{order_id}":
-    parameters:
-    - name: order_id
-      in: path
-      description: order_id
-      required: true
-      schema:
-        type: string
     put:
+      tags:
+        - Superadmin
       summary: accept_order order
+      security:
+      - SuperAdminAuth: []
       parameters:
-      - name: Authorization
-        in: header
-        description: Authentication token
-        schema:
-          type: string
       - name: order_id
         in: path
         required: true
@@ -1610,16 +1646,50 @@ paths:
               - status
   "/v1/super_admin/placed_order":
     get:
+      tags:
+        - Superadmin
       summary: placed_order order
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: search
+          schema:
+            type: string 
   "/v1/super_admin/order_without_driver":
     get:
+      tags:
+        - Superadmin
       summary: orders_without_agent order
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: search
+          schema:
+            type: string         
   "/v1/super_admin/restaurant/{restaurant_id}/order_status":
     parameters:
     - name: restaurant_id
@@ -1629,31 +1699,66 @@ paths:
       schema:
         type: string
     post:
+      tags:
+        - Superadmin
+      summary: order_statistics order
+      security:
+      - SuperAdminAuth: []
       summary: order_status order
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                  - restaurant_accepted
+                  - driver_picked_up
+                  - delivered
+              required:
+              - status
   "/v1/super_admin/orders/statistics":
     get:
+      tags:
+        - Superadmin
       summary: order_statistics order
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
   "/v1/super_admin/placed_orders_by_hours":
     get:
+      tags:
+        - Superadmin
       summary: placed_orders_by_hours order
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
   "/v1/super_admin/ongoing_orders_statistics":
     get:
+      tags:
+        - Superadmin
       summary: orders_ongoing_stats order
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
   "/v1/super_admin/orders_unfilled_stats":
     get:
+      tags:
+        - Superadmin
       summary: orders_unfilled_stats order
+      security:
+      - SuperAdminAuth: []
       responses:
         '200':
           description: successful
