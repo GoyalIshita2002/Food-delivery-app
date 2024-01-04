@@ -2220,6 +2220,7 @@ paths:
       responses:
         '200':
           description: successful
+
   "/v1/restaurant_owner/orders/{order_id}":
     parameters:
     - name: order_id
@@ -2229,7 +2230,11 @@ paths:
       schema:
         type: string
     get:
+      tags:
+        - RestaurantOwner
       summary: show order
+      security:
+      -  RestaurantOwnerAuth: []
       responses:
         '200':
           description: successful
@@ -2238,31 +2243,104 @@ paths:
       responses:
         '200':
           description: successful
+
   "/v1/restaurant_owner/orders":
     get:
+      tags:
+        - RestaurantOwner
       summary: list orders
+      security:
+      -  RestaurantOwnerAuth: []
       responses:
         '200':
           description: successful
   "/v1/restaurant_owner/profile/update":
     put:
+      tags:
+        - RestaurantOwner
       summary: update profile
+      security:
+      -  RestaurantOwnerAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                restaurant_admin:
+                  type: object
+                  properties:
+                    user_name:
+                      type: string
+                      default: "Nani"
+                    email:
+                      type: string
+                      default: "local@fasthome.com"
+                    restaurant:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          default: "the restaurant"
+                        phone:
+                          type: string
+                          default: "99898988"
+                        std_code:
+                          type: string
+                          default: "91"
+                        restaurant_address:
+                          type: object
+                          properties:
+                            address1:
+                              type: string
+                              default: "Swan square, Sai nagar, Srinivasa Nagar"
+                            address2:
+                              type: string
+                              default: "Madhurawada"
+                            state:
+                              type: string
+                              default: "Andhra Pradesh"
+                            city:
+                              type: string
+                              default: "Visakhapatnam"
+        
+            required:
+              - restaurant_admin
+              - restaurant
   "/v1/restaurant_owner/profile/upload_image":
     post:
+      tags:
+        - RestaurantOwner
       summary: upload_image profile
+      security:
+      -  RestaurantOwnerAuth: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                   type: string
+                   format: binary
+            required:
+              - avatar
   "/v1/restaurant_owner/profile":
     get:
+      tags:
+        - RestaurantOwner
       summary: show profile
+      security:
+      -  RestaurantOwnerAuth: []
       responses:
         '200':
           description: successful
-
   "/v1/super_admin/drivers/{driver_id}/revenue_by_day":
     parameters:
     - name: driver_id
